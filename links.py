@@ -7,7 +7,7 @@ html = ans.text
 links = re.findall("href=\"([^\"]*)\"",html)
 forms = re.findall("<form[^>]*action=\"([^\"]*)\"[^>]*method=\"([^\"]*)\"",html)
 forms += re.findall("<form[^>]*method=\"([^\"]*)\"[^>]*action=\"([^\"]*)\"",html)
-parameters = re.findall("<input [^>]* name=\"([^\"]*)\"",html)
+parameters = re.findall("<form[^>]*method=\"([^>]*)\"[^>]*action=\"([^>]*)\"[^>]*>.*|\n.*<input[^>]*name=\"([^>\"]*)\"[^>]*>.*|\n.*<\/form>",html)
 for i in links:
 	print i
 print "\n\nparameters:\n\n"
