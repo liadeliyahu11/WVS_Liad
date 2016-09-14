@@ -5,7 +5,8 @@ url = raw_input("please enter url:")
 ans = requests.get(url)
 html = ans.text
 links = re.findall("href=\"([^\"]*)\"",html)
-forms = re.findall("<form [^>]* action=\"([^\"]*)\"",html)
+forms = re.findall("<form[^>]*action=\"([^\"]*)\"[^>]*method=\"([^\"]*)\"",html)
+forms += re.findall("<form[^>]*method=\"([^\"]*)\"[^>]*action=\"([^\"]*)\"",html)
 parameters = re.findall("<input [^>]* name=\"([^\"]*)\"",html)
 for i in links:
 	print i
