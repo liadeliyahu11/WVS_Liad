@@ -121,12 +121,12 @@ def scanOnePage(filename,url,page,depth):
 	return False
 
 def scanAllPages(url):
+	print "scan started..."
 	if url[:5] == "https":
 		filename = url[8:].replace('/','-')
 	else:
 		filename = url[7:].replace('/','-')
 	if scanPage(filename,url,"",0):
-		print "scan started..."
 		f = open(filename+".txt","w")
 		for i in total:
 			f.write(i+"\n")
