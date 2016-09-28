@@ -18,6 +18,9 @@ s = requests.Session()
 
 
 def notFound(html):
+	"""
+	gets html code of a page and checks if page not found.
+	"""
 	c = 0
 	for i in cluesForError:
 		if i in html:
@@ -27,6 +30,9 @@ def notFound(html):
 	return False
 	
 def createFormsList(html):
+	"""
+	gets html code and creates list of tuples with form parameters : (name,action,method) 
+	"""
 	parameters,final_parameters = [],[]
 	parsed_html = BeautifulSoup(html,'html.parser')
 	for par in parsed_html.find_all('input'):
@@ -41,23 +47,33 @@ def createFormsList(html):
 	return final_parameters
 
 def existInFile(fileName,toFind):
+	"""
+	get file name and string and check if the file contains the string.  
+	"""
 	f = open(fileName,'r')
 	for i in f.readlines():
-		if i[:-1]==toFind.encode('utf-8'):
+		if i[:-1]==toFind.encode('utf-8'): # without \n from the file
 			return True
 	return False
 
 def scanPage(filename,url,page,depth):
+	"""
+	wrapping function to scanOnePage (scans a page).
+	"""
 	if not scanOnePage(filename,url,page,depth):
 		allLinks.remove(page)
 		return False
 	return True
 
 def par_to_file(i):
+	"""
+	prepares parameter line to the file.
+	"""
 	return (str(i[0]+'\t')+str(i[1]+'\t')+str(i[2])).encode('utf-8')
+
 def linkValid(url,i):
 	"""
-	return true if url is valid
+	returns true if url is valid
 	"""
 	if i==url or i==url[7:] or ((i[:7]=="http://" or i[:8]=="https://") and 
 		((url not in i or url[:7]+"www."+url[7:] not in i) or (url[:-1] not in i or url[:7]+"www."+url[7:-1] not in i)
@@ -66,6 +82,9 @@ def linkValid(url,i):
 	return True
 
 def linkExist(url,page):
+	"""
+	checks if the link exist if it does returns the html else return False.
+	"""
 	if page[:4] == "http":
 		ans = s.get(page,headers=headers)
 		html = ans.text.encode('utf-8')
@@ -88,6 +107,10 @@ def linkExist(url,page):
 	return (html,url)
 
 def scanOnePage(filename,url,page,depth):
+	"""
+	scans a page.
+	gets file name url page and depth(in the recursion) and returns is succeeded.
+	"""
 	try:
 		my_threads = []
 		base = url
@@ -123,6 +146,9 @@ def scanOnePage(filename,url,page,depth):
 	return False
 
 def scanAllPages(url):
+	"""
+	gets url address and trys to scan all it's page. 
+	"""
 	print "scan started..."
 	if url[:5] == "https":
 		filename = url[8:].replace('/','-')
