@@ -14,7 +14,7 @@ headers = {
 threads = []
 allLinks = []
 total = []
-
+s = requests.Session()
 
 
 def notFound(html):
@@ -53,9 +53,11 @@ def scanPage(filename,url,page,depth):
 		return False
 	return True
 
+def par_to_file(i):
+	return (str(i[0]+'\t')+str(i[1]+'\t')+str(i[2])).encode('utf-8')
 def linkValid(url,i):
 	"""
-	return true if valid
+	return true if url is valid
 	"""
 	if i==url or i==url[7:] or ((i[:7]=="http://" or i[:8]=="https://") and 
 		((url not in i or url[:7]+"www."+url[7:] not in i) or (url[:-1] not in i or url[:7]+"www."+url[7:-1] not in i)
@@ -65,10 +67,10 @@ def linkValid(url,i):
 
 def linkExist(url,page):
 	if page[:4] == "http":
-		ans = requests.get(page,headers=headers)
+		ans = s.get(page,headers=headers)
 		html = ans.text.encode('utf-8')
 		if ans.status_code == 404 and notFound(html):
-			ans = requests.get(url+"/"+page,headers=headers)
+			ans = s.get(url+"/"+page,headers=headers)
 			html = ans.text.encode('utf-8')
 			if ans.status_code == 404 and notFound(html):
 				return False
@@ -77,7 +79,7 @@ def linkExist(url,page):
 		else:
 			url = page
 	else:
-		ans = requests.get(url+"/"+page,headers=headers)
+		ans = s.get(url+"/"+page,headers=headers)
 		html = ans.text.encode('utf-8')
 		if ans.status_code == 404 and notFound(html):
 			return False
@@ -91,27 +93,27 @@ def scanOnePage(filename,url,page,depth):
 		base = url
 		html,url = linkExist(url,page) # if not exist exception will raise
 		parameters = createFormsList(html)
-		links = re.findall("href=\"([^\"]*)\"",html)
-		total.append(url)
-		for i in links:
-			if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
-				allLinks.append(i)
-				if depth <=MAX_DEPTH:
+		if depth <=MAX_DEPTH:
+			links = re.findall("href=\"([^\"]*)\"",html)
+			total.append(url)
+			for i in links:
+				if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
+					allLinks.append(i)
 					if len(threads)<=MAX_THREADS:
 						t = threading.Thread(target=scanOnePage,args=(filename,url,i,depth+1))
 						threads.append(t)
 						my_threads.append(t)
 						t.start()
-		for i in my_threads:
-			i.join()
+			for i in my_threads:
+				i.join()
 		f = open(filename+"-forms.txt",'a+')
 		tagOpen = False
 		for i in parameters:
-			if not existInFile(filename+"-forms.txt",str(i).encode('utf-8')):
+			if not existInFile(filename+"-forms.txt",par_to_file(i)):
 				if not tagOpen:
 					f.write("url:"+"\n"+url+"\n")
 					tagOpen = True
-				f.write(str(i).encode('utf-8')+"\n")
+				f.write(par_to_file(i)+"\n")
 		if tagOpen:
 			f.write("endUrl\n")
 		f.close()
