@@ -11,4 +11,5 @@ Presence of backup files giving sensitive information (source code disclosure)<b
 -- to support proxy <br>
 <br>
 libraries for requirements:<br>
-pip install git+https://github.com/abenassi/Google-Search-API<br>
+pip install browsercookie
+<br>
