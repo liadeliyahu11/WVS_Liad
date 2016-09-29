@@ -10,7 +10,7 @@ def checkRFI(url):
 	if THE_TEXT in ans.text:
 		return url
 
-	def checkLFI(url):
+def checkLFI(url):
 	"""
 	check if rfi exist in the givven url
 	more : 
