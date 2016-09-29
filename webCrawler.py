@@ -1,4 +1,5 @@
 import requests
+#import browsercookie
 import re
 from bs4 import BeautifulSoup
 import threading
@@ -15,7 +16,7 @@ threads = []
 allLinks = []
 total = []
 s = requests.Session()
-
+#s.cookie = browsercookie.firefox()
 
 def notFound(html):
 	"""
