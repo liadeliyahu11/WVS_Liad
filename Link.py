@@ -1,3 +1,5 @@
+import itertools
+
 class Link:
 
 	def __init__(self,link):
@@ -8,8 +10,8 @@ class Link:
 		self.fileName = tmp[0]
 		self.param = ''
 		if len(tmp)>1:
-			tmp = tmp[1].split('&')
-			self.param = map(lambda par: par.split('='),tmp)
+			self.param_for_build = tmp[1].split('&')
+			self.param = map(lambda par: par.split('='),self.param_for_build)
 			# param is list of parameters lists [[key,value],[key,value]] 
 		
 	def printLink(self):
@@ -19,5 +21,18 @@ class Link:
 		print "parameters:" + str(self.param)
 
 	def getAllPossibleLinks(self):
-		totalLink = self.baseUrl
-		tmp = map(lambda x:'/'+x,self.dir)
+		link = self.baseUrl
+		tmp = map(lambda x:'/'+x,self.dirs)
+		link += "".join(tmp)
+		link+= self.fileName+'?'
+		tmp = map(lambda x: x+'&',self.param_for_build)
+		tmp2 = []
+		for i in tmp:
+			st=""
+			for j in tmp:
+				if j!=i:
+					st += j
+				st += i[:-1]
+			tmp2.append(st)
+		totalLinks = map(lambda x:link+x,tmp2)
+		return totalLinks

@@ -7,6 +7,7 @@ def main():
 	print sqli.isInjectable(url)
 	"""
 	l = Link(url)
+	l.getAllPossibleLinks()
 	l.printLink()
 
 
