@@ -61,12 +61,8 @@ ORA-00933: SQL command not properly ended
 
 MS SQL Server - 
 
-Microsoft SQL Native Client error â€˜80040e14â€™
+Microsoft SQL Native Client error ‘80040e14’
 Unclosed quotation mark after the character string
 
 postgresql - 
 Query failed: ERROR: syntax error at or near
-
-
-
-

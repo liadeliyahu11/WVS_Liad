@@ -8,21 +8,13 @@ import sys
 s = requests.Session()
 #s.cookie = browsercookie.firefox()
 
-def scanPage(filename,url,page,depth):
-	"""
-	wrapping function to scanOnePage (scans a page).
-	"""
-	if not scanOnePage(filename,url,page,depth):
-		allLinks.remove(page)
-		return False
-	return True
-
-def scanOnePage(filename,url,page,depth):
+def scanPages(filename,url,page,depth):
 	"""
 	scans a page.
 	gets file name url page and depth(in the recursion) and returns is succeeded.
 	"""
 	try:
+		#print depth
 		my_threads = []
 		base = url
 		html,url = linkExist(s,url,page) # if not exist exception will raise
@@ -34,7 +26,7 @@ def scanOnePage(filename,url,page,depth):
 				if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
 					allLinks.append(i)
 					if len(threads)<=MAX_THREADS:
-						t = threading.Thread(target=scanOnePage,args=(filename,url,i,depth+1))
+						t = threading.Thread(target=scanPages,args=(filename,url,i,depth+1))
 						threads.append(t)
 						my_threads.append(t)
 						t.start()
@@ -61,18 +53,21 @@ def scanAllPages(url):
 	gets url address and trys to scan all it's page. 
 	"""
 	print "scan started..."
-	if url[:5] == "https":
-		filename = url[8:].replace('/','-')
+	if url[:4] != "http":
+		print 'the url is not by the protocol'
 	else:
-		filename = url[7:].replace('/','-')
-	if scanPage(filename,url,"",0):
-		f = open(filename+".txt","w")
-		for i in total:
-			f.write(i+"\n")
-		f.close()
-		print "scan completed!"
-	else:
-		print "cant scan the page you gave"
+		if url[:5] == "https":
+			filename = url[8:].replace('/','-')
+		else:
+			filename = url[7:].replace('/','-')
+		if scanPages(filename,url,"",0):
+			f = open(filename+".txt","w")
+			for i in total:
+				f.write(i+"\n")
+			f.close()
+			print "scan completed!"
+		else:
+			print "can't scan the page you gave.(couldn't find the page)."
 
 def main():
 	reload(sys)  

@@ -20,7 +20,7 @@ class FileInclusion():
 	def checkLFI(self):
 		"""
 		check if rfi exist in the givven url
-		more : 
+		more:
 		/etc/group
 		/etc/hosts
 		/etc/motd

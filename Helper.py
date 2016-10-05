@@ -44,24 +44,23 @@ def createFormsList(html):
 		for i in parameters:
 			if i[1] in str(form):
 				final_parameters.append((i[0],form.get('action'),form.get('method')))
-				#to fix: if its GET or POST upper its doesnt work
 				#liad note: if i want to save the input line so :
 				#final_parameters.append((i[0],i[1],form.get('action'),form.get('method')))
 	return final_parameters
 
 def par_to_file(i):
 	"""
-	prepares parameter line to the file.
+	prepares parameter line to the file.(name,action,method)
 	"""
 	return (str(i[0]+'\t')+str(i[1]+'\t')+str(i[2])).encode('utf-8')
 
-def linkValid(url,i):
+def linkValid(url,url2):
 	"""
-	returns true if url is valid
+	returns true if url is valid. include http/https and link to the same 
 	"""
-	if i==url or i==url[7:] or ((i[:7]=="http://" or i[:8]=="https://") and 
-		((url not in i or url[:7]+"www."+url[7:] not in i) or (url[:-1] not in i or url[:7]+"www."+url[7:-1] not in i)
-		or (url not in i or url[:8]+"www."+url[8:] not in i) or (url[:-1] not in i or url[:8]+"www."+url[8:-1] not in i))):
+	if url2==url or url2==url[7:] or ((url2[:7]=="http://" or url2[:8]=="https://") and 
+		((url not in url2 or url[:7]+"www."+url[7:] not in url2) or (url[:-1] not in i or url[:7]+"www."+url[7:-1] not in url2)
+		or (url not in url2 or url[:8]+"www."+url[8:] not in url2) or (url[:-1] not in i or url[:8]+"www."+url[8:-1] not in url2))):
 		return False
 	return True
 
