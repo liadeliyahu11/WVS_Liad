@@ -7,7 +7,6 @@ import sys
 
 s = requests.Session()
 #s.cookie = browsercookie.firefox()
-
 def scanPages(filename,url,page,depth):
 	"""
 	scans a page.
@@ -18,39 +17,30 @@ def scanPages(filename,url,page,depth):
 		my_threads = []
 		base = url
 		html,url = linkExist(s,url,page) # if not exist exception will raise
-		parameters = createFormsList(html)
-		if depth <=MAX_DEPTH:
-			links = re.findall("href=\"([^\"]*)\"",html)
-			total.append(url)
-			for i in links:
-				if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
-					allLinks.append(i)
-					if len(threads)<=MAX_THREADS:
-						t = threading.Thread(target=scanPages,args=(filename,url,i,depth+1))
-						threads.append(t)
-						my_threads.append(t)
-						t.start()
-			for i in my_threads:
-				i.join()
-		f = open(filename+"-forms.txt",'a+')
-		tagOpen = False
-		for i in parameters:
-			if not existInFile(filename+"-forms.txt",par_to_file(i)):
-				if not tagOpen:
-					f.write("url:"+"\n"+url+"\n")
-					tagOpen = True
-				f.write(par_to_file(i)+"\n")
-		if tagOpen:
-			f.write("endUrl\n")
-		f.close()
-		return True
+		if not already_visited(html):
+			parameters = createFormsList(html)
+			if depth <=MAX_DEPTH:
+				links = re.findall("href=\"([^\"]*)\"",html)
+				total.append(url)
+				for i in links:
+					if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
+						allLinks.append(i)
+						if len(threads)<=MAX_THREADS:
+							t = threading.Thread(target=scanPages,args=(filename,url,i,depth+1))
+							threads.append(t)
+							my_threads.append(t)
+							t.start()
+				for i in my_threads:
+					i.join()
+			if print_par_to_file(filename,url,parameters):
+				return True
 	except Exception as ex:
 		pass
 	return False
 
 def scanAllPages(url):
 	"""
-	gets url address and trys to scan all it's page. 
+	gets url address and trys to scan all it's pages. 
 	"""
 	print "scan started..."
 	if url[:4] != "http":

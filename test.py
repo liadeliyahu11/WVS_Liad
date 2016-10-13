@@ -6,11 +6,10 @@ def main():
 	sqli = Sqli(s)
 	print sqli.isInjectable(url)
 	"""
-	l = Link(url)
+	"""l = Link(url)
 	l.getAllPossibleLinks()
 	l.printLink()
-
-
-
+	"""
+	getAllFormsFromFile('thisislegal.com-forms.txt')
 if __name__ == "__main__":
 	main()
