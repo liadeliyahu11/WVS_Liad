@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import hashlib
 
 MAX_DEPTH = 5
 MAX_THREADS = 1000
@@ -11,7 +10,7 @@ headers = {
 threads = []
 allLinks = []
 total = []
-pages_hashes = []
+pages_len = []
 
 
 def notFound(html):
@@ -27,12 +26,14 @@ def notFound(html):
 	return False
 
 def already_visited(html):
-	thishash = hashlib.md5()
-	thishash.update(html)
-	thishash = thishash.hexdigest()
-	if thishash in pages_hashes:
+	html = html.split('\n')
+	new_html = ''
+	for line in html:
+		if not (('<title>' or '</title>') in line):
+			new_html += line+'\n'
+	if len(new_html) in pages_len:
 		return True
-	pages_hashes.append(thishash)
+	pages_len.append(len(new_html))
 	return False
 
 def existInFile(filename,toFind):
