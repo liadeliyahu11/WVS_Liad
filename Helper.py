@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 MAX_DEPTH = 5
+MAX_LINKS = 20
 MAX_THREADS = 1000
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
 headers = {
@@ -155,3 +156,27 @@ def getAllFormsFromFile(filename):
 				keys.append(j)
 			allForms.append([url,action,method,keys])
 	return allForms
+
+	def sendRequest(session,base_url,form,values):#[url,action,method,[key,key,key]]
+		try:
+			url,action,method,keys = form[0],form[1],form[2],form[3]
+			if action != ('' or '/'):
+					url=base_url+'/'+action
+			if method == 'post':
+				#order key and values and send request
+				#to fix
+				return True
+			elif method == 'get':
+				link = Link(url)
+				url = link.addGetParameters(keys,values)
+				ans = session.get(url)
+				html = ans.text.encode('utf-8')
+				if ans.status_code == 404 and notFound(html):
+					return False
+				return html
+		except:
+			pass
+		return False
+
+
+

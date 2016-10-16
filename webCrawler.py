@@ -13,11 +13,11 @@ def scanPages(filename,url,page,depth):
 	gets file name url page and depth(in the recursion) and returns is succeeded.
 	"""
 	try:
-		#print depth
+		print depth
 		my_threads = []
 		base = url
 		html,url = linkExist(s,url,page) # if not exist exception will raise
-		if not already_visited(html):
+		if not already_visited(html) and len(total)<MAX_LINKS:
 			parameters = createFormsList(html)
 			if depth <=MAX_DEPTH:
 				links = re.findall("href=\"([^\"]*)\"",html)
@@ -25,7 +25,7 @@ def scanPages(filename,url,page,depth):
 				for i in links:
 					if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
 						allLinks.append(i)
-						if len(threads)<=MAX_THREADS:
+						if len(threads)<=MAX_THREADS:#if not in max threads
 							t = threading.Thread(target=scanPages,args=(filename,url,i,depth+1))
 							threads.append(t)
 							my_threads.append(t)

@@ -1,8 +1,8 @@
 import itertools
 
 class Link:
-
 	def __init__(self,link):
+		self.link = link
 		pre = link.split("/")
 		self.baseUrl = pre[0]+'//'+pre[1]+pre[2]
 		self.dirs = [x for x in pre[3:-1]]
@@ -53,3 +53,9 @@ class Link:
 			else:
 				url = url[:-1]
 		return url
+
+	def addGetParameters(self,keys,values):
+		self.link += '?'
+		for i in xrange(len(key)):
+			self.link += keys[i]+'='+values[i]+'&'
+		return self.link[:-1]
