@@ -1,9 +1,13 @@
 from bs4 import BeautifulSoup
 import requests
-
+from Link import *
 MAX_DEPTH = 5
 MAX_LINKS = 20
 MAX_THREADS = 1000
+HTTP = 7
+HTTPS = 8
+HTTPORHTTPS = 4
+
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
 headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
@@ -13,6 +17,16 @@ allLinks = []
 total = []
 pages_len = []
 
+def parseCookiesFromFile(filename):
+	cookies = {}
+	f = open(filename,'r')
+	lines = f.readlines()
+	f.close()
+	for line in lines:
+		l = line[:-1].split(':')
+		if len(l)>1:
+			cookies.update({l[0],l[1]})
+	return cookies
 
 def notFound(html):
 	"""
@@ -100,9 +114,9 @@ def linkValid(url,url2):
 	"""
 	returns true if url is valid. include http/https and link to the same 
 	"""
-	if url2==url or url2==url[7:] or ((url2[:7]=="http://" or url2[:8]=="https://") and 
-		((url not in url2 or url[:7]+"www."+url[7:] not in url2) or (url[:-1] not in i or url[:7]+"www."+url[7:-1] not in url2)
-		or (url not in url2 or url[:8]+"www."+url[8:] not in url2) or (url[:-1] not in i or url[:8]+"www."+url[8:-1] not in url2))):
+	if url2==url or url2==url[HTTP:] or ((url2[:HTTP]=="http://" or url2[:HTTPS]=="https://") and 
+		((url not in url2 or url[:HTTP]+"www."+url[HTTP:] not in url2) or (url[:-1] not in i or url[:HTTP]+"www."+url[HTTP:-1] not in url2)#with or without / 
+		or (url not in url2 or url[:HTTPS]+"www."+url[HTTPS:] not in url2) or (url[:-1] not in i or url[:HTTPS]+"www."+url[HTTPS:-1] not in url2))):
 		return False
 	return True
 
@@ -110,7 +124,7 @@ def linkExist(s,url,page):
 	"""
 	checks if the link exist if it does returns the html else return False.
 	"""
-	if page[:4] == "http":
+	if page[:HTTP] == "http://":
 		ans = s.get(page,headers=headers)
 		html = ans.text.encode('utf-8')
 		if ans.status_code == 404 and notFound(html):
@@ -131,10 +145,23 @@ def linkExist(s,url,page):
 				url = url+"/"+page
 	return (html,url)
 
-def formParser(form):# form  = [url,action,method,[key,key,key]]
-	print form[0]
-	print form[1]
-	print form[2]
+	"""
+	the end of the functions for the crawler
+	the start of the functions for the vuln scanner
+	"""
+
+
+
+
+def key_values_post(keys,values):# form  = [url,action,method,[key,key,key]]
+	d = {}
+	if len(keys) == len(values):
+		for i in xrange(0,len(keys)):
+			d.update({keys[i]:values[i]})
+	else:#one value for all keys
+		for i in xrange(0,len(keys)):
+			d.update({keys[i]:values})
+	return d
 
 def getAllFormsFromFile(filename):
  	"""
@@ -157,26 +184,37 @@ def getAllFormsFromFile(filename):
 			allForms.append([url,action,method,keys])
 	return allForms
 
-	def sendRequest(session,base_url,form,values):#[url,action,method,[key,key,key]]
-		try:
-			url,action,method,keys = form[0],form[1],form[2],form[3]
-			if action != ('' or '/'):
-					url=base_url+'/'+action
-			if method == 'post':
-				#order key and values and send request
-				#to fix
-				return True
-			elif method == 'get':
-				link = Link(url)
-				url = link.addGetParameters(keys,values)
-				ans = session.get(url)
-				html = ans.text.encode('utf-8')
-				if ans.status_code == 404 and notFound(html):
-					return False
-				return html
-		except:
-			pass
-		return False
-
-
-
+def getAllLinksFromFile(filename):
+	links = []
+	f = open(filename,'r')
+	lines = f.readlines()
+	f.close()
+	for line in lines:
+		links.append(line[:-1])
+	return links
+def sendRequest(session,base_url,form,values):#[url,action,method,[key,key,key]]
+	try:
+		url,action,method,keys = form[0],form[1],form[2],form[3]
+		if action != ('' or '/'):
+				url=base_url+'/'+action
+		print url
+		if method == 'post':
+			data = key_values_post(keys,values)
+			ans = session.post(url,data=data)
+			html = ans.text.encode('utf-8')
+			if ans.status_code == 404 and notFound(html):
+				return False
+			return html
+		elif method == 'get':
+			link = Link(url)
+			url = link.addGetParameters(keys,values)
+			print url
+			ans = session.get(url)
+			html = ans.text.encode('utf-8')
+			if ans.status_code == 404 and notFound(html):
+				return False
+			return html
+	except Exception as ex:
+		print ex
+		pass
+	return False

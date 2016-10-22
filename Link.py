@@ -56,6 +56,6 @@ class Link:
 
 	def addGetParameters(self,keys,values):
 		self.link += '?'
-		for i in xrange(len(key)):
+		for i in xrange(len(keys)):
 			self.link += keys[i]+'='+values[i]+'&'
 		return self.link[:-1]
