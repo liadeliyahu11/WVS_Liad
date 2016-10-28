@@ -30,16 +30,17 @@ def parseCookiesFromFile(filename):
 			cookies.update({l[0]:l[1]})
 	return cookies
 
-def notFound(html):
+def notFound(ans):
 	"""
 	gets html code of a page and checks if page not found by known strings.
 	"""
+
 	c = 0
 	for i in cluesForError:
-		if i in html:
+		if i in ans.text:
 			c += 1
 	if c>3:
-		return True
+		return (ans.status_code == 404)
 	return False
 
 def already_visited(html):
@@ -116,11 +117,19 @@ def linkValid(url,url2):
 	"""
 	returns true if url is valid. include http/https and link to the same 
 	"""
-	if url2==url or url2==url[HTTP:] or ((url2[:HTTP]=="http://" or url2[:HTTPS]=="https://") and 
-		((url not in url2 or url[:HTTP]+"www."+url[HTTP:] not in url2) or (url[:-1] not in i or url[:HTTP]+"www."+url[HTTP:-1] not in url2)#with or without / 
-		or (url not in url2 or url[:HTTPS]+"www."+url[HTTPS:] not in url2) or (url[:-1] not in i or url[:HTTPS]+"www."+url[HTTPS:-1] not in url2))):
-		return False
-	return True
+	IS_HTTPS = (url[:HTTPS] == "https://")
+	SAME = (url2==url or url2 == url[HTTP:]) 
+	IS_LINK = (url2[:HTTP]=="http://" or url2[:HTTPS]=="https://") 
+	INSIDE_HTTP = (url in url2 or url[:HTTP]+"www."+url[HTTP:] in url2) 
+	INSIDE_HTTP_WITHOUT_LAST =  ((url[:-1] in url2) or (url[:HTTP]+"www."+url[HTTP:-1] in url2))
+	INSIDE_HTTPS = ((url in url2) or (url[:HTTPS]+"www."+url[HTTPS:] in url2)) 
+	INSIDE_HTTPS_WITHOUT_LAST = ((url[:-1] in url2) or (url[:HTTPS]+"www."+url[HTTPS:-1] in url2)) 
+	if (not SAME) and IS_LINK :
+		if IS_HTTPS:
+			return (INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST)
+		else:
+			return (INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST)
+	return False
 
 def linkExist(s,url,page):
 	"""
@@ -129,10 +138,10 @@ def linkExist(s,url,page):
 	if page[:HTTP] == "http://":
 		ans = s.get(page,headers=headers)
 		html = ans.text.encode('utf-8')
-		if ans.status_code == 404 and notFound(html):
+		if notFound(ans):
 			ans = s.get(url+"/"+page,headers=headers)
 			html = ans.text.encode('utf-8')
-			if ans.status_code == 404 and notFound(html):
+			if notFound(ans):
 				return False
 			else:
 				url = url+"/"+page
@@ -141,7 +150,7 @@ def linkExist(s,url,page):
 	else:
 		ans = s.get(url+"/"+page,headers=headers)
 		html = ans.text.encode('utf-8')
-		if ans.status_code == 404 and notFound(html):
+		if notFound(ans):
 			return False
 		else:
 				url = url+"/"+page
@@ -213,7 +222,7 @@ def sendRequest(session,base_url,form,values):#[url,action,method,[key,key,key]]
 			data = key_values_post(keys,values)
 			ans = session.post(url,data=data)
 			html = ans.text.encode('utf-8')
-			if ans.status_code == 404 and notFound(html):
+			if notFound(ans):
 				return False
 			return html
 		elif method == 'get':
@@ -222,7 +231,7 @@ def sendRequest(session,base_url,form,values):#[url,action,method,[key,key,key]]
 			print url
 			ans = session.get(url)
 			html = ans.text.encode('utf-8')
-			if ans.status_code == 404 and notFound(html):
+			if notFound(ans):
 				return False
 			return html
 	except Exception as ex:
