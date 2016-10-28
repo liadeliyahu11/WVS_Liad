@@ -7,3 +7,5 @@ class vulnChecker():
 		self.allForms = getAllFormsFromFile(formsFileName)
 		self.allLinks = getAllLinksFromFile(linksFileName)
 
+	def checkAttacks():
+		print 's'

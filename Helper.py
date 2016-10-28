@@ -6,7 +6,6 @@ MAX_LINKS = 20
 MAX_THREADS = 1000
 HTTP = 7
 HTTPS = 8
-HTTPORHTTPS = 4
 
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
 headers = {
@@ -23,9 +22,12 @@ def parseCookiesFromFile(filename):
 	lines = f.readlines()
 	f.close()
 	for line in lines:
-		l = line[:-1].split(':')
+		if line[-1] == '\n':
+			l = line[:-1].split(':')
+		else:
+			l = line.split(':')
 		if len(l)>1:
-			cookies.update({l[0],l[1]})
+			cookies.update({l[0]:l[1]})
 	return cookies
 
 def notFound(html):
@@ -154,6 +156,9 @@ def linkExist(s,url,page):
 
 
 def key_values_post(keys,values):# form  = [url,action,method,[key,key,key]]
+	"""
+	chain key to value (organized  in dictionary)
+	"""
 	d = {}
 	if len(keys) == len(values):
 		for i in xrange(0,len(keys)):
@@ -165,7 +170,7 @@ def key_values_post(keys,values):# form  = [url,action,method,[key,key,key]]
 
 def getAllFormsFromFile(filename):
  	"""
-	
+	parse all the forms from the forms file.
  	"""
 	f = open(filename,'r')
 	lines = f.readlines()
@@ -185,6 +190,9 @@ def getAllFormsFromFile(filename):
 	return allForms
 
 def getAllLinksFromFile(filename):
+	"""
+	read all the links from the links file.
+	"""
 	links = []
 	f = open(filename,'r')
 	lines = f.readlines()
@@ -193,6 +201,9 @@ def getAllLinksFromFile(filename):
 		links.append(line[:-1])
 	return links
 def sendRequest(session,base_url,form,values):#[url,action,method,[key,key,key]]
+	"""
+	gets action and values to send and sends the requests with the given values.
+	"""
 	try:
 		url,action,method,keys = form[0],form[1],form[2],form[3]
 		if action != ('' or '/'):
