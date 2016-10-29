@@ -12,7 +12,7 @@ def getParameters(argv):
 	st += 'cookie file name for example:\ncookies.txt'
 	cookies,url = None,None
 	try:
-		opts, args = getopt.getopt(argv,"hu:c:",["url=","coockies="])
+		opts, args = getopt.getopt(argv,"hbu:c:",["url=","coockies="])
 	except getopt.GetoptError:
 		print st
 		sys.exit(2)
@@ -25,6 +25,8 @@ def getParameters(argv):
 				url = arg
 			elif opt == '-c':
 				cookies = parseCookiesFromFile(arg)
+			elif opt == '-b':
+				status508 = 15
 		filename = False
 		if (url[:HTTP] != "http://") and (url[:HTTPS] != "https://"):
 			print url

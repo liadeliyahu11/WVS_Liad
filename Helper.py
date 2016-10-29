@@ -2,10 +2,11 @@ from bs4 import BeautifulSoup
 import requests
 from Link import *
 MAX_DEPTH = 5
-MAX_LINKS = 20
+MAX_LINKS = 100
 MAX_THREADS = 1000
 HTTP = 7
 HTTPS = 8
+status508 = 999
 
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
 headers = {
@@ -15,6 +16,11 @@ threads = []
 allLinks = []
 total = []
 pages_len = []
+current_scanning = 0
+count_not_answered = 0
+
+
+
 
 def parseCookiesFromFile(filename):
 	cookies = {}
@@ -40,8 +46,8 @@ def notFound(ans):
 		if i in ans.text:
 			c += 1
 	if c>3:
-		return (ans.status_code == 404)
-	return False
+		return True
+	return ans.status_code == 404
 
 def already_visited(html):
 	html = html.split('\n')
@@ -60,10 +66,10 @@ def existInFile(filename,toFind):
 	"""
 	f = open(filename,'r')
 	lines = f.readlines()
+	lines = "".join(lines)
 	f.close()
-	for i in lines:
-		if i[:-1] == toFind.encode('utf-8'): # without \n from the file
-			return True
+	if toFind.encode('utf-8') in lines: # without \n from the file
+		return True
 	return False
 	
 
@@ -85,28 +91,23 @@ def createFormsList(html):
 	
 def par_to_file(i):
 	"""
-	prepares parameter line to the file.(name,action,method)
+	prepares parameter line to the file.
 	"""
 	st = str(i[0])+"\t"+str(i[1])+"\n"
 	for j in i[2]:
-		st += j+"\n"
+		st += str(j)+"\n"
 	return st.encode('utf-8')
 
 def print_par_to_file(filename,url,parameters):
 	try:	
 		filename  = filename+"-forms.txt"
 		f = open(filename,'a+')
-		tagOpen = False
 		for l in parameters:
-			st = (str(l[0])+"\t"+str(l[1]))
+			st = par_to_file(l)
 			if not existInFile(filename,st):
-				if not tagOpen:
-					f.write("url:"+"\n"+url+"\n")
-					tagOpen = True
-				f.write(par_to_file(l))
-			if tagOpen:
+				f.write("url:"+"\n"+url+"\n")
+				f.write(st)
 				f.write("endUrl\n")
-				tagOpen = False
 		f.close()
 		return True
 	except Exception as ex:
@@ -117,6 +118,7 @@ def linkValid(url,url2):
 	"""
 	returns true if url is valid. include http/https and link to the same 
 	"""
+	IS_PAGE = (len(url2)>0 and (url2[0] == '/' or '.' in url2))
 	IS_HTTPS = (url[:HTTPS] == "https://")
 	SAME = (url2==url or url2 == url[HTTP:]) 
 	IS_LINK = (url2[:HTTP]=="http://" or url2[:HTTPS]=="https://") 
@@ -124,22 +126,31 @@ def linkValid(url,url2):
 	INSIDE_HTTP_WITHOUT_LAST =  ((url[:-1] in url2) or (url[:HTTP]+"www."+url[HTTP:-1] in url2))
 	INSIDE_HTTPS = ((url in url2) or (url[:HTTPS]+"www."+url[HTTPS:] in url2)) 
 	INSIDE_HTTPS_WITHOUT_LAST = ((url[:-1] in url2) or (url[:HTTPS]+"www."+url[HTTPS:-1] in url2)) 
-	if (not SAME) and IS_LINK :
-		if IS_HTTPS:
-			return (INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST)
-		else:
-			return (INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST)
+	if (not SAME) and ((IS_LINK and ((INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST) or (INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST)))
+	 or (IS_PAGE and not IS_LINK)):
+		return True
 	return False
+
+def wait():
+	global count_not_answered
+	while count_not_answered > status508:
+		pass
+	count_not_answered += 1
 
 def linkExist(s,url,page):
 	"""
 	checks if the link exist if it does returns the html else return False.
 	"""
+	global count_not_answered
 	if page[:HTTP] == "http://":
+		wait()
 		ans = s.get(page,headers=headers)
+		count_not_answered -= 1
 		html = ans.text.encode('utf-8')
 		if notFound(ans):
+			wait()
 			ans = s.get(url+"/"+page,headers=headers)
+			count_not_answered -= 1
 			html = ans.text.encode('utf-8')
 			if notFound(ans):
 				return False
@@ -148,7 +159,9 @@ def linkExist(s,url,page):
 		else:
 			url = page
 	else:
+		wait()
 		ans = s.get(url+"/"+page,headers=headers)
+		count_not_answered -= 1
 		html = ans.text.encode('utf-8')
 		if notFound(ans):
 			return False
