@@ -3,38 +3,57 @@ import re
 from Helper import *
 import threading
 
+#
+#
+#
+#
+# handle subdomains example : walla
+#
+#
+#
+#
 
 s = requests.Session()
 #s.cookie = browsercookie.firefox()
-def scanPages(filename,url,page,depth):
+def scanPages(filename,base_url,url=None):
 	"""
 	scans a page.
-	gets file name url page and depth(in the recursion) and returns is succeeded.
+	gets file name, url and page. 
+	returns is succeeded.
 	"""
 	global current_scanning
+	global done
 	my_threads = []
-	base = url
+	base = base_url
+	if url == None:
+		url = base_url
 	try:
 		current_scanning += 1
-		htmlurl = linkExist(s,url,page) # if not exist exception will raise
-		if htmlurl:
-			html,url = htmlurl
+		html = linkExist(s,url)
+		if html: 
 			if not already_visited(html):
-				parameters = createFormsList(html)
-				if depth <=MAX_DEPTH:
-					links = re.findall("href=\"([^\"]*)\"",html)
-					total.append(url)
+				total.append(url)
+				if len(total) >= MAX_LINKS:
+					done = True
+				else:
 					current_scanning -= 1
+					links = re.findall("href=\"([^\"]*)\"",html)
 					for i in links:
-						if i.encode('utf-8') not in allLinks and linkValid(base,i):#doesnt exist and doesnt equal to this url
+						i = i.encode('utf-8')
+						link = make_link(base,i)
+						if i not in allLinks and linkValid(base,i) and not similar_page(link):#doesnt exist and doesnt equal to this url
 							allLinks.append(i)
-							if len(threads)<=MAX_THREADS and (current_scanning+len(total) < MAX_LINKS+1 ):#if not in max threads
-								t = threading.Thread(target=scanPages,args=(filename,url,i,depth+1))
-								threads.append(t)
-								my_threads.append(t)
-								t.start()
+							if len(threads)<=MAX_THREADS:#if not in max threads
+								while current_scanning+len(total) > MAX_LINKS and not done:
+									pass
+								if not done:
+									t = threading.Thread(target=scanPages,args=(filename,base,link))
+									threads.append(t)
+									my_threads.append(t)
+									t.start()
 					for i in my_threads:
 						i.join()
+				parameters = createFormsList(html)
 				if print_par_to_file(filename,url,parameters):
 					return True
 	except Exception as ex:
@@ -47,11 +66,12 @@ def scanAllPages(url,filename):
 	"""
 	gets url address and trys to scan all it's pages. 
 	"""
-	if scanPages(filename,url,"",0):
+	if scanPages(filename,url):
 		f = open(filename+".txt","w")
 		for i in total:
 			f.write(i+"\n")
 		f.close()
+		print str(len(total)) + ' links found'
 		return True
 	else:
 		print "can't scan the page you gave.(couldn't find the page)."

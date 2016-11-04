@@ -8,7 +8,7 @@ class FileInclusion():
 		self.ffi_text = 'this is special text to test the rfi vulnerability!!!'
 		self.lfi_string = ['/../../../../../../../../../../etc/passwd','/../../../../../../../../../../etc/passwd%00']
 	
-	def checkRFI(self,url):
+	def checkRFI(self,url):#url without last parameter
 		"""
 		check if rfi exist in the givven url
 		"""

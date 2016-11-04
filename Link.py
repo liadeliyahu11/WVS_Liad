@@ -8,12 +8,16 @@ class Link:
 		self.dirs = [x for x in pre[3:-1]]
 		tmp = pre[-1].split('?')
 		self.fileName = tmp[0]
-		self.param = ''
+		self.param = []
 		if len(tmp)>1:
 			self.param_for_build = tmp[1].split('&')
-			self.param = map(lambda par: par.split('='),self.param_for_build)
+			self.param = map(lambda par: par.split('='),self.param_for_build)#get
 			# param is list of parameters lists [[key,value],[key,value]] 
 		
+
+	def numOfParameters():
+		return len(self.param)
+
 	def printLink(self):
 		"""
 		prints the current parsed link.

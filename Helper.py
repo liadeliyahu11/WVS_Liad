@@ -1,9 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 from Link import *
-MAX_DEPTH = 5
-MAX_LINKS = 100
-MAX_THREADS = 1000
+MAX_LINKS = 150
+MAX_THREADS = 500
 HTTP = 7
 HTTPS = 8
 status508 = 999
@@ -13,12 +12,13 @@ headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
 }
 threads = []
-allLinks = []
-total = []
-pages_len = []
+allLinks,total = [],[]
+pages_len,similar_pages = [],[]
+
+
 current_scanning = 0
 count_not_answered = 0
-
+done = False
 
 
 
@@ -48,6 +48,14 @@ def notFound(ans):
 	if c>3:
 		return True
 	return ans.status_code == 404
+
+
+def similar_page(url):
+	base_url = url.split('?')[0]
+	if base_url in similar_pages:
+		return True
+	similar_pages.append(base_url)
+	return False
 
 def already_visited(html):
 	html = html.split('\n')
@@ -137,37 +145,27 @@ def wait():
 		pass
 	count_not_answered += 1
 
-def linkExist(s,url,page):
+
+def make_link(url,page):
+	if len(page)>HTTPS:
+		if page[:HTTP] == "http://" or page[:HTTPS] == "https://":
+			return page
+	return url+'/'+page
+
+
+def linkExist(s,toAsk):
 	"""
 	checks if the link exist if it does returns the html else return False.
 	"""
 	global count_not_answered
-	if page[:HTTP] == "http://":
-		wait()
-		ans = s.get(page,headers=headers)
-		count_not_answered -= 1
-		html = ans.text.encode('utf-8')
-		if notFound(ans):
-			wait()
-			ans = s.get(url+"/"+page,headers=headers)
-			count_not_answered -= 1
-			html = ans.text.encode('utf-8')
-			if notFound(ans):
-				return False
-			else:
-				url = url+"/"+page
-		else:
-			url = page
-	else:
-		wait()
-		ans = s.get(url+"/"+page,headers=headers)
-		count_not_answered -= 1
-		html = ans.text.encode('utf-8')
-		if notFound(ans):
-			return False
-		else:
-				url = url+"/"+page
-	return (html,url)
+	wait()
+	ans = s.get(toAsk,headers=headers)
+	if notFound(ans):
+		return False
+	count_not_answered -= 1
+	return ans.text
+
+
 
 	"""
 	the end of the functions for the crawler
