@@ -47,11 +47,11 @@ def main():
 	sys.setdefaultencoding('utf8')
 	url,cookies,filename = getParameters(sys.argv[1:])
 	print "scan started..."
-	success = scanAllPages(url,filename)
+	se = scanAllPages(url,filename,cookies)
 	print "scan completed!"
-	if success:
+	if se:
 		print 'vlunerabilities scan started...'
-		vc = vulnChecker(filename+".txt",filename+"-forms.txt")
+		vc = vulnChecker(se,filename+".txt",filename+"-forms.txt")
 		print "vlunerabilities scan completed..."
 
 if __name__ == "__main__":

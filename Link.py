@@ -15,6 +15,13 @@ class Link:
 			# param is list of parameters lists [[key,value],[key,value]] 
 		
 
+	def getUrlWithoutParameters():
+		url = self.baseUrl
+		for i in dirs:
+			url += '/'+i
+		return url+'/'+self.fileName
+
+
 	def numOfParameters():
 		return len(self.param)
 
@@ -64,3 +71,10 @@ class Link:
 		for i in xrange(len(keys)):
 			self.link += keys[i]+'='+values[i]+'&'
 		return self.link[:-1]
+
+	def padGetParameters(parameter):
+		ret_url = getUrlWithoutParameters()
+		ret_url += '?'
+		for i in self.param:
+			ret_url += i[0]+'='+parameter+'&' 
+		return ret_url[:-1]

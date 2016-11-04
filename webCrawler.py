@@ -62,17 +62,18 @@ def scanPages(filename,base_url,url=None):
 	current_scanning -= 1
 	return False
 
-def scanAllPages(url,filename):
+def scanAllPages(url,filename,cookies):
 	"""
 	gets url address and trys to scan all it's pages. 
 	"""
+	s.cookies = cookies
 	if scanPages(filename,url):
 		f = open(filename+".txt","w")
 		for i in total:
 			f.write(i+"\n")
 		f.close()
 		print str(len(total)) + ' links found'
-		return True
+		return s
 	else:
 		print "can't scan the page you gave.(couldn't find the page)."
 		return False
