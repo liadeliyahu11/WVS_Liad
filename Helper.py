@@ -23,6 +23,9 @@ done = False
 
 
 def parseCookiesFromFile(filename):
+	"""
+	gets file name and parse the cookies from the file.
+	"""
 	cookies = {}
 	f = open(filename,'r')
 	lines = f.readlines()
@@ -51,6 +54,9 @@ def notFound(ans):
 
 
 def similar_page(url):
+	"""
+	gets the url and checks if the url without the parameters is already visited.
+	"""
 	base_url = url.split('?')[0]
 	if base_url in similar_pages:
 		return True
@@ -58,6 +64,9 @@ def similar_page(url):
 	return False
 
 def already_visited(html):
+	"""
+	gets the html and checks if the page is already visited.
+	"""
 	html = html.split('\n')
 	new_html = ''
 	for line in html:
@@ -107,6 +116,9 @@ def par_to_file(i):
 	return st.encode('utf-8')
 
 def print_par_to_file(filename,url,parameters):
+	"""
+	gets file,url and parameters and print the parameters to the givven file.
+	"""
 	try:	
 		filename  = filename+"-forms.txt"
 		f = open(filename,'a+')
@@ -140,6 +152,9 @@ def linkValid(url,url2):
 	return False
 
 def wait():
+	"""
+	thread sync function - wait (keeps just number of open requests at a moment)
+	"""
 	global count_not_answered
 	while count_not_answered > status508:
 		pass
@@ -147,6 +162,9 @@ def wait():
 
 
 def make_link(url,page):
+	"""
+	gets url and page name and create the right url for the request. 
+	"""
 	if len(page)>HTTPS:
 		if page[:HTTP] == "http://" or page[:HTTPS] == "https://":
 			return page
