@@ -12,8 +12,7 @@ import threading
 #
 #
 #
-
-s = requests.Session()
+ses = requests.Session()
 #s.cookie = browsercookie.firefox()
 def scanPages(filename,base_url,url=None):
 	"""
@@ -29,7 +28,7 @@ def scanPages(filename,base_url,url=None):
 		url = base_url
 	try:
 		current_scanning += 1
-		html = linkExist(s,url)
+		html = linkExist(ses,url)
 		if html: 
 			if not already_visited(html):
 				total.append(url)
@@ -66,14 +65,14 @@ def scanAllPages(url,filename,cookies):
 	"""
 	gets url address and trys to scan all it's pages. 
 	"""
-	s.cookies = cookies
+	ses.cookies.update(cookies)
 	if scanPages(filename,url):
 		f = open(filename+".txt","w")
 		for i in total:
 			f.write(i+"\n")
 		f.close()
 		print str(len(total)) + ' links found'
-		return s
+		return ses
 	else:
 		print "can't scan the page you gave.(couldn't find the page)."
 		return False

@@ -1,5 +1,0 @@
-url:
-http://shippuden.co.il/
-/cdn-cgi/l/chk_captcha	get
-None
-endUrl

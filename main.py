@@ -10,7 +10,7 @@ def getParameters(argv):
 	st = '\n\ntest.py -u <url> -c <cookiesFileName>\n\n'
 	st += 'url for example:\nhttp://some.com\n'
 	st += 'cookie file name for example:\ncookies.txt'
-	cookies,url = None,None
+	cookies,url = {},None
 	try:
 		opts, args = getopt.getopt(argv,"hbu:c:",["url=","coockies="])
 	except getopt.GetoptError:
@@ -27,6 +27,7 @@ def getParameters(argv):
 				cookies = parseCookiesFromFile(arg)
 			elif opt == '-b':
 				status508 = 15
+				#ses.max_redirects = 1
 		filename = False
 		if (url[:HTTP] != "http://") and (url[:HTTPS] != "https://"):
 			print url
