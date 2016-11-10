@@ -227,6 +227,39 @@ def getAllFormsFromFile(filename):
 			allForms.append([url,action,method,keys])
 	return allForms
 
+
+def login(ses,details):
+    """
+    get password and user name and try to login to the page(get url)
+    return true - succes login
+    """
+    #details = [login_url,action,method,[key1,key2...],[value1,value2]]
+    count = 0
+    html = ses.get(login_url).text
+    try:
+    	allForms = createFormsList(html)
+    	for form in allForms:
+    		is_login_form()
+        	html = sendRequest(ses,login_url,form,[userName,password])
+	        if isError(html):
+     	           return False
+    	        else:
+    	            return True 
+    except Exception as ex:
+        print ex
+        pass   
+    return False
+ 
+def isError(html):
+    """
+    get html string and check if error excite
+    """
+    check1 = ("error" in html) or ("Error" in html)
+    check2 = ("wrong" in html) or ("Wrong" in html)
+    if(check1 or check2):
+        return True
+    return False
+
 def getAllLinksFromFile(filename):
 	"""
 	read all the links from the links file.
