@@ -32,26 +32,20 @@ def scanPages(filename,base_url,url=None):
 		if html: 
 			if not already_visited(html):
 				total.append(url)
-				if len(total) >= MAX_LINKS:
-					done = True
-				else:
-					current_scanning -= 1
-					links = re.findall("href=\"([^\"]*)\"",html)
-					for i in links:
-						i = i.encode('utf-8')
-						link = make_link(base,i)
-						if i not in allLinks and linkValid(base,i) and not similar_page(link):#doesnt exist and doesnt equal to this url
-							allLinks.append(i)
-							if len(threads)<=MAX_THREADS:#if not in max threads
-								while current_scanning+len(total) > MAX_LINKS and not done:
-									pass
-								if not done:
-									t = threading.Thread(target=scanPages,args=(filename,base,link))
-									threads.append(t)
-									my_threads.append(t)
-									t.start()
-					for i in my_threads:
-						i.join()
+				current_scanning -= 1
+				links = re.findall("href=\"([^\"]*)\"",html)
+				for i in links:
+					i = i.encode('utf-8')
+					link = make_link(base,i)
+					if i not in allLinks and linkValid(base,i) and not similar_page(link):#doesnt exist and doesnt equal to this url
+						allLinks.append(i)
+						if len(threads)<=MAX_THREADS and current_scanning+len(total) < MAX_LINKS+1 :#if not in max threads
+							t = threading.Thread(target=scanPages,args=(filename,base,link))
+							threads.append(t)
+							my_threads.append(t)
+							t.start()
+				for i in my_threads:
+					i.join()
 				parameters = createFormsList(html)
 				if print_par_to_file(filename,url,parameters):
 					return True

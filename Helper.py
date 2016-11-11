@@ -5,12 +5,15 @@ MAX_LINKS = 150
 MAX_THREADS = 500
 HTTP = 7
 HTTPS = 8
-status508 = 999
+status508 = 15
 
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
 headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
-}
+	"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+	"Accept-Encoding": "gzip, deflate, sdch",
+	"Accept-Language": "en-US,en;q=0.8"
+}	
 threads = []
 allLinks,total = [],[]
 pages_len,similar_pages = [],[]
@@ -50,7 +53,7 @@ def notFound(ans):
 			c += 1
 	if c>3:
 		return True
-	return ans.status_code == 404
+	return ans.status_code in [404,400] 
 
 
 def similar_page(url):

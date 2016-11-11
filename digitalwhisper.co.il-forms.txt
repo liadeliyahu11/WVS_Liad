@@ -1,0 +1,32 @@
+url:
+http://www.digitalwhisper.co.il/Issues/
+None	post
+user_name
+password
+user_do_login
+endUrl
+url:
+http://www.digitalwhisper.co.il/Contact/
+None	post
+sender_name
+sender_email
+sender_phone
+message_subject
+action:contact_us_send
+endUrl
+url:
+http://www.digitalwhisper.co.il/0x8F/
+None	post
+user_name
+captcha
+action_add_comment
+endUrl
+url:
+http://digitalwhisper.co.il//register
+None	post
+user_name
+user_mail
+password
+_conf_password
+user_do_register
+endUrl
