@@ -2,7 +2,6 @@ from Sqli import *
 import sys  
 import getopt
 
-
 def main():
 	url = raw_input("url:")
 	"""s = requests.session()
@@ -23,8 +22,22 @@ def main():
 	else:
 		print html
 		"""
-	t = getParameters(sys.argv[1:])
+	"""t = getParameters(sys.argv[1:])
 	print t[0] 
 	print t[1]
+	"""
+	global lock
+	global ses
+	filename = "thisis"
+	if pageScan(ses,url):
+		while len(allLinks)>0:
+			pageScanner(ses,url)
+		f = open(filename+".txt","w")
+		for i in total:
+			f.write(i+"\n")
+		f.close()
+		print str(len(total)) + ' links found'
+	else:
+		print "cant scan the page you gabe"
 if __name__ == "__main__":
 	main()

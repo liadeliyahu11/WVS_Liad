@@ -14,57 +14,74 @@ import threading
 #
 ses = requests.Session()
 #s.cookie = browsercookie.firefox()
-def scanPages(filename,base_url,url=None):
-	"""
-	scans a page.
-	gets file name, url and page. 
-	returns is succeeded.
-	"""
-	global current_scanning
-	global done
-	my_threads = []
-	base = base_url
+lock = threading.Lock()
+cond = threading.Condition()
+
+done = False
+mythreads = []
+
+def checkAddLink(base_url,page):
+	link = make_link(base_url,page.encode('utf8'))
+	if link not in allLinks and linkValid(base_url,link) and not similar_page(link):
+		allLinks.append(link)
+
+
+def getLinkFromList():
+	if len(allLinks)>0:
+		res = allLinks[0]
+		allLinks.remove(res)
+		return res
+	return False
+
+def pageScanner(ses,base_url):
+	try:		
+		link = getLinkFromList()
+		if link:
+			pageScan(ses,base_url,link)
+	except Exception as e:
+		print
+		pass
+
+			
+def pageScan(ses,base_url,url=None):
+	global total
 	if url == None:
 		url = base_url
 	try:
-		current_scanning += 1
 		html = linkExist(ses,url)
-		if html: 
-			if not already_visited(html):
+		if html and not already_visited(html):
+			if len(total) < MAX_LINKS:
 				total.append(url)
-				current_scanning -= 1
+				print url+" added!"
 				links = re.findall("href=\"([^\"]*)\"",html)
-				for i in links:
-					i = i.encode('utf-8')
-					link = make_link(base,i)
-					if i not in allLinks and linkValid(base,i) and not similar_page(link):#doesnt exist and doesnt equal to this url
-						allLinks.append(i)
-						if len(threads)<=MAX_THREADS and current_scanning+len(total) < MAX_LINKS+1 :#if not in max threads
-							t = threading.Thread(target=scanPages,args=(filename,base,link))
-							threads.append(t)
-							my_threads.append(t)
-							t.start()
-				for i in my_threads:
-					i.join()
-				parameters = createFormsList(html)
-				if print_par_to_file(filename,url,parameters):
-					return True
+				for link in links:
+					checkAddLink(base_url,link)
+			parameters = createFormsList(url,html)
+			allParameters.append(parameters)
+		return True
 	except Exception as ex:
 		print ex
 		pass
-	current_scanning -= 1
 	return False
+
+def linksToFile(filename):
+	global total
+	f = open(filename+".txt","w")
+	for i in total:
+		f.write(i+"\n")
+	f.close()
+
 
 def scanAllPages(url,filename,cookies):
 	"""
 	gets url address and trys to scan all it's pages. 
 	"""
 	ses.cookies.update(cookies)
-	if scanPages(filename,url):
-		f = open(filename+".txt","w")
-		for i in total:
-			f.write(i+"\n")
-		f.close()
+	if pageScan(ses,url):
+		while len(allLinks)>0:
+			pageScanner(ses,url)
+		linksToFile(filename)
+		print_par_to_file(filename,allParameters)
 		print str(len(total)) + ' links found'
 		return ses
 	else:
