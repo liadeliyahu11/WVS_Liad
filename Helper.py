@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from Link import *
-MAX_LINKS = 150
+MAX_LINKS = 10
 MAX_THREADS = 500
 HTTP = 7
 HTTPS = 8
@@ -126,10 +126,11 @@ def print_par_to_file(filename,parameters):
 	try:	
 		filename  = filename+"-forms.txt"
 		f = open(filename,'a+')
-		for l in parameters:
-			st = par_to_file(l)
-			if not existInFile(filename,st):
-				f.write("url:"+"\n"+str(l[0])+"\n"+st+"endUrl\n")
+		for k in parameters:# k:list of lists
+			for l in k:
+				st = par_to_file(l)
+				if not existInFile(filename,st):
+					f.write("url:"+"\n"+str(l[0])+"\n"+st+"endUrl\n")
 		f.close()
 		return True
 	except Exception as ex:
@@ -167,6 +168,7 @@ def linkExist(s,toAsk):
 	"""
 	checks if the link exist if it does returns the html else return False.
 	"""
+	print "c: "+toAsk
 	ans = s.get(toAsk,headers=headers)
 	if notFound(ans):
 		return False

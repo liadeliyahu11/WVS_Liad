@@ -2,6 +2,7 @@ from webCrawler import *
 from vulnChecker import *
 import Helper
 import sys  
+import os
 import getopt
 
 def getParameters(argv):
@@ -55,6 +56,7 @@ def main():
 		print 'vlunerabilities scan started...'
 		vc = vulnChecker(se,filename+".txt",filename+"-forms.txt")
 		print "vlunerabilities scan completed..."
+	os.system("pause")
 
 if __name__ == "__main__":
 	main()
