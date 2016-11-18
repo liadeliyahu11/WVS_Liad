@@ -48,16 +48,16 @@ def pageScan(ses,base_url,url=None):
 	if url == None:
 		url = base_url
 	try:
-		html = linkExist(ses,url)
-		if html and not already_visited(html):
-			if len(total) < MAX_LINKS:
+		if len(total) < MAX_LINKS:
+			html = linkExist(ses,url)
+			if html and not already_visited(html):
 				total.append(url)
 				print url+" added!"
 				links = re.findall("href=\"([^\"]*)\"",html)
 				for link in links:
 					checkAddLink(base_url,link)
-			parameters = createFormsList(url,html)
-			allParameters.append(parameters)
+				parameters = createFormsList(url,html)
+				allParameters.append(parameters)
 		return True
 	except Exception as ex:
 		print ex

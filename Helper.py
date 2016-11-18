@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from Link import *
-MAX_LINKS = 10
+MAX_LINKS = 50
 MAX_THREADS = 500
 HTTP = 7
 HTTPS = 8
@@ -46,14 +46,15 @@ def notFound(ans):
 	"""
 	gets html code of a page and checks if page not found by known strings.
 	"""
-
+	if ans.status_code in [404,400]:
+		return True
 	c = 0
 	for i in cluesForError:
 		if i in ans.text:
 			c += 1
 	if c>3:
 		return True
-	return ans.status_code in [404,400] 
+	return False 
 
 
 def similar_page(url):
@@ -158,9 +159,8 @@ def make_link(url,page):
 	"""
 	gets url and page name and create the right url for the request. 
 	"""
-	if len(page)>HTTPS:
-		if page[:HTTP] == "http://" or page[:HTTPS] == "https://":
-			return page
+	if  len(page)>HTTPS and page[:HTTP] == "http://" or page[:HTTPS] == "https://":
+		return page
 	return url+'/'+page
 
 
@@ -169,7 +169,7 @@ def linkExist(s,toAsk):
 	checks if the link exist if it does returns the html else return False.
 	"""
 	print "c: "+toAsk
-	ans = s.get(toAsk,headers=headers)
+	ans = s.get(toAsk,headers=headers,timeout=3)
 	if notFound(ans):
 		return False
 	return ans.text
