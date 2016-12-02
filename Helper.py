@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 from Link import *
-MAX_LINKS = 50
-MAX_THREADS = 500
+MAX_LINKS = 20
+MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
 status508 = 15
@@ -16,7 +16,7 @@ headers = {
 }	
 threads = []
 allLinks,allParameters,total = [],[],[]
-pages_len,similar_pages = [],[]
+pages_len,similar_pages,tmpFileForms = [],[],[]
 
 
 current_scanning = 0
@@ -81,17 +81,14 @@ def already_visited(html):
 	pages_len.append(len(new_html))
 	return False
 
-def existInFile(filename,toFind):
+def alreadyAdded(filename,toFind):
 	"""
 	get file name and string and check if the file contains the string.  
 	"""
-	f = open(filename,'r')
-	lines = f.readlines()
-	lines = "".join(lines)
-	f.close()
-	if toFind.encode('utf-8') in lines: # without \n from the file
+	if toFind in tmpFileForms:
 		return True
-	return False
+	tmpFileForms.append(toFind)
+	return toFind in open(filename).read()
 	
 
 def createFormsList(url,html):
@@ -110,6 +107,13 @@ def createFormsList(url,html):
 		final_parameters.append(l)
 	return final_parameters
 	
+def hrefs(html):
+	lst = []
+	soup = BeautifulSoup(html,'html.parser')
+	for a in soup.find_all('a', href=True):
+		lst.append(a['href'])
+	return lst
+
 def par_to_file(i):
 	"""
 	prepares parameter line to the file.
@@ -130,7 +134,7 @@ def print_par_to_file(filename,parameters):
 		for k in parameters:# k:list of lists
 			for l in k:
 				st = par_to_file(l)
-				if not existInFile(filename,st):
+				if not alreadyAdded(filename,st):
 					f.write("url:"+"\n"+str(l[0])+"\n"+st+"endUrl\n")
 		f.close()
 		return True
@@ -142,16 +146,18 @@ def linkValid(url,url2):
 	"""
 	returns true if url is valid. include http/https and link to the same 
 	"""
+	BASE_URL = url2.split('/')[2]
 	IS_PAGE = (len(url2)>0 and (url2[0] == '/' or '.' in url2))
 	IS_HTTPS = (url[:HTTPS] == "https://")
 	SAME = (url2==url or url2 == url[HTTP:]) 
 	IS_LINK = (url2[:HTTP]=="http://" or url2[:HTTPS]=="https://") 
-	INSIDE_HTTP = (url in url2 or url[:HTTP]+"www."+url[HTTP:] in url2) 
-	INSIDE_HTTP_WITHOUT_LAST =  ((url[:-1] in url2) or (url[:HTTP]+"www."+url[HTTP:-1] in url2))
-	INSIDE_HTTPS = ((url in url2) or (url[:HTTPS]+"www."+url[HTTPS:] in url2)) 
-	INSIDE_HTTPS_WITHOUT_LAST = ((url[:-1] in url2) or (url[:HTTPS]+"www."+url[HTTPS:-1] in url2)) 
+	INSIDE_HTTP = (url in BASE_URL or url[:HTTP]+"www."+url[HTTP:] in url2) 
+	INSIDE_HTTP_WITHOUT_LAST =  ((url[:-1] in BASE_URL) or (url[:HTTP]+"www."+url[HTTP:-1] in BASE_URL))
+	INSIDE_HTTPS = ((url in BASE_URL) or (url[:HTTPS]+"www."+url[HTTPS:] in BASE_URL)) 
+	INSIDE_HTTPS_WITHOUT_LAST = ((url[:-1] in BASE_URL) or (url[:HTTPS]+"www."+url[HTTPS:-1] in BASE_URL))
+	IS_SUBDOMAIN = (IS_LINK and (url[HTTP:] in BASE_URL))
 	if (not SAME) and ((IS_LINK and ((INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST) or (INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST)))
-	 or (IS_PAGE and not IS_LINK)):
+	 or (IS_PAGE and not IS_LINK)) or IS_SUBDOMAIN:
 		return True
 	return False
 

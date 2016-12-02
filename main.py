@@ -14,7 +14,7 @@ def getParameters(argv):
 	st += 'cookie file name for example:\ncookies.txt'
 	cookies,url,status508 = {},None,999
 	try:
-		opts, args = getopt.getopt(argv,"hbu:c:",["url=","coockies="])
+		opts, args = getopt.getopt(argv,"hu:c:",["url=","coockies="])
 	except getopt.GetoptError:
 		print st
 		sys.exit(2)
@@ -27,10 +27,6 @@ def getParameters(argv):
 				url = arg
 			elif opt == '-c':
 				cookies = parseCookiesFromFile(arg)
-			elif opt == '-b':
-				status508 = 1
-				print 'ok'
-				#ses.max_redirects = 1
 		filename = False
 		if (url[:HTTP] != "http://") and (url[:HTTPS] != "https://"):
 			print url
@@ -55,6 +51,7 @@ def main():
 	if se:
 		print 'vlunerabilities scan started...'
 		vc = vulnChecker(se,filename+".txt",filename+"-forms.txt")
+		vc.checkAttacks()
 		print "vlunerabilities scan completed..."
 	os.system("pause")
 

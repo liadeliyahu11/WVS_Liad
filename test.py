@@ -26,6 +26,7 @@ def main():
 	print t[0] 
 	print t[1]
 	"""
+	"""
 	global lock
 	global ses
 	filename = "thisis"
@@ -38,6 +39,9 @@ def main():
 		f.close()
 		print str(len(total)) + ' links found'
 	else:
-		print "cant scan the page you gabe"
+		print "cant scan the page you gave"""
+	se = requests.Session()
+	sql = Sqli(se)
+	print sql.isInjectable("http://www.sedimental.com/catalog/index.php?ID=67")
 if __name__ == "__main__":
 	main()

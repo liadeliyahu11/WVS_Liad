@@ -6,26 +6,10 @@ class FileInclusion():
 		self.s = se
 		self.urls = urls
 		self.the_addr = 'http://wvstest.weebly.com'
-		self.ffi_text = 'this is special text to test the rfi vulnerability!!!'
+		self.rfi_text = 'this is special text to test the rfi vulnerability!!!'
 		self.lfi_string = ['/../../../../../../../../../../etc/passwd','/../../../../../../../../../../etc/passwd%00']
 		self.lfi_links = []
 		self.rfi_links = []
-	
-	def checkLRFI():
-		"""
-		takes the urls and checks each link.
-		if link found ad vulnerable its added to the links list.
-		"""
-		for i in self.urls:
-			url = Link(i)
-			if url.numOfParameters()>0:
-				rfi = checkRFI(url)
-				if rfi:
-					self.rfi_links.append(rfi)
-				lfi = checkLFI(url)
-				if lfi:
-					self.lfi_links.append(lfi)
-		return (self.lfi_links,self.rfi_links)
 
 
 	def checkRFI(self,url):#url without last parameter
@@ -61,8 +45,25 @@ class FileInclusion():
 		/etc/httpd/conf/httpd.conf
 		"""
 		for lfi in self.lfi_string:
-			url = url.padGetParameters(lfi)
+			url = url.padGetParameters(self.lfi_string[0])
 			ans = self.s.get(url) #liad note: find the linux/unix based servers
-			if not notFound(ans.text):
+			if not notFound(ans):
 				return url
 		return False
+
+	def checkLRFI(self):
+		"""
+		takes the urls and checks each link.
+		if link found ad vulnerable its added to the links list.
+		"""
+		for i in self.urls:
+			url = Link(i)
+			if url.numOfParameters()>0:
+				rfi = self.checkRFI(url)
+				print "check vuln in:"+i
+				if rfi:
+					self.rfi_links.append(rfi)
+				lfi = self.checkLFI(url)
+				if lfi:
+					self.lfi_links.append(lfi)
+		return (self.lfi_links,self.rfi_links)

@@ -3,15 +3,6 @@ import re
 from Helper import *
 import threading
 
-#
-#
-#
-#
-# handle subdomains example : walla
-#
-#
-#
-#
 ses = requests.Session()
 #s.cookie = browsercookie.firefox()
 lock = threading.Lock()
@@ -53,7 +44,7 @@ def pageScan(ses,base_url,url=None):
 			if html and not already_visited(html):
 				total.append(url)
 				print url+" added!"
-				links = re.findall("href=\"([^\"]*)\"",html)
+				links = hrefs(html)
 				for link in links:
 					checkAddLink(base_url,link)
 				parameters = createFormsList(url,html)

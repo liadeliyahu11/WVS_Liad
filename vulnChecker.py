@@ -1,5 +1,6 @@
 from Helper import *
-
+from FileInclusion import * 
+from Sqli import * 
 
 class vulnChecker():
 	"""docstring for vulnChecker"""
@@ -8,10 +9,15 @@ class vulnChecker():
 		self.allForms = getAllFormsFromFile(formsFileName)
 		self.allLinks = getAllLinksFromFile(linksFileName)
 
-	def checkAttacks():
-		lfi,rfi = FileInclusion(self.se,self.allLinks)
+	def checkAttacks(self):
+		lrfi = FileInclusion(self.allLinks,self.se)
+		lfi,rfi = lrfi.checkLRFI()
+		sqli = Sqli(self.se,self.allLinks)
+		vulnSqli = sqli.getAllVulnLinks()
+		for i in vulnSqli:
+			print i[0]+":"+i[1]
 		if len(lfi)>0:
-			print lfi
+			print lfi 
 		if len(rfi)>0:
 			print rfi
 		return False

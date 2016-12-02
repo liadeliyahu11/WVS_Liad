@@ -13,8 +13,9 @@ class Sqli():
     "SQLite": ("SQLite/JDBCDriver", "SQLite.Exception", "System.Data.SQLite.SQLiteException", "Warning.*sqlite_.*", "Warning.*SQLite3::", "\[SQLITE_ERROR\]"),
     "Sybase": ("(?i)Warning.*sybase.*", "Sybase message", "Sybase.*Server message.*"),
 }
-	def __init__(self,se):
+	def __init__(self,se,urls):
 		self.s = se
+		self.urls = urls
 		self.mysql_fp = ['You have an error in your SQL syntax','check the manual that corresponds',' MySQL server version \
 		for the right syntax to use near','mysql']
 
@@ -27,17 +28,26 @@ class Sqli():
 				return True
 		return False
 
+	def getAllVulnLinks(self):
+		vulnLinks = []
+		for i in self.urls:
+			if '=' in i:
+				res = self.isInjectable(i)
+				if res:
+					vulnLinks.append((i,res))
+		return vulnLinks
+
 	def isInjectable(self,url):
 		"""
 		returns true if url parameter is injectable else false
 		"""
 		base_html = self.s.get(url).text
 		ans = self.s.get(url+'\'')
-		if not notFound(ans.text) and self.errorExist(ans.text):#non-blind
-			return True
+		if not notFound(ans) and self.errorExist(ans.text):#non-blind
+			return "non-blind"
 		ans = self.s.get(url+' and 1=1')
 		if ans.text == base_html:
 			ans = self.s.get(url+' and 1=2')
-			if self.errorExist(ans.text) or notFound(ans.text):#blind
-				return True 
+			if self.errorExist(ans.text) or notFound(ans):#blind
+				return "blind"
 		return False
