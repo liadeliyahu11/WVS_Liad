@@ -16,10 +16,10 @@ class FileInclusion():
 		"""
 		check if rfi exist in the givven url
 		"""
-		url = url.padGetParameters(self.the_addr)
-		ans = self.s.get(url)
+		urlAddr = url.padGetParameters(self.the_addr)
+		ans = self.s.get(urlAddr)
 		if self.rfi_text in ans.text:
-			return url
+			return urlAddr
 		return False
 
 
@@ -45,10 +45,10 @@ class FileInclusion():
 		/etc/httpd/conf/httpd.conf
 		"""
 		for lfi in self.lfi_string:
-			url = url.padGetParameters(self.lfi_string[0])
-			ans = self.s.get(url) #liad note: find the linux/unix based servers
-			if not notFound(ans):
-				return url
+			urlAddr = url.padGetParameters(self.lfi_string[0])
+			ans = self.s.get(urlAddr) #liad note: find the linux/unix based servers
+			if not notFound(ans) and 'root:' in ans.text:
+				return urlAddr
 		return False
 
 	def checkLRFI(self):
@@ -67,3 +67,4 @@ class FileInclusion():
 				if lfi:
 					self.lfi_links.append(lfi)
 		return (self.lfi_links,self.rfi_links)
+		

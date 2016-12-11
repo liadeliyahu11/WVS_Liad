@@ -15,7 +15,7 @@ class vulnChecker():
 		sqli = Sqli(self.se,self.allLinks)
 		vulnSqli = sqli.getAllVulnLinks()
 		for i in vulnSqli:
-			print i[0]+":"+i[1]
+			print i[0] + ":" + i[1][0] + ":" + i[1][1]
 		if len(lfi)>0:
 			print lfi 
 		if len(rfi)>0:

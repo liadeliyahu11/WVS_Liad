@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import re
 from Link import *
 MAX_LINKS = 20
 MAX_THREADS = 100
@@ -112,6 +113,8 @@ def hrefs(html):
 	soup = BeautifulSoup(html,'html.parser')
 	for a in soup.find_all('a', href=True):
 		lst.append(a['href'])
+	for url in re.findall('url=(.*)\"',html):
+		lst.append(url)
 	return lst
 
 def par_to_file(i):
@@ -178,7 +181,7 @@ def linkExist(s,toAsk):
 	ans = s.get(toAsk,headers=headers,timeout=3)
 	if notFound(ans):
 		return False
-	return ans.text
+	return ans.text.encode('utf-8')
 
 
 
