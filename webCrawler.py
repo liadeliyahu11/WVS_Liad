@@ -13,7 +13,7 @@ mythreads = []
 
 def checkAddLink(base_url,page):
 	link = make_link(base_url,page.encode('utf8'))
-	if link not in allLinks and linkValid(base_url,link) and not similar_page(link):
+	if link not in allLinks and linkValid(base_url,link) and not similar_page(link) and not is_useless_page(link):
 		allLinks.append(link)
 
 

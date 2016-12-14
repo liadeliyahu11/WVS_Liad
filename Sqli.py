@@ -14,12 +14,10 @@ class Sqli():
 	    "IBM DB2": ("CLI Driver.*DB2", "DB2 SQL error", "\bdb2_\w+\("),
 	    "SQLite": ("SQLite/JDBCDriver", "SQLite.Exception", "System.Data.SQLite.SQLiteException", "Warning.*sqlite_.*", "Warning.*SQLite3::", "\[SQLITE_ERROR\]"),
 	    "Sybase": ("(?i)Warning.*sybase.*", "Sybase message", "Sybase.*Server message.*"),
-	    "MariaDB": ("SQL syntax.*MariaDB")
+	    "MariaDB": ("SQL syntax.*MariaDB",),
 	    }
 		self.s = se
 		self.urls = urls
-		self.mysql_fp = ['You have an error in your SQL syntax','check the manual that corresponds',' MySQL server version \
-		for the right syntax to use near','mysql']
 
 	def errorExist(self,html):
 		"""
@@ -28,7 +26,7 @@ class Sqli():
 		keys = self.dbms_errors.keys()
 		for key in keys:
 			for toFind in self.dbms_errors[key]:
-				if re.search(toFind, html):
+				if re.findall(toFind, html):
 					return key
 		return False
 

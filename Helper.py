@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from Link import *
-MAX_LINKS = 20
+MAX_LINKS = 100
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
@@ -25,6 +25,10 @@ count_not_answered = 0
 done = False
 
 
+def is_useless_page(link):
+	IS_PDF = (len(link)>4 and link[-4:] == ".pdf")
+	IS_JPG = (len(link)>4 and link[-4:] == ".jpg")
+	return (IS_JPG or IS_PDF)
 
 def parseCookiesFromFile(filename):
 	"""

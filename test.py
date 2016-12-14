@@ -42,6 +42,6 @@ def main():
 		print "cant scan the page you gave"""
 	se = requests.Session()
 	sql = Sqli(se,[])
-	print sql.isInjectable("http://www.princessholidays.com/home.php?id=1")
+	print sql.isInjectable("http://www.tab4u.com//players?ref=players")
 if __name__ == "__main__":
 	main()
