@@ -2,10 +2,11 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from Link import *
-MAX_LINKS = 100
+MAX_LINKS = 20
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
+FOLDER = "scan/logs/"
 status508 = 15
 
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
@@ -93,7 +94,7 @@ def alreadyAdded(filename,toFind):
 	if toFind in tmpFileForms:
 		return True
 	tmpFileForms.append(toFind)
-	return toFind in open(filename).read()
+	return toFind in open(FOLDER + filename).read()
 	
 
 def createFormsList(url,html):
@@ -137,7 +138,7 @@ def print_par_to_file(filename,parameters):
 	"""
 	try:	
 		filename  = filename+"-forms.txt"
-		f = open(filename,'a+')
+		f = open(FOLDER+filename,'a+')
 		for k in parameters:# k:list of lists
 			for l in k:
 				st = par_to_file(l)
@@ -214,7 +215,7 @@ def getAllFormsFromFile(filename):
  	"""
 	parse all the forms from the forms file.
  	"""
-	f = open(filename,'r')
+	f = open(FOLDER + filename,'r')
 	lines = f.readlines()
 	f.close()
 	st = "".join(lines)
@@ -237,7 +238,7 @@ def getAllLinksFromFile(filename):
 	read all the links from the links file.
 	"""
 	links = []
-	f = open(filename,'r')
+	f = open(FOLDER + filename,'r')
 	lines = f.readlines()
 	f.close()
 	for line in lines:

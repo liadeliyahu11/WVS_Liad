@@ -1,0 +1,93 @@
+url:
+http://tab4u.com
+/resultsSimple	get
+tab
+type
+type
+type
+type
+q
+None
+endUrl
+url:
+http://tab4u.com
+/results	get
+tab
+q
+None
+None
+None
+endUrl
+url:
+http://tab4u.com
+/results	get
+None
+tab
+q
+None
+None
+endUrl
+url:
+http://tab4u.com
+/results	get
+None
+None
+tab
+type
+type
+type
+q
+None
+endUrl
+url:
+http://tab4u.com
+/teacherSearch.php	get
+city
+None
+endUrl
+url:
+http://tab4u.com//players?ref=players
+playersRegRusults.php?ref=players	post
+sex
+sex
+email
+password
+terms
+isOnPlayers
+None
+endUrl
+url:
+http://tab4u.com//players?ref=players
+/phpbb/ucp.php?mode=login&ref=players&redirect=/../players	post
+username
+endUrl
+url:
+http://en.tab4u.com/index_en.php
+/results	get
+tab
+q
+None
+endUrl
+url:
+http://tab4u.com//boards/
+?	get
+search
+q
+None
+endUrl
+url:
+http://tab4u.com//my_songs
+playersRegRusults.php?ref=my_songs	post
+sex
+sex
+email
+password
+terms
+isOnPlayers
+None
+endUrl
+url:
+http://tab4u.com//my_songs
+/phpbb/ucp.php?mode=login&ref=my_songs&redirect=/../players	post
+username
+endUrl

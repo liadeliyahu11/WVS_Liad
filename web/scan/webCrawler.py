@@ -2,7 +2,6 @@
 import re
 from Helper import *
 import threading
-
 ses = requests.Session()
 #s.cookie = browsercookie.firefox()
 lock = threading.Lock()
@@ -57,7 +56,7 @@ def pageScan(ses,base_url,url=None):
 
 def linksToFile(filename):
 	global total
-	f = open(filename+".txt","w")
+	f = open(FOLDER+filename+".txt","w")
 	for i in total:
 		f.write(i+"\n")
 	f.close()

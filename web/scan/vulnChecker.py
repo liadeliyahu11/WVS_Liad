@@ -20,4 +20,4 @@ class vulnChecker():
 			print lfi 
 		if len(rfi)>0:
 			print rfi
-		return False
+		return list(lfi+rfi+vulnSqli)
