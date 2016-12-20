@@ -6,7 +6,7 @@ MAX_LINKS = 20
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
-FOLDER = "scan/logs/"
+FOLDER = "/logs/"
 status508 = 15
 
 cluesForError = ["The resource you are looking","had its name changed","or is temporarily unavailable","File or directory not found","404","not found","Not Found","Not found","was not found on this server","The requested URL","ErrorDocument to handle the request"]
@@ -152,18 +152,18 @@ def print_par_to_file(filename,parameters):
 
 def linkValid(url,url2):
 	"""
-	returns true if url is valid. include http/https and link to the same 
+	returns true if url2 is valid. include http/https and link to the same 
 	"""
 	BASE_URL = url2.split('/')[2]
-	IS_PAGE = (len(url2)>0 and (url2[0] == '/' or '.' in url2))
+	IS_PAGE = (len(url2)>0 and (url2[0] == '/' and '.' in url2))
 	IS_HTTPS = (url[:HTTPS] == "https://")
 	SAME = (url2==url or url2 == url[HTTP:]) 
 	IS_LINK = (url2[:HTTP]=="http://" or url2[:HTTPS]=="https://") 
-	INSIDE_HTTP = (url in BASE_URL or url[:HTTP]+"www."+url[HTTP:] in url2) 
-	INSIDE_HTTP_WITHOUT_LAST =  ((url[:-1] in BASE_URL) or (url[:HTTP]+"www."+url[HTTP:-1] in BASE_URL))
-	INSIDE_HTTPS = ((url in BASE_URL) or (url[:HTTPS]+"www."+url[HTTPS:] in BASE_URL)) 
-	INSIDE_HTTPS_WITHOUT_LAST = ((url[:-1] in BASE_URL) or (url[:HTTPS]+"www."+url[HTTPS:-1] in BASE_URL))
-	IS_SUBDOMAIN = (IS_LINK and (url[HTTP:] in BASE_URL))
+	INSIDE_HTTP = ((BASE_URL in url) or url[:HTTP]+"www."+url[HTTP:] in url2) 
+	INSIDE_HTTP_WITHOUT_LAST =  ((BASE_URL in url[:-1]) or (BASE_URL in url[:HTTP]+"www."+url[HTTP:-1]))
+	INSIDE_HTTPS = ((BASE_URL in url) or (BASE_URL in url[:HTTPS]+"www."+url[HTTPS:])) 
+	INSIDE_HTTPS_WITHOUT_LAST = ((BASE_URL in url[:-1]) or (BASE_URL in url[:HTTPS]+"www."+url[HTTPS:-1]))
+	IS_SUBDOMAIN = (IS_LINK and ((url[HTTP:] in BASE_URL) or (url[HTTPS:] in BASE_URL)))
 	if (not SAME) and ((IS_LINK and ((INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST) or (INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST)))
 	 or (IS_PAGE and not IS_LINK)) or IS_SUBDOMAIN:
 		return True

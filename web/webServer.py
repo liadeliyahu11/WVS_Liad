@@ -1,20 +1,20 @@
 from flask import Flask,jsonify,abort,render_template,current_app,request,redirect,url_for
 import json
-import hashlib 
-from scan.main import *
-
-
-def message(msg):
-	return redirect(url_for('send_message', message=msg))
+import hashlib
+import os
 
 app = Flask(__name__)
 scans = []
 temps = {}
 
+def message(msg):
+	return redirect(url_for('send_message', message=msg))
+
 def get_link_by_hash(hash_str):
-	for scan in scans:
-		if scan['hash_str'] == hash_str:
-			return scan['link']
+	global temps
+	for key in temps.keys():
+		if key == hash_str:
+			return temps[hash_str]
 	return None
 
 def reload_all_scan():
@@ -36,8 +36,9 @@ def send_message():
 
 @app.route('/scans',methods=['GET'])
 def get_scans():
+	global scans
 	reload_all_scan()
-	return jsonify(scans)
+	return json.dumps(scans)
 
 @app.route('/checkDetails',methods=['POST'])
 def check_details():
@@ -49,12 +50,11 @@ def check_details():
 			if k == hash_str:
 				link = temps[k]
 				break
-			else:
-				print k
-				print hash_str
 	if link:
 		try:
-			results = str(runScan(link,hash_str))#should be maybe thread
+			os.system("python scan\main.py -u "+link+' -s '+hash_str)
+			#runScan(link,hash_str)#needed to run command not from here
+			return redirect('/results/'+hash_str)
 		except Exception as ex:
 			print ex
 			results = "error"
@@ -79,8 +79,9 @@ def generate_key():
 
 @app.route('/scans/<string:hash_str>',methods=['GET'])
 def get_scan(hash_str):
+	global scans
 	reload_all_scan()
-	scan = [scan for scan in scans if scan['hash_str'] == hash_str]
+	scan = [scan for scan in scans if scan['hash_str'] == hash_str.lower()]
 	if len(scan)==0:
 		abort(404)
 	else:
