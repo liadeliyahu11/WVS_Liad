@@ -1,0 +1,2 @@
+mongodump -d wvs -o C:\Users\liad\Documents\GitHub\WVS_Liad
+mongorestore -d wvs C:\Users\liad\Documents\GitHub\WVS_Liad

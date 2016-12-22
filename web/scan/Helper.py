@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from Link import *
-MAX_LINKS = 20
+MAX_LINKS = 10
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8

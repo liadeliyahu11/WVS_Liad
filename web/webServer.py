@@ -2,10 +2,12 @@ from flask import Flask,jsonify,abort,render_template,current_app,request,redire
 import json
 import hashlib
 import os
+from scan.dbWrapper import *
 
 app = Flask(__name__)
-scans = []
 temps = {}
+db = dbWrapper()
+
 
 def message(msg):
 	return redirect(url_for('send_message', message=msg))
@@ -16,12 +18,6 @@ def get_link_by_hash(hash_str):
 		if key == hash_str:
 			return temps[hash_str]
 	return None
-
-def reload_all_scan():
-	global scans
-	with open("allScans.json") as f:
-		scans = json.load(f)
-reload_all_scan()
 
 @app.route('/')
 def get_index():
@@ -36,9 +32,7 @@ def send_message():
 
 @app.route('/scans',methods=['GET'])
 def get_scans():
-	global scans
-	reload_all_scan()
-	return json.dumps(scans)
+	return "error"
 
 @app.route('/checkDetails',methods=['POST'])
 def check_details():
@@ -79,12 +73,11 @@ def generate_key():
 
 @app.route('/scans/<string:hash_str>',methods=['GET'])
 def get_scan(hash_str):
-	global scans
-	reload_all_scan()
-	scan = [scan for scan in scans if scan['hash_str'] == hash_str.lower()]
-	if len(scan)==0:
+	scan = db.get_scan_by_hash(hash_str)	
+	if not scan:
 		abort(404)
 	else:
-		return jsonify(scan[0])
+		scan['_id'] = str(scan['_id'])
+		return jsonify(scan)
 if __name__ == "__main__":
 	app.run(debug=True)

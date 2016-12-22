@@ -1,17 +1,30 @@
-import MySQLdb
+import pymongo
+from pymongo import MongoClient
 
 class dbWrapper():
 	"""docstring for dbWrapper"""
-	def __init__(self, host, username, pwd, dbname):
-		self.db = MySQLdb.connect(host, username, pwd, dbname)
-		self.cursor = self.db.cursor()
+	def __init__(self):
+		self.cl = MongoClient() #basic connection
+		self.wvs = self.cl['wvs']#here is the db name
 
 	def getAllCheatsheets(self):
-		self.cursor.execute("select * from cheatsheets")
-		res = self.cursor.fetchall()
-		results = []
-		for row in res:
-			results.append((row[0],row[1]))
-		return results
+		dic = {}
+		dic['sqli_fp'] = list(self.wvs.sqli_fp.find())
+		dic['lfi_cs'] = list(self.wvs.lfi_cs.find())
+		dic['rfi_cs'] = list(self.wvs.rfi_cs.find())
+		dic['ce_cs'] = list(self.wvs.ce_cs.find())
+		dic['xss_cs'] = list(self.wvs.xss_cs.find())
+		return dic
 
+	def get_scan_by_hash(self,hash_str):
+		return self.wvs.scans.find_one({"hash_str":hash_str})
+
+	def get_all_scans(self,):
+		return self.wvs.scans.find()
+
+	def remove_if_exist(self,hash_str):
+		self.wvs.scans.remove({"hash_str":hash_str})
 	
+	def add_new_scan(self,scan):
+		self.wvs.scans.insert_one(scan)
+

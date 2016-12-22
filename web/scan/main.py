@@ -5,31 +5,20 @@ import sys
 import json
 import os
 import getopt
+from dbWrapper import *
 
-def if_exist_remove(scans,hash_str):
-	for scan in scans:
-		if scan['hash_str'] == hash_str:
-			scans.remove(scan)
-			break
+db = dbWrapper()
 
 
 def add_new_scan(hash_str,link,links,vulns):
-	scans = []
-	with open("allScans.json") as f:
-		scans = json.load(f)
-	if_exist_remove(scans,hash_str)
-	for dic in scans:
-		if dic['hash_str'] == hash_str:
-			scans.remove(dic)
-	dic = {
+	db.remove_if_exist(hash_str)
+	scan = {
 	'hash_str':hash_str,
 	"link":link,
 	"links":links,
 	"vulnLinks":vulns,
 	}
-	scans.append(dic)
-	with open('allScans.json', 'w') as f:
-		json.dump(scans, f)
+	db.add_new_scan(scan)
 
 def getParameters(argv):
 	"""
@@ -40,7 +29,7 @@ def getParameters(argv):
 	st += 'cookie file name for example:\ncookies.txt'
 	cookies,url,status508,hash_str = {},None,999,None
 	try:
-		opts, args = getopt.getopt(argv,"hbu:c:s",["url=","coockies="])
+		opts, args = getopt.getopt(argv,"hbu:c:s:",["url=","coockies=","hash_str="])
 	except getopt.GetoptError:
 		print st
 		sys.exit(2)
@@ -77,14 +66,16 @@ def main():
 	reload(sys)
 	sys.setdefaultencoding('utf8')
 	url,cookies,filename,hash_str = getParameters(sys.argv[1:])
+	print hash_str
 	print "scan started..."
 	se = scanAllPages(url,filename,cookies)
 	print "scan completed!"
 	if se:
 		print 'vlunerabilities scan started...'
 		vc = vulnChecker(se,filename+".txt",filename+"-forms.txt")
+		vuln_links = vc.checkAttacks()
 		print "vlunerabilities scan completed..."
-		add_new_scan(hash_str,url,getAllLinksFromFile(filename+'.txt'),vc)
+		add_new_scan(hash_str,url,getAllLinksFromFile(filename+'.txt'),vuln_links)
 
 if __name__ == "__main__":
 	main()
