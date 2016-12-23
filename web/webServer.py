@@ -73,7 +73,7 @@ def generate_key():
 
 @app.route('/scans/<string:hash_str>',methods=['GET'])
 def get_scan(hash_str):
-	scan = db.get_scan_by_hash(hash_str)	
+	scan = db.get_scan_by_hash(hash_str.lower())	
 	if not scan:
 		abort(404)
 	else:
