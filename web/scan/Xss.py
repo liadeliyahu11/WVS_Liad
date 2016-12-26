@@ -1,17 +1,18 @@
 from Helper import *
+
 class Xss():
 	"""docstring for Xss"""
 	#cs = cheatsheet
 	def __init__(self,se,urls):
 		self.urls = urls
 		self.se = se
-		self.cheatsheets = self.readFromFile("xssCheatSheet.txt")
+		self.cheatsheets = self.readFromFile("scan/xssCheatSheet.txt")
 		self.vulnLinks = []
 
 	def readFromFile(self,filename):
 	    f = open(filename)
 	    lines = f.readlines()
-	    lst = map(lambda x: x[:-1],lines)
+	    lst = map(lambda x: x[:-1], lines)
 	    f.close()
 	    return lst
 
@@ -31,7 +32,8 @@ class Xss():
 
 	def include_the_script(self,link,cs):
 		url = link.padGetParameters(cs)
-		ans = self.se.get(url)
-		if cs in ans.text.encode('utf-8'):
-			return True
+		if '?' in url:
+			ans = self.se.get(url)
+			if cs.encode('utf8') in (ans.text).encode('utf8'):
+				return True
 		return False

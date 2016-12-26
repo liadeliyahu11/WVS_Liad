@@ -8,9 +8,13 @@ http://tab4u.com//boards/
 http://tab4u.com//tuner
 http://tab4u.com//chords_dictionary
 http://tab4u.com//my_songs
-http://tab4u.com/profile.php?id=19765
-http://tab4u.com/tabs/songs/7318_נירה גל_-_אנשים יש בעולם (שיר ערש).html
+http://tab4u.com/profile.php?id=17123
+http://tab4u.com/phpbb/viewtopic.php?f=5&t=5961
+http://tab4u.com/phpbb/viewforum.php?f=5
 http://tab4u.com/boards/musicians/index.php#board
+http://tab4u.com/tabs/songs/7319_יונתן רזאל_-_עכשיו אני עף.html
+http://tab4u.com/boards/teach/index.php#board
+http://tab4u.com/tabs/songs/7318_נירה גל_-_אנשים יש בעולם (שיר ערש).html
 http://tab4u.com/tabs/songs/7317_Leonard Cohen_-_Dance Me To The End Of Love.html
 http://tab4u.com/tabs/songs/7316_Leonard Cohen_-_I'm Your Man.html
 http://tab4u.com/tabs/songs/7315_שמעון בוסקילה_-_לנשום.html
@@ -18,3 +22,29 @@ http://tab4u.com/tabs/songs/7315_אליעד נחום_-_לנשום.html
 http://tab4u.com/tabs/songs/7314_Leonard Cohen_-_Everybody Knows.html
 http://tab4u.com/tabs/songs/7313_Sean Paul_-_Rockabye.html
 http://tab4u.com/tabs/songs/7313_Clean Bandit_-_Rockabye.html
+http://tab4u.com/tabs/songs/7313_Anne-Marie_-_Rockabye.html
+http://tab4u.com/updates.php
+http://www.tab4u.com/players?ref=players.php
+http://tab4u.com//articles/guitar
+http://tab4u.com//articles/bass_guitar
+http://tab4u.com//articles/drums
+http://tab4u.com//articles/trumpet
+http://tab4u.com//articles/vocal
+http://tab4u.com//articles/chordsbook
+http://tab4u.com//editor.php
+http://tab4u.com//missingSong.php
+http://tab4u.com//topLoaders.php
+http://tab4u.com//results?tab=songs&cat=6
+http://tab4u.com//categories
+http://tab4u.com//views100
+http://tab4u.com//top100
+http://tab4u.com//last100
+http://www.tab4u.com/teachers.php
+http://tab4u.com//phpbb/
+http://www.tab4u.com/b5/rusit/rusit.html
+http://tab4u.com//discussionsT.php
+http://www.tab4u.com/articles/competition
+http://www.tab4u.com/users.php
+http://www.tab4u.com/about
+http://www.tab4u.com/terms
+http://www.tab4u.com/results?tab=songs&cat=24

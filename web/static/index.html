@@ -79,16 +79,9 @@ function adjust_textarea(h) {
 </head>
 <body>
 <div class="form-style-8">
-  <h2>Web Vulnerability Scanner - Generate Key By Domain</h2>
-  <form method="post" action="/generateKey" >
+  <h2>Web Vulnerability Scanner - Scan Web By Domain</h2>
+  <form method="post" action="/scanDomain" >
     <input type="text" name="domain" placeholder="enter the domain" />
-    <input type="submit" value="Generate" />
-  </form>
-</div>
-<div class="form-style-8">
-  <h2>Web Vulnerability Scanner - Scan By Key</h2>
-  <form method="post" action="/checkDetails" >
-    <input type="text" name="key" placeholder="enter generated key" />
     <input type="submit" value="Scan" />
   </form>
 </div>

