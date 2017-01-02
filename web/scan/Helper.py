@@ -193,7 +193,10 @@ def linkValid(url, url2):
 		(url[HTTP:] in BASE_URL) or (url[HTTPS:] in BASE_URL)))
 	if (not SAME) and ((IS_LINK and ((INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST) or (
 			INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST))) or (IS_PAGE and not IS_LINK)) or IS_SUBDOMAIN:
-		return True
+		#because the bot can logout ans then you have no access to another files
+		if 'logout' not in url2:
+			return True
+		return False
 	return False
 
 
@@ -247,14 +250,14 @@ def getAllFormsFromFile(filename):
 	st = "".join(lines)
 	forms = map(lambda x: x[5:], st.split('endUrl\n'))
 	allForms = []  # [[url,action,method,[key,key,key]],[url,action,method,[key,key,key]]]
-	for i in forms:
-		a = i.split('\n')
-		if len(a) > 2:
-			url = a[0]
-			action, method = a[1].split('\t')
+	for form in forms:
+		formlines = form.split('\n')
+		if len(formlines) > 2:
+			url = formlines[0]#place of url
+			action, method = formlines[1].split('\t')#place of action and method
 			keys = []
-			for j in a[2:-1]:
-				keys.append(j)
+			for key in formlines[2:-1]:
+				keys.append(key)
 			allForms.append([url, action, method, keys])
 	return allForms
 
@@ -281,7 +284,7 @@ def sendRequest(session, base_url, form, values):
 		url, action, method, keys = form[0], form[1], form[2], form[3]
 		if action != ('' or '/'):
 			url = base_url + '/' + action
-		print url
+
 		if method == 'post':
 			data = key_values_post(keys, values)
 			ans = session.post(url, data=data)
@@ -289,6 +292,7 @@ def sendRequest(session, base_url, form, values):
 			if notFound(ans):
 				return False
 			return html
+
 		elif method == 'get':
 			link = Link(url)
 			url = link.addGetParameters(keys, values)
@@ -298,6 +302,7 @@ def sendRequest(session, base_url, form, values):
 			if notFound(ans):
 				return False
 			return html
+
 	except Exception as ex:
 		print ex
 		pass

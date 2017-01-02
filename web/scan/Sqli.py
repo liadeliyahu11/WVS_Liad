@@ -4,7 +4,7 @@ class Sqli():
 	"""docstring for ClassName"""
 	#liad note: url should be like : http://abcs.com/somepage.php?id=5
 
-	def __init__(self,se,urls):
+	def __init__(self,se,urls,forms):
 		self.dbms_errors = {# regular expressions for DBMS fingerprints
 	    "MySQL": ("SQL syntax.*MySQL", "Warning.*mysql_.*", "valid MySQL result", "MySqlClient\."),
 	    "PostgreSQL": ("PostgreSQL.*ERROR", "Warning.*\Wpg_.*", "valid PostgreSQL result", "Npgsql\."),
@@ -18,6 +18,7 @@ class Sqli():
 	    }
 		self.s = se
 		self.urls = urls
+		self.forms = forms
 
 	def errorExist(self,html):
 		"""

@@ -3,11 +3,12 @@ from Helper import *
 class Xss():
 	"""docstring for Xss"""
 	#cs = cheatsheet
-	def __init__(self,se,urls):
+	def __init__(self,se,urls,forms):
 		self.urls = urls
 		self.se = se
 		self.cheatsheets = self.readFromFile("scan/xssCheatSheet.txt")
 		self.vulnLinks = []
+		self.forms = forms
 
 	def readFromFile(self,filename):
 	    f = open(filename)

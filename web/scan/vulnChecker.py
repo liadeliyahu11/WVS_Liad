@@ -10,11 +10,12 @@ class vulnChecker():
 		self.allLinks = getAllLinksFromFile(linksFileName)
 
 	def checkAttacks(self):
-		lrfi = FileInclusion(self.allLinks,self.se)
+
+		lrfi = FileInclusion(self.se,self.allLinks,self.allForms)
 		lfi,rfi = lrfi.checkLRFI()
-		sqli = Sqli(self.se,self.allLinks)
+		sqli = Sqli(self.se,self.allLinks,self.allForms)
 		vuln_sqli = sqli.getAllVulnLinks()
-		xss = Xss(self.se,self.allLinks)
+		xss = Xss(self.se,self.allLinks,self.allForms)
 		vuln_xss =  xss.getAllVulnLinks()
 		
 		print 'xss:'

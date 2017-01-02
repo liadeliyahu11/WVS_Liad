@@ -1,14 +1,13 @@
 from webCrawler import *
 from vulnChecker import *
+from dbWrapper import *
 import Helper
 import sys
 import json
 import os
 import getopt
-from dbWrapper import *
 
 db = dbWrapper()
-
 
 def add_new_scan(hash_str, link, links, vulns):
     db.remove_if_exist(hash_str)

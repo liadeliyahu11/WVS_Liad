@@ -2,7 +2,7 @@ from Helper import *
 class FileInclusion():
 	"""doc string fot the class"""
 	#liad note: url should be like : http://abcs.com/somepage.php?page=
-	def __init__(self,urls,se):
+	def __init__(self,se,urls,forms):
 		self.s = se
 		self.urls = urls
 		self.the_addr = 'http://wvstest.weebly.com'
@@ -10,6 +10,7 @@ class FileInclusion():
 		self.lfi_string = ['/../../../../../../../../../../etc/passwd','/../../../../../../../../../../etc/passwd%00']
 		self.lfi_links = []
 		self.rfi_links = []
+		self.forms = forms
 
 
 	def checkRFI(self,url):#url without last parameter

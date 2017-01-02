@@ -67,6 +67,8 @@ def scanAllPages(url,filename,cookies):
 	gets url address and trys to scan all it's pages. 
 	"""
 	ses.cookies.update(cookies)
+	
+	signin(ses,url)# this is for dvwa
 	if pageScan(ses,url):
 		while len(allLinks)>0:
 			pageScanner(ses,url)
@@ -77,3 +79,7 @@ def scanAllPages(url,filename,cookies):
 	else:
 		print "can't scan the page you gave.(couldn't find the page)."
 		return False
+
+
+def signin(se,url):
+		se.post(url + '/login.php',data={'username':"admin","password":"admin","Login":"Login"})

@@ -8,21 +8,21 @@ http://tab4u.com//boards/
 http://tab4u.com//tuner
 http://tab4u.com//chords_dictionary
 http://tab4u.com//my_songs
-http://tab4u.com/profile.php?id=17123
-http://tab4u.com/phpbb/viewtopic.php?f=5&t=5961
-http://tab4u.com/phpbb/viewforum.php?f=5
-http://tab4u.com/boards/musicians/index.php#board
-http://tab4u.com/tabs/songs/7319_יונתן רזאל_-_עכשיו אני עף.html
+http://tab4u.com/profile.php?id=15941
 http://tab4u.com/boards/teach/index.php#board
-http://tab4u.com/tabs/songs/7318_נירה גל_-_אנשים יש בעולם (שיר ערש).html
-http://tab4u.com/tabs/songs/7317_Leonard Cohen_-_Dance Me To The End Of Love.html
-http://tab4u.com/tabs/songs/7316_Leonard Cohen_-_I'm Your Man.html
-http://tab4u.com/tabs/songs/7315_שמעון בוסקילה_-_לנשום.html
-http://tab4u.com/tabs/songs/7315_אליעד נחום_-_לנשום.html
-http://tab4u.com/tabs/songs/7314_Leonard Cohen_-_Everybody Knows.html
-http://tab4u.com/tabs/songs/7313_Sean Paul_-_Rockabye.html
-http://tab4u.com/tabs/songs/7313_Clean Bandit_-_Rockabye.html
-http://tab4u.com/tabs/songs/7313_Anne-Marie_-_Rockabye.html
+http://tab4u.com/tabs/songs/7332_הראל סקעת_-_גיבור.html
+http://tab4u.com/tabs/songs/7332_יהודה פוליקר_-_גיבור.html
+http://tab4u.com/tabs/songs/7331_חיים ישראל_-_יתגדל ויתקדש.html
+http://tab4u.com/teacher.php?id=74
+http://tab4u.com/teacherSearch.php?inst=5
+http://tab4u.com/tabs/songs/7330_יונתן רוזן_-_אוטומוביל.html
+http://tab4u.com/boards/musicians/index.php#board
+http://tab4u.com/tabs/songs/7329_מוקי_-_דבר איתי.html
+http://tab4u.com/phpbb/viewtopic.php?f=5&t=5963
+http://tab4u.com/phpbb/viewforum.php?f=5
+http://tab4u.com/tabs/songs/7328_שולי רנד_-_בך בטחו.html
+http://tab4u.com/tabs/songs/7327_New Order_-_Bizarre Love Triangle.html
+http://tab4u.com/tabs/songs/7326_אייל גולן_-_לו הייתי יכול.html
 http://tab4u.com/updates.php
 http://www.tab4u.com/players?ref=players.php
 http://tab4u.com//articles/guitar
