@@ -44,5 +44,10 @@ def main():
 	print sql.isInjectable("http://www.tab4u.com/profile.php?id=57846")
 	xsss = Xss(se,["http://www.tab4u.com/resultsSimple?tab=songs&type=song&q=asd&content=&max_chords=0","http://www.tab4u.com/players.php?ref=my_songs"])
 	print xsss.getAllVulnLinks()"""
+
+	form = ["http://www.tab4u.com", "/resultsSimple", "get", ["tab", "q", "content", "max_chords", "type"]]
+	html = sendRequest(se, form[0], form, 	["sss", "sss", "sss", "sss", "sss"])
+	if html:
+		return True
 if __name__ == "__main__":
 	main()

@@ -10,10 +10,11 @@ cond = threading.Condition()
 done = False
 mythreads = []
 
-def checkAddLink(base_url,page):
-	link = make_link(base_url,page.encode('utf8'))
-	if link not in allLinks and linkValid(base_url,link) and not similar_page(link) and not is_useless_page(link):
-		allLinks.append(link)
+def checkAddLink(base_url,links):
+	for page in links:
+		link = make_link(base_url,page.encode('utf8'))
+		if link not in allLinks and linkValid(base_url,link) and not similar_page(link) and not is_useless_page(link):
+			allLinks.append(link)
 
 
 def getLinkFromList():
@@ -44,9 +45,8 @@ def pageScan(ses,base_url,url=None):
 				total.append(url)
 				print url+" added!"
 				links = hrefs(html)
-				for link in links:
-					checkAddLink(base_url,link)
-				parameters = createFormsList(url,html)
+				checkAddLink(base_url, links)
+				parameters = createFormsList(url, html)
 				allParameters.append(parameters)
 		return True
 	except Exception as ex:
@@ -56,7 +56,7 @@ def pageScan(ses,base_url,url=None):
 
 def linksToFile(filename):
 	global total
-	f = open(FOLDER+filename+".txt","w")
+	f = open(FOLDER + filename + ".txt", "w")
 	for i in total:
 		f.write(i+"\n")
 	f.close()
@@ -68,7 +68,7 @@ def scanAllPages(url,filename,cookies):
 	"""
 	ses.cookies.update(cookies)
 	
-	signin(ses,url)# this is for dvwa
+	signin(ses, url)# this is for dvwa
 	if pageScan(ses,url):
 		while len(allLinks)>0:
 			pageScanner(ses,url)

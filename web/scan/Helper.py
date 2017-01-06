@@ -276,32 +276,29 @@ def getAllLinksFromFile(filename):
 
 
 # [url,action,method,[key,key,key]]
-def sendRequest(session, base_url, form, values):
+def sendRequest(se, base_url, form, values):
 	"""
 	gets action and values to send and sends the requests with the given values.
 	"""
 	try:
-		url, action, method, keys = form[0], form[1], form[2], form[3]
+		url, action, method, keys = form[0], form[1], form[2].lower(), form[3]
 		if action != ('' or '/'):
 			url = base_url + '/' + action
 
 		if method == 'post':
 			data = key_values_post(keys, values)
-			ans = session.post(url, data=data)
-			html = ans.text.encode('utf-8')
-			if notFound(ans):
-				return False
-			return html
+			ans = se.post(url, data=data)
 
-		elif method == 'get':
+		else: #get
 			link = Link(url)
 			url = link.addGetParameters(keys, values)
 			print url
-			ans = session.get(url)
-			html = ans.text.encode('utf-8')
-			if notFound(ans):
-				return False
-			return html
+			ans = se.get(url)
+
+		html = ans.text.encode('utf-8')
+		if notFound(ans):
+			return False
+		return html
 
 	except Exception as ex:
 		print ex

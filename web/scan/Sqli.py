@@ -40,6 +40,9 @@ class Sqli():
 					vulnLinks.append((url, res))
 		return vulnLinks# (type,db_type)
 
+	def getAllVulnForms(self):
+		print 'ok'
+
 	def isInjectable(self,url):
 		"""
 		returns true if url parameter is injectable else false
