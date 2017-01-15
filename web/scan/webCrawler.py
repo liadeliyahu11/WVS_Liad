@@ -46,8 +46,8 @@ def pageScan(ses,base_url,url=None):
 				print url+" added!"
 				links = hrefs(html)
 				checkAddLink(base_url, links)
-				parameters = createFormsList(url, html)
-				allParameters.append(parameters)
+				form = createFormsList(url, html)
+				allParameters.append(form)
 		return True
 	except Exception as ex:
 		print ex

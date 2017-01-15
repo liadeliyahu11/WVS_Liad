@@ -161,11 +161,11 @@ def print_par_to_file(filename, parameters):
 	try:
 		filename = filename + "-forms.txt"
 		f = open(FOLDER + filename, 'a+')
-		for k in parameters:  # k:list of lists
-			for l in k:
-				st = par_to_file(l)
+		for form in parameters:  # k:list of lists - list of forms
+			for arb in form:
+				st = par_to_file(arb)
 				if not alreadyAdded(filename, st):
-					f.write("url:" + "\n" + str(l[0]) + "\n" + st + "endUrl\n")
+					f.write("url:" + "\n" + str(arb[0]) + "\n" + st + "endUrl\n")
 		f.close()
 		return True
 	except Exception as ex:
@@ -276,16 +276,19 @@ def getAllLinksFromFile(filename):
 
 
 # [url,action,method,[key,key,key]]
-def sendRequest(se, base_url, form, values):
+def sendRequest(se, form, values):
 	"""
 	gets action and values to send and sends the requests with the given values.
 	"""
 	try:
 		url, action, method, keys = form[0], form[1], form[2].lower(), form[3]
+		print url + "  " + method
+		if '#' in action:
+				action = ''
 		if action != ('' or '/'):
-			url = base_url + '/' + action
+			url += '/' + action
 
-		if method == 'post':
+		if method.lower() == 'post':
 			data = key_values_post(keys, values)
 			ans = se.post(url, data=data)
 
@@ -298,7 +301,7 @@ def sendRequest(se, base_url, form, values):
 		html = ans.text.encode('utf-8')
 		if notFound(ans):
 			return False
-		return html
+		return ans
 
 	except Exception as ex:
 		print ex

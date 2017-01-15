@@ -60,14 +60,14 @@ http://192.168.1.66/dvwa//security.php
 seclev_submit
 endUrl
 url:
-http://192.168.1.66/dvwa//logout.php
+http://192.168.1.66/dvwa//ids_log.php
+#	GET
+clear_log
+endUrl
+url:
+http://192.168.1.66/dvwa/
 login.php	post
 username
 password
 Login
-endUrl
-url:
-http://192.168.1.66/dvwa//ids_log.php
-#	GET
-clear_log
 endUrl
