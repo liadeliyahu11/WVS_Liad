@@ -16,15 +16,15 @@ class dbWrapper():
 		dic['xss_cs'] = list(self.wvs.xss_cs.find())
 		return dic
 
-	def get_scan_by_hash(self,hash_str):
-		return self.wvs.scans.find_one({"hash_str":hash_str})
+	def get_scan_by_hash(self, hash_str):
+		return self.wvs.scans.find_one({"hash_str" : hash_str})
 
 	def get_all_scans(self,):
 		return self.wvs.scans.find()
 
-	def remove_if_exist(self,hash_str):
-		self.wvs.scans.remove({"hash_str":hash_str})
+	def remove_if_exist(self, hash_str):
+		self.wvs.scans.remove({"hash_str" : hash_str})
 	
-	def add_new_scan(self,scan):
+	def add_new_scan(self, scan):
 		self.wvs.scans.insert_one(scan)
 

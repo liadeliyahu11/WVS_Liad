@@ -13,42 +13,30 @@ class FileInclusion():
 		self.forms = forms
 
 
-	def checkRFI(self,url):#url without last parameter
+	def checkRFI(self, url, is_form=False):#url without last parameter
 		"""
 		check if rfi exist in the givven url
 		"""
 		urlAddr = url.padGetParameters(self.the_addr)
 		ans = self.s.get(urlAddr)
-		if self.rfi_text in ans.text:
+		if self.check_RFI_in_ans(ans):
 			return urlAddr
 		return False
 
+	def check_LFI_in_ans(self, ans):
+		return not notFound(ans) and 'root:' in ans.text
 
-	def checkLFI(self,url):
+	def check_RFI_in_ans(self, ans):
+		return self.rfi_text in ans.text
+	
+	def checkLFI(self, url, is_form=False):
 		"""
 		check if rfi exist in the given url
-		more linux:
-
-		/etc/group
-		/etc/hosts
-		/etc/motd
-		/etc/issue
-		/etc/mysql/my.cnf
-		/proc/self/environ
-		/proc/version
-		/proc/cmdline
-		(need to ask dor if require) 
-		
-		apache:
-
-		/etc/apache2/apache2.conf
-		/usr/local/etc/apache2/httpd.conf
-		/etc/httpd/conf/httpd.conf
 		"""
 		for lfi in self.lfi_string:
 			urlAddr = url.padGetParameters(self.lfi_string[0])
-			ans = self.s.get(urlAddr) #liad note: find the linux/unix based servers
-			if not notFound(ans) and 'root:' in ans.text:
+			ans = self.s.get(urlAddr)
+			if self.check_LFI_in_ans(ans):
 				return urlAddr
 		return False
 

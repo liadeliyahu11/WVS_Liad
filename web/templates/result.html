@@ -68,31 +68,30 @@
 </style>
 <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-function showScanResults()
-	{
-	$.getJSON("http://127.0.0.1:5000/scans/{{hash_str}}", 
-		function(data) 
-		{
-            clearInterval(intval);
-			$('#link').html(data.link);
-			$('#hash_str').html(data.hash_str);
-			//$('#links').html(data.links);
-			var links_str;
-			for(i = 0; i < data.links.length; i++)
-			{
-				links_str += data.links[i] + "<br>";
-			}
-			$('#links').html(links_str)
-			//$('#vulnLinks').html(data.vulnLinks);
-			var vulnLinks_str;
-			for(i = 0; i < data.vulnLinks.length; i++)
-			{
-				vulnLinks_str += data.vulnLinks[i]+ "<br>";
-			}
-			$('#vulnLinks').html(vulnLinks_str);
-		});
+    function showScanResults()
+    {
+    	$.getJSON("http://127.0.0.1:5000/scans/{{hash_str}}", 
+    		function(data) 
+    		{
+                clearInterval(intval);
+                $('#link').html(data.link);
+                $('#hash_str').html(data.hash_str);
+                //$('#links').html(data.links);
+                var links_str;
+                for(i = 0; i < data.links.length; i++)
+                {
+                    links_str += data.links[i] + "<br>";
+                }
+                $('#links').html(links_str)
+                var vulnLinks_str;
+                for(i = 0; i < data.vulnLinks.length; i++)
+                {
+                    vulnLinks_str += data.vulnLinks[i]+ "<br>";
+                }
+                $('#vulnLinks').html(vulnLinks_str);
+    		});
     }
-var intval = setInterval(showScanResults(), 5000);
+var intval = setInterval(showScanResults(), 5);
 </script>
 </head>
 <body>

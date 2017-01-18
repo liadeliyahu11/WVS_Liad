@@ -33,57 +33,70 @@ class Sqli():
 		return False
 
 	def getAllVulnLinks(self):
+		"""
+		returns list of all the vulnerable links in this format : [url, vulnerability type, database type]
+		"""
 		vulnLinks = []
 		for url in self.urls:
 			if '=' in url:
 				res = self.linkIsInjectable(url)
 				if res:
 					vulnLinks.append((url, res))
-		return vulnLinks# (type,db_type)
+		return vulnLinks
 
 	def getAllVulnForms(self):
+		"""
+
+		"""
 		vulnForms = []
 		for form in self.forms:
 			res = self.formIsInjectable(form)
-			print res
 			if res:
 				vulnForms.append((form, res))
 		return vulnForms
 
-	def check_cheat_sheet(self, url_or_form, cs, ErrorCheck=False,isForm=False):
-		if isForm:
-			ans = sendRequest(self.s, url_or_form, [cs for i in xrange(len(url_or_form[-1]))])
-		else:
-			ans = self.s.get(url_or_form + cs)
-		if ans and ErrorCheck:
-			return (ans, self.errorExist(ans.text))
-		return ans
-
-	def is_non_blind(self, ans, db_type):
+	def is_classic(self, ans, db_type):
+		"""
+		returns True if classic sql injection found, else false.
+		"""
 		return not notFound(ans) and db_type
 
-	def formIsInjectable(self, form):
-		res = self.check_cheat_sheet(form, self.cs[0], ErrorCheck=True, isForm=True)
-		if res:
-			ans, db_type = res
-			if self.is_non_blind(ans, db_type):
-				return ("non-blind-sql-injection", db_type)
+	def check_classic_cheat_sheet(self, url_or_form, cs, isForm=False):
+		"""
+		
+		"""
+		if isForm:
+			values = [cs for i in xrange(len(url_or_form[-1]))]
+			ans = sendRequest(self.s, url_or_form, values)
+		else:
+			url = Link(url_or_form)
+			urlAddr = url.padGetParameters(cs)
+			ans = self.s.get(urlAddr)
+		if ans:
+			db = self.errorExist(ans.text)
+			if db and self.is_classic(ans, db):
+				return ("classic-sql-injection", db)
 		return False
 
+
+	def formIsInjectable(self, form):
+		"""
+
+		"""
+		types = self.check_classic_cheat_sheet(form, self.cs[0], isForm=True)
+		if types:
+				return types
+		return False
 
 	def linkIsInjectable(self, url):
 		"""
 		returns true if url parameter is injectable else false
 		"""
 		try:
-			ans, db_type = self.check_cheat_sheet(url, self.cs[0], ErrorCheck=True)
-			if self.is_non_blind(ans, db_type):#non-blind
-				return ("non-blind-sql-injection", db_type)
-			
-			#ans = self.check_cheat_sheet(url, " and 1=1")
-			
-			# TODO: blind sql injection + text for \"
-			
-			return False
+			types = self.check_classic_cheat_sheet(url, self.cs[0])
+			if types:
+				return types
+			#blind
 		except:
-			return False
+			pass
+		return False
