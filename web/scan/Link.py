@@ -78,3 +78,7 @@ class Link:
 		for i in self.param:
 			ret_url += i[0]+'='+parameter+'&' 
 		return ret_url[:-1]
+
+	def send_padded_link(self, s, cs):
+		to_request = self.padGetParameters([cs for i in xrange(len(self.param))])
+		return (to_request, s.get(to_request))

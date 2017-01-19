@@ -10,6 +10,8 @@ class FileInclusion():
 		self.lfi_string = ['/../../../../../../../../../../etc/passwd','/../../../../../../../../../../etc/passwd%00']
 		self.lfi_links = []
 		self.rfi_links = []
+		self.lfi_forms = []
+		self.rfi_forms = []
 		self.forms = forms
 
 
@@ -17,8 +19,7 @@ class FileInclusion():
 		"""
 		check if rfi exist in the givven url
 		"""
-		urlAddr = url.padGetParameters(self.the_addr)
-		ans = self.s.get(urlAddr)
+		urlAddr, ans = url.send_padded_link(self.se, self.lfi_string[0])
 		if self.check_RFI_in_ans(ans):
 			return urlAddr
 		return False
@@ -33,27 +34,38 @@ class FileInclusion():
 		"""
 		check if rfi exist in the given url
 		"""
-		for lfi in self.lfi_string:
-			urlAddr = url.padGetParameters(self.lfi_string[0])
-			ans = self.s.get(urlAddr)
-			if self.check_LFI_in_ans(ans):
-				return urlAddr
+		if not is_form:
+			for lfi in self.lfi_string:
+				urlAddr, ans = url.send_padded_link(self.se, self.lfi_string[0])
+				if self.check_LFI_in_ans(ans):
+					return urlAddr
+		else:
+			for lfi in self.lfi_string:
+				form, ans = form.send_padded_form(self.se, self.lfi_string)
 		return False
 
-	def checkLRFI(self):
+	def checkLRFI_in_links(self):
 		"""
 		takes the urls and checks each link.
 		if link found ad vulnerable its added to the links list.
 		"""
-		for i in self.urls:
-			url = Link(i)
-			if url.numOfParameters()>0:
-				rfi = self.checkRFI(url)
-				print "check vuln in:"+i
+		for url in self.urls:
+			link = Link(url)
+			if link.numOfParameters() > 0:
+				rfi = self.checkRFI(link)
+				print "check vuln in:"+url
 				if rfi:
 					self.rfi_links.append(rfi)
-				lfi = self.checkLFI(url)
+				lfi = self.checkLFI(link)
 				if lfi:
 					self.lfi_links.append(lfi)
-		return (self.lfi_links,self.rfi_links)
+		return (self.lfi_links, self.rfi_links)
 		
+	def check_LRFI_in_forms(self):
+		"""
+
+		"""
+		for form in forms:
+			new_form = Form(form)
+			if new_form.numOfParameters() > 0:
+				rfi = self.check

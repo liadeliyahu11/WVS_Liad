@@ -282,7 +282,6 @@ def sendRequest(se, form, values):
 	"""
 	try:
 		url, action, method, keys = form[0], form[1], form[2].lower(), form[3]
-		print url + "  " + method
 		if '#' in action:
 				action = ''
 		if action != ('' or '/'):
