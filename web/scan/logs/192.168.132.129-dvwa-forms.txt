@@ -1,0 +1,66 @@
+url:
+http://192.168.132.129/dvwa/setup.php
+#	post
+create_db
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/brute/.
+#	GET
+username
+password
+Login
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/exec/.
+#	post
+ip
+submit
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/csrf/.
+#	GET
+password_new
+password_conf
+Change
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/captcha/.
+#	POST
+step
+password_new
+password_conf
+recaptcha_response_field
+Change
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/sqli/.
+#	GET
+id
+Submit
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/upload/.
+#	POST
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/xss_r/.
+#	GET
+name
+None
+endUrl
+url:
+http://192.168.132.129/dvwa/vulnerabilities/xss_s/.
+None	post
+txtName
+btnSign
+endUrl
+url:
+http://192.168.132.129/dvwa/security.php
+#	POST
+seclev_submit
+endUrl
+url:
+http://192.168.132.129/dvwa/ids_log.php
+#	GET
+clear_log
+endUrl

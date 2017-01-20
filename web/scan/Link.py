@@ -72,7 +72,7 @@ class Link:
 			self.link += keys[i]+'='+values[i]+'&'
 		return self.link[:-1]
 
-	def padGetParameters(self,parameter):
+	def padGetParameters(self, parameter):
 		ret_url = self.getUrlWithoutParameters()
 		ret_url += '?'
 		for i in self.param:
@@ -80,5 +80,5 @@ class Link:
 		return ret_url[:-1]
 
 	def send_padded_link(self, s, cs):
-		to_request = self.padGetParameters([cs for i in xrange(len(self.param))])
+		to_request = self.padGetParameters(cs)
 		return (to_request, s.get(to_request))

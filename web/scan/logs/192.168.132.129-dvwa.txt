@@ -1,0 +1,17 @@
+http://192.168.132.129/dvwa
+http://192.168.132.129/dvwa/instructions.php
+http://192.168.132.129/dvwa/setup.php
+http://192.168.132.129/dvwa/vulnerabilities/brute/.
+http://192.168.132.129/dvwa/vulnerabilities/exec/.
+http://192.168.132.129/dvwa/vulnerabilities/csrf/.
+http://192.168.132.129/dvwa/vulnerabilities/captcha/.
+http://192.168.132.129/dvwa/vulnerabilities/fi/.?page=include.php
+http://192.168.132.129/dvwa/vulnerabilities/sqli/.
+http://192.168.132.129/dvwa/vulnerabilities/sqli_blind/.
+http://192.168.132.129/dvwa/vulnerabilities/upload/.
+http://192.168.132.129/dvwa/vulnerabilities/xss_r/.
+http://192.168.132.129/dvwa/vulnerabilities/xss_s/.
+http://192.168.132.129/dvwa/security.php
+http://192.168.132.129/dvwa/phpinfo.php
+http://192.168.132.129/dvwa/about.php
+http://192.168.132.129/dvwa/ids_log.php

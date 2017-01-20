@@ -1,12 +1,13 @@
+from Link import *
 
 class Form():
 	"""docstring for Form"""
 	def __init__(self, form_list):
 		self.form_list = form_list
-		self.url = form[0]
-		self.action = form[1]
-		self.is_get = (form[2].lower() == 'get')
-		self.keys = form[3]
+		self.url = form_list[0]
+		self.action = form_list[1]
+		self.is_get = (form_list[2].lower() == 'get')
+		self.keys = form_list[3]
 
 	def send_padded_form(self, s, cs):
 		try:
@@ -17,13 +18,15 @@ class Form():
 
 			if self.is_get:
 				link = Link(self.url)
-				ans = link.send_padded_link(s, cs)
-				return ans
+				addr, ans = link.send_padded_link(s, cs)
+				return (addr, ans)
 			else:
 				data = self.get_padded_data(cs)
 				ans = s.post(self.url, data = data)
-				return ans
-		except:
+				self.form_list
+				return (str(self.form_list), ans)
+		except Exception as ex:
+			print ex
 			return False
 
 
@@ -33,7 +36,7 @@ class Form():
 		"""
 		data = {}
 		for key in self.keys:
-			d.update({key : cs})
+			data.update({key : cs})
 		return data
 		
 	def numOfParameters(self):

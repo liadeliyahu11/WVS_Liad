@@ -1,4 +1,4 @@
-	from Helper import *
+from Helper import *
 
 class Sqli():
 	"""docstring for ClassName"""
@@ -66,9 +66,9 @@ class Sqli():
 		
 		"""
 		if isForm:
-			ans = Form(url_or_form).send_padded_form(self.se, cs)
+			form, ans = Form(url_or_form).send_padded_form(self.s, cs)
 		else:
-			ans = Link(url_or_form).send_padded_link(self.se, cs)
+			addr, ans = Link(url_or_form).send_padded_link(self.s, cs)
 		if ans:
 			db = self.errorExist(ans.text)
 			if db and self.is_classic(ans, db):

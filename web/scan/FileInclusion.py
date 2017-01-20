@@ -3,7 +3,7 @@ class FileInclusion():
 	"""doc string fot the class"""
 	#liad note: url should be like : http://abcs.com/somepage.php?page=
 	def __init__(self,se,urls,forms):
-		self.s = se
+		self.s= se
 		self.urls = urls
 		self.the_addr = 'http://wvstest.weebly.com'
 		self.rfi_text = 'this is special text to test the rfi vulnerability!!!'
@@ -15,16 +15,16 @@ class FileInclusion():
 		self.forms = forms
 
 
-	def checkRFI(self, url_or_form, is_form=False):#url without last parameter
+	def checkRFI(self, url_or_form, is_form=False):
 		"""
-		check if rfi exist in the givven url
+		check if rfi exist in the givven url or form
 		"""
 		if not is_form:
-			urlAddr, ans = url.send_padded_link(self.se, self.the_addr)
+			urlAddr, ans = url_or_form.send_padded_link(self.s, self.the_addr)
 			if self.check_RFI_in_ans(ans):
 				return urlAddr
 		else:
-			form, ans = url_or_form.send_padded_form(self.se, self.the_addr)
+			form, ans = url_or_form.send_padded_form(self.s, self.the_addr)
 			if self.check_RFI_in_ans(ans):
 				return form
 		return False
@@ -41,12 +41,12 @@ class FileInclusion():
 		"""
 		if not is_form:
 			for lfi in self.lfi_string:
-				urlAddr, ans = url_or_form.send_padded_link(self.se, lfi)
+				urlAddr, ans = url_or_form.send_padded_link(self.s, lfi)
 				if self.check_LFI_in_ans(ans):
 					return urlAddr
 		else:
 			for lfi in self.lfi_string:
-				form, ans = url_or_form.send_padded_form(self.se, lfi)
+				form, ans = url_or_form.send_padded_form(self.s, lfi)
 				return form
 		return False
 
@@ -71,7 +71,7 @@ class FileInclusion():
 		"""
 
 		"""
-		for form in forms:
+		for form in self.forms:
 			new_form = Form(form)
 			if new_form.numOfParameters() > 0:
 				rfi = self.checkRFI(new_form, is_form=True)

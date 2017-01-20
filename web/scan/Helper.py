@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 from Link import *
+from Form import *
 MAX_LINKS = 50
 MAX_THREADS = 100
 HTTP = 7
