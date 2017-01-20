@@ -31,7 +31,7 @@ class Xss():
 				return True
 		return False
 
-	def include_the_script(self,link,cs):
+	def include_the_script(self, link, cs):
 		url = link.padGetParameters(cs)
 		if '?' in url:
 			ans = self.se.get(url)

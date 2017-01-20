@@ -15,13 +15,18 @@ class FileInclusion():
 		self.forms = forms
 
 
-	def checkRFI(self, url, is_form=False):#url without last parameter
+	def checkRFI(self, url_or_form, is_form=False):#url without last parameter
 		"""
 		check if rfi exist in the givven url
 		"""
-		urlAddr, ans = url.send_padded_link(self.se, self.lfi_string[0])
-		if self.check_RFI_in_ans(ans):
-			return urlAddr
+		if not is_form:
+			urlAddr, ans = url.send_padded_link(self.se, self.the_addr)
+			if self.check_RFI_in_ans(ans):
+				return urlAddr
+		else:
+			form, ans = url_or_form.send_padded_form(self.se, self.the_addr)
+			if self.check_RFI_in_ans(ans):
+				return form
 		return False
 
 	def check_LFI_in_ans(self, ans):
@@ -30,18 +35,19 @@ class FileInclusion():
 	def check_RFI_in_ans(self, ans):
 		return self.rfi_text in ans.text
 	
-	def checkLFI(self, url, is_form=False):
+	def checkLFI(self, url_or_form, is_form=False):
 		"""
 		check if rfi exist in the given url
 		"""
 		if not is_form:
 			for lfi in self.lfi_string:
-				urlAddr, ans = url.send_padded_link(self.se, self.lfi_string[0])
+				urlAddr, ans = url_or_form.send_padded_link(self.se, lfi)
 				if self.check_LFI_in_ans(ans):
 					return urlAddr
 		else:
 			for lfi in self.lfi_string:
-				form, ans = form.send_padded_form(self.se, self.lfi_string)
+				form, ans = url_or_form.send_padded_form(self.se, lfi)
+				return form
 		return False
 
 	def checkLRFI_in_links(self):
@@ -53,7 +59,7 @@ class FileInclusion():
 			link = Link(url)
 			if link.numOfParameters() > 0:
 				rfi = self.checkRFI(link)
-				print "check vuln in:"+url
+				print "check vuln in:" + url
 				if rfi:
 					self.rfi_links.append(rfi)
 				lfi = self.checkLFI(link)
@@ -68,4 +74,10 @@ class FileInclusion():
 		for form in forms:
 			new_form = Form(form)
 			if new_form.numOfParameters() > 0:
-				rfi = self.check
+				rfi = self.checkRFI(new_form, is_form=True)
+				if rfi:
+					self.rfi_forms.append(rfi)
+				lfi = self.checkLFI(new_form, is_form=True)
+				if lfi:
+					self.lfi_forms.append(lfi)
+		return (self.lfi_forms, self.rfi_forms)

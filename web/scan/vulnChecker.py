@@ -13,11 +13,13 @@ class vulnChecker():
 		lrfi = FileInclusion(self.se, self.allLinks, self.allForms)
 		xss = Xss(self.se, self.allLinks, self.allForms)
 		sqli = Sqli(self.se, self.allLinks, self.allForms)
-		lfi, rfi = lrfi.checkLRFI()
+		
+		lfi, rfi = lrfi.checkLRFI_in_links()
 		vuln_sqli = sqli.getAllVulnLinks()
 		vuln_xss =  xss.getAllVulnLinks()
 
 		vuln_sqli_f = sqli.getAllVulnForms()
+		lfi_f, rfi_f = lrfi.check_LRFI_in_forms()
 		
 		print 'xss:'
 		for vuln in vuln_xss:
@@ -27,17 +29,23 @@ class vulnChecker():
 		for vuln in vuln_sqli:
 			print vuln[0] + ":" + vuln[1][0] + ":" + vuln[1][1]
 
-		for vuln in vuln_sqli_f:
-			print vuln
-		
 		print 'lfi:'
-		if len(lfi) > 0:
-			print lfi 
+		for l in lfi:
+			print l 
 		
 		print 'rfi:'
-		if len(rfi) > 0:
-			print rfi
+		for r in rfi:
+			print r
+			
+		for vuln in vuln_sqli_f:
+			print vuln
+
+		for vuln in lfi_f:
+			print vuln
+
+		for vuln in rfi_f:
+			print vuln
 		
-		return list(lfi + rfi + vuln_sqli + vuln_xss + vuln_sqli_f)
+		return list(lfi + rfi + vuln_sqli + vuln_xss + vuln_sqli_f + lfi_f + rfi_f)
 
 		#admin' and (select 1 from dual where (select password from users where username = 'admin') like '___________')#
