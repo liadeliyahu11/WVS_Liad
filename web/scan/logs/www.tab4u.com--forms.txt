@@ -1,0 +1,47 @@
+url:
+http://www.tab4u.com/
+/resultsSimple	get
+tab
+type
+type
+type
+type
+q
+None
+endUrl
+url:
+http://www.tab4u.com/
+/results	get
+tab
+q
+None
+None
+None
+endUrl
+url:
+http://www.tab4u.com/
+/results	get
+None
+tab
+q
+None
+None
+endUrl
+url:
+http://www.tab4u.com/
+/results	get
+None
+None
+tab
+type
+type
+type
+q
+None
+endUrl
+url:
+http://www.tab4u.com/
+/teacherSearch.php	get
+city
+None
+endUrl

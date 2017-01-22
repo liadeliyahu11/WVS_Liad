@@ -42,6 +42,8 @@ done = False
 def is_useless_page(link):
 	IS_PDF = (len(link) > 4 and link[-4:] == ".pdf")
 	IS_JPG = (len(link) > 4 and link[-4:] == ".jpg")
+	if 'logout' in link or 'setup' in link or 'csrf' in link:
+			return False
 	return (IS_JPG or IS_PDF)
 
 
@@ -195,9 +197,7 @@ def linkValid(url, url2):
 	if (not SAME) and ((IS_LINK and ((INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST) or (
 			INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST))) or (IS_PAGE and not IS_LINK)) or IS_SUBDOMAIN:
 		#because the bot can logout ans then you have no access to another files
-		if 'logout' not in url2:
-			return True
-		return False
+		return True
 	return False
 
 

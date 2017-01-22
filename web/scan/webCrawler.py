@@ -13,7 +13,7 @@ mythreads = []
 def checkAddLink(base_url,links):
 	for page in links:
 		link = make_link(base_url,page.encode('utf8'))
-		if link not in allLinks and linkValid(base_url,link) and not similar_page(link) and not is_useless_page(link):
+		if link not in allLinks and linkValid(base_url, link) and not similar_page(link) and not is_useless_page(link):
 			allLinks.append(link)
 
 
@@ -40,7 +40,7 @@ def pageScan(ses,base_url,url=None):
 		url = base_url
 	try:
 		if len(total) < MAX_LINKS:
-			html = linkExist(ses,url)
+			html = linkExist(ses, url)
 			if html and not already_visited(html):
 				total.append(url)
 				print url+" added!"
@@ -68,12 +68,12 @@ def scanAllPages(url,filename,cookies):
 	"""
 	ses.cookies.update(cookies)
 	
-	signin(ses, url)# this is for dvwa
-	if pageScan(ses,url):
+	#signin(ses, url)# this is for dvwa
+	if pageScan(ses, url):
 		while len(allLinks)>0:
-			pageScanner(ses,url)
+			pageScanner(ses, url)
 		linksToFile(filename)
-		print_par_to_file(filename,allParameters)
+		print_par_to_file(filename, allParameters)
 		print str(len(total)) + ' links found'
 		return ses
 	else:

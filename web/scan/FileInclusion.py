@@ -46,8 +46,9 @@ class FileInclusion():
 					return urlAddr
 		else:
 			for lfi in self.lfi_string:
-				form, ans = url_or_form.send_padded_form(self.s, lfi)
-				return form
+				form_ans = url_or_form.send_padded_form(self.s, lfi)
+				if form_ans and self.check_LFI_in_ans(form_ans[1]):#tuple (form string, ans)
+					return form_ans[0]
 		return False
 
 	def checkLRFI_in_links(self):

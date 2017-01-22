@@ -21,7 +21,7 @@ class Xss():
 		for url in self.urls:
 			link = Link(url)
 			if self.vulnLink(link):
-				self.vulnLinks.append(url)
+				self.vulnLinks.append(url+" :xss")
 		return self.vulnLinks
 
 

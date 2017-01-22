@@ -1,0 +1,7 @@
+url:
+http://tldp.org/
+http://www.google.com/cse	None
+cx
+q
+sa
+endUrl
