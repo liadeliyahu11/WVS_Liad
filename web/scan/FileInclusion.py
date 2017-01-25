@@ -51,7 +51,7 @@ class FileInclusion():
 					return form_ans[0]
 		return False
 
-	def checkLRFI_in_links(self):
+	def getAllVulnLinks(self):
 		"""
 		takes the urls and checks each link.
 		if link found ad vulnerable its added to the links list.
@@ -68,7 +68,7 @@ class FileInclusion():
 					self.lfi_links.append(lfi)
 		return (self.lfi_links, self.rfi_links)
 		
-	def check_LRFI_in_forms(self):
+	def getAllVulnForms(self):
 		"""
 
 		"""
