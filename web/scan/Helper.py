@@ -43,7 +43,7 @@ def is_useless_page(link):
 	IS_PDF = (len(link) > 4 and link[-4:] == ".pdf")
 	IS_JPG = (len(link) > 4 and link[-4:] == ".jpg")
 	if 'logout' in link or 'setup' in link or 'csrf' in link:
-			return False
+			return True
 	return (IS_JPG or IS_PDF)
 
 
@@ -221,25 +221,11 @@ def linkExist(s, toAsk):
 		return False
 	return ans.text.encode('utf-8')
 
+
 	"""
 	the end of the functions for the crawler
 	the start of the functions for the vuln scanner
 	"""
-
-
-def key_values_post(keys, values):  # form  = [url,action,method,[key,key,key]]
-	"""
-	chain key to value (organized  in dictionary)
-	"""
-	d = {}
-	if len(keys) == len(values):
-		for i in xrange(0, len(keys)):
-			d.update({keys[i]: values[i]})
-	else:  # one value for all keys
-		for i in xrange(0, len(keys)):
-			d.update({keys[i]: values})
-	return d
-
 
 def getAllFormsFromFile(filename):
 	"""
@@ -274,36 +260,3 @@ def getAllLinksFromFile(filename):
 	for line in lines:
 		links.append(line[:-1])
 	return links
-
-
-# [url,action,method,[key,key,key]]
-def sendRequest(se, form, values):
-	"""
-	gets action and values to send and sends the requests with the given values.
-	"""
-	try:
-		url, action, method, keys = form[0], form[1], form[2].lower(), form[3]
-		if '#' in action:
-				action = ''
-		if action != ('' or '/'):
-			url += '/' + action
-
-		if method.lower() == 'post':
-			data = key_values_post(keys, values)
-			ans = se.post(url, data=data)
-
-		else: #get
-			link = Link(url)
-			url = link.addGetParameters(keys, values)
-			print url
-			ans = se.get(url)
-
-		html = ans.text.encode('utf-8')
-		if notFound(ans):
-			return False
-		return ans
-
-	except Exception as ex:
-		print ex
-		pass
-	return False

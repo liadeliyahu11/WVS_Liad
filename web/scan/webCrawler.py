@@ -68,7 +68,7 @@ def scanAllPages(url,filename,cookies):
 	"""
 	ses.cookies.update(cookies)
 	
-	#signin(ses, url)# this is for dvwa
+	signin(ses, url)# this is for dvwa
 	if pageScan(ses, url):
 		while len(allLinks)>0:
 			pageScanner(ses, url)

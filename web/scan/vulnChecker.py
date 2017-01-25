@@ -20,7 +20,7 @@ class vulnChecker():
 
 		vuln_sqli_f = sqli.getAllVulnForms()
 		lfi_f, rfi_f = lrfi.getAllVulnForms()
-		"""
+		
 		print 'xss:'
 		for vuln in vuln_xss:
 			print vuln
@@ -45,7 +45,7 @@ class vulnChecker():
 
 		for vuln in rfi_f:
 			print vuln
-		"""
+		
 		return list(lfi + rfi + vuln_sqli + vuln_xss + vuln_sqli_f + lfi_f + rfi_f)
 
 		#admin' and (select 1 from dual where (select password from users where username = 'admin') like '___________')#
