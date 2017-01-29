@@ -1,9 +1,7 @@
 http://192.168.1.66/dvwa/
 http://192.168.1.66/dvwa//instructions.php
-http://192.168.1.66/dvwa//setup.php
 http://192.168.1.66/dvwa//vulnerabilities/brute/.
 http://192.168.1.66/dvwa//vulnerabilities/exec/.
-http://192.168.1.66/dvwa//vulnerabilities/csrf/.
 http://192.168.1.66/dvwa//vulnerabilities/captcha/.
 http://192.168.1.66/dvwa//vulnerabilities/fi/.?page=include.php
 http://192.168.1.66/dvwa//vulnerabilities/sqli/.

@@ -80,7 +80,8 @@ class Sqli():
 
 			if ans:
 				db = self.errorExist(ans.text)
-				if db and self.is_classic(ans, db):
+				if self.is_classic(ans, db):
+					print 'vuln form or link found!'
 					return ("classic-sql-injection", db)
 		return False
 
@@ -133,3 +134,4 @@ class Sqli():
 		except:
 			pass
 		return False
+ 

@@ -14,6 +14,9 @@ class Link:
 			self.param = map(lambda par: par.split('='),self.param_for_build)#get
 			# param is list of parameters lists [[key,value],[key,value]] 
 		
+	def set_params(self,params):
+		for parameter in params:
+			self.param.append([parameter,None])
 
 	def getUrlWithoutParameters(self):
 		url = self.baseUrl
@@ -75,8 +78,8 @@ class Link:
 	def padGetParameters(self, parameter):
 		ret_url = self.getUrlWithoutParameters()
 		ret_url += '?'
-		for i in self.param:
-			ret_url += i[0]+'='+parameter+'&' 
+		for par in self.param:
+			ret_url += par[0]+'='+parameter+'&' 
 		return ret_url[:-1]
 
 	def send_padded_link(self, s, cs):

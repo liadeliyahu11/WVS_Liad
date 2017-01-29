@@ -11,6 +11,8 @@ class Form():
 
 	def send_padded_form(self, s, cs):
 		try:
+			while self.url[-1] == '.':
+				self.url = self.url[:-1]
 			if '#' in self.action:
 					self.action = ''
 			if self.action != ('' or '/'):
@@ -18,12 +20,12 @@ class Form():
 
 			if self.is_get:
 				link = Link(self.url)
+				link.set_params(self.keys)
 				addr, ans = link.send_padded_link(s, cs)
 				return (addr, ans)
 			else:
 				data = self.get_padded_data(cs)
 				ans = s.post(self.url, data = data)
-				self.form_list
 				return (str(self.form_list), ans)
 		except Exception as ex:
 			print ex

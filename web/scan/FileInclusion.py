@@ -20,13 +20,17 @@ class FileInclusion():
 		check if rfi exist in the givven url or form
 		"""
 		if not is_form:
-			urlAddr, ans = url_or_form.send_padded_link(self.s, self.the_addr)
-			if self.check_RFI_in_ans(ans):
-				return urlAddr
+			res = url_or_form.send_padded_link(self.s, self.the_addr)
+			if res:
+				urlAddr, ans = res
+				if self.check_RFI_in_ans(ans):
+					return urlAddr
 		else:
-			form, ans = url_or_form.send_padded_form(self.s, self.the_addr)
-			if self.check_RFI_in_ans(ans):
-				return form
+			res = url_or_form.send_padded_form(self.s, self.the_addr)
+			if res:
+				form, ans = res
+				if self.check_RFI_in_ans(ans):
+					return form
 		return False
 
 	def check_LFI_in_ans(self, ans):
@@ -41,14 +45,18 @@ class FileInclusion():
 		"""
 		if not is_form:
 			for lfi in self.lfi_string:
-				urlAddr, ans = url_or_form.send_padded_link(self.s, lfi)
-				if self.check_LFI_in_ans(ans):
-					return urlAddr
+				res = url_or_form.send_padded_link(self.s, lfi)
+				if res:
+					urlAddr, ans = res
+					if self.check_LFI_in_ans(ans):
+						return urlAddr
 		else:
 			for lfi in self.lfi_string:
-				form_ans = url_or_form.send_padded_form(self.s, lfi)
-				if form_ans and self.check_LFI_in_ans(form_ans[1]):#tuple (form string, ans)
-					return form_ans[0]
+				res = url_or_form.send_padded_form(self.s, lfi)
+				if res:
+					form, ans = res
+					if self.check_LFI_in_ans(ans):#tuple (form string, ans)
+						return form
 		return False
 
 	def getAllVulnLinks(self):
