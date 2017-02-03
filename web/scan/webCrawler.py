@@ -34,52 +34,47 @@ def pageScanner(ses,base_url):
 		pass
 
 			
-def pageScan(ses,base_url,url=None):
-	global total
+def pageScan(ses, base_url, url=None):
+	global total_links
 	if url == None:
 		url = base_url
 	try:
-		if len(total) < MAX_LINKS:
+		if len(total_links) < MAX_LINKS:
 			html = linkExist(ses, url)
 			if html and not already_visited(html):
-				total.append(url)
+				total_links.append(url)
 				print url+" added!"
 				links = hrefs(html)
 				checkAddLink(base_url, links)
 				form = createFormsList(url, html)
-				allParameters.append(form)
+				all_forms.append(form)
 		return True
 	except Exception as ex:
 		print ex
 		pass
 	return False
 
-def linksToFile(filename):
-	global total
-	f = open(FOLDER + filename + ".txt", "w")
-	for i in total:
-		f.write(i+"\n")
-	f.close()
 
-
-def scanAllPages(url,filename,cookies):
+def scanAllPages(url, filename, cookies):
 	"""
 	gets url address and trys to scan all it's pages. 
 	"""
+	global total_links
 	ses.cookies.update(cookies)
 	
 	signin(ses, url)# this is for dvwa
 	if pageScan(ses, url):
 		while len(allLinks)>0:
 			pageScanner(ses, url)
-		linksToFile(filename)
-		print_par_to_file(filename, allParameters)
-		print str(len(total)) + ' links found'
-		return ses
+		
+		forms = filter_forms(all_forms)
+		print str(len(total_links)) + ' links found'
+		return (ses, total_links, forms)
 	else:
 		print "can't scan the page you gave.(couldn't find the page)."
 		return False
 
 
 def signin(se,url):
-		se.post(url + '/login.php',data={'username':"admin","password":"admin","Login":"Login"})
+		ans = se.post(url + '/login.php',data={'username':"admin","password":"admin","Login":"Login"})
+		print ans.text

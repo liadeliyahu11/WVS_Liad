@@ -2,7 +2,7 @@ from Helper import *
 class FileInclusion():
 	"""doc string fot the class"""
 	#liad note: url should be like : http://abcs.com/somepage.php?page=
-	def __init__(self,se,urls,forms):
+	def __init__(self, se, urls, forms):
 		self.s= se
 		self.urls = urls
 		self.the_addr = 'http://wvstest.weebly.com'

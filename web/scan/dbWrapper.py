@@ -28,3 +28,6 @@ class dbWrapper():
 	def add_new_scan(self, scan):
 		self.wvs.scans.insert_one(scan)
 
+
+
+

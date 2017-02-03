@@ -9,12 +9,13 @@ import getopt
 
 db = dbWrapper()
 
-def add_new_scan(hash_str, link, links, vulns):
+def add_new_scan(hash_str, link, links, forms, vulns):
     db.remove_if_exist(hash_str)
     scan = {
         'hash_str': hash_str,
         "link": link,
         "links": links,
+        "forms": forms,
         "vulnLinks": vulns,
     }
     db.add_new_scan(scan)
@@ -72,20 +73,14 @@ def main():
     sys.setdefaultencoding('utf8')
     url, cookies, filename, hash_str = getParameters(sys.argv[1:])
     print "scan started..."
-    se = scanAllPages(url, filename, cookies)
+    se, links, forms = scanAllPages(url, filename, cookies)
     print "scan completed!"
     if se:
         print 'vlunerabilities scan started...'
-        vc = vulnChecker(se, filename + ".txt", filename + "-forms.txt")
+        vc = vulnChecker(se, links, forms)
         vuln_links = vc.checkAttacks()
         print "vlunerabilities scan completed..."
-        add_new_scan(
-            hash_str,
-            url,
-            getAllLinksFromFile(
-                filename +
-                '.txt'),
-            vuln_links)
+        add_new_scan(hash_str, url, links, forms, vuln_links)
 
 if __name__ == "__main__":
     main()

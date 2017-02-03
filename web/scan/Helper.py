@@ -30,8 +30,8 @@ headers = {
 	"Accept-Encoding": "gzip, deflate, sdch",
 	"Accept-Language": "en-US,en;q=0.8"}
 threads = []
-allLinks, allParameters, total = [], [], []
-pages_len, similar_pages, tmpFileForms = [], [], []
+allLinks, all_forms, total_links = [], [], []
+pages_len, similar_pages, tmpForms = [], [], []
 
 
 current_scanning = 0
@@ -39,11 +39,18 @@ count_not_answered = 0
 done = False
 
 
+def need_to_filter(txt):
+	# because they can destroy things
+	if not txt:
+		return False
+	unwanted_pages = ['logout', 'setup', 'csrf', 'captcha']
+	for unwanted in unwanted_pages:
+		if unwanted in txt:
+			return True
+
 def is_useless_page(link):
 	IS_PDF = (len(link) > 4 and link[-4:] == ".pdf")
 	IS_JPG = (len(link) > 4 and link[-4:] == ".jpg")
-	if 'logout' in link or 'setup' in link or 'csrf' in link:
-			return True
 	return (IS_JPG or IS_PDF)
 
 
@@ -106,14 +113,14 @@ def already_visited(html):
 	return False
 
 
-def alreadyAdded(filename, toFind):
+def alreadyAdded(toFind):
 	"""
 	get file name and string and check if the file contains the string.
 	"""
-	if toFind in tmpFileForms:
-		return True
-	tmpFileForms.append(toFind)
-	return toFind in open(FOLDER + filename).read()
+	for form in tmpForms:
+		if toFind[1:] == form[1:]:
+			return True
+	tmpForms.append(toFind)
 
 
 def createFormsList(url, html):
@@ -125,12 +132,12 @@ def createFormsList(url, html):
 	for par in parsed_html.find_all('input'):
 		parameters.append((par.get('name'), str(par)))
 	for form in parsed_html.find_all('form'):
-		# [url,action,method,[name1,name2]]
-		l = [url, form.get('action'), form.get('method'), []]
-		for i in parameters:
-			if i[1] in str(form):
-				l[3].append(i[0])
-		final_parameters.append(l)
+		# [url, action, method, [name1, name2]]
+		form_lst = [url, form.get('action'), form.get('method'), []]
+		for parameter in parameters:
+			if parameter[0] and parameter[1] in str(form):
+				form_lst[3].append(parameter[0])
+		final_parameters.append(form_lst)
 	return final_parameters
 
 
@@ -147,30 +154,17 @@ def hrefs(html):
 	return lst
 
 
-def par_to_file(i):
+def filter_forms(forms):
 	"""
-	prepares parameter line to the file.
-	"""
-	st = str(i[1]) + "\t" + str(i[2]) + "\n"
-	for j in i[3]:
-		st += str(j) + "\n"
-	return st.encode('utf-8')
 
-
-def print_par_to_file(filename, parameters):
 	"""
-	gets file,url and parameters and print the parameters to the givven file.
-	"""
+	total_forms = []
 	try:
-		filename = filename + "-forms.txt"
-		f = open(FOLDER + filename, 'a+')
-		for form in parameters:  # k:list of lists - list of forms
-			for arb in form:
-				st = par_to_file(arb)
-				if not alreadyAdded(filename, st):
-					f.write("url:" + "\n" + str(arb[0]) + "\n" + st + "endUrl\n")
-		f.close()
-		return True
+		for form in forms:  # form :list of lists - list of forms
+			for one_form in form:
+				if not alreadyAdded(one_form):
+					total_forms.append(one_form)
+		return total_forms
 	except Exception as ex:
 		print ex
 
@@ -215,48 +209,10 @@ def linkExist(s, toAsk):
 	"""
 	checks if the link exist if it does returns the html else return False.
 	"""
-	print "c: " + toAsk
-	ans = s.get(toAsk, headers=headers, timeout=3)
-	if notFound(ans):
-		return False
-	return ans.text.encode('utf-8')
-
-
-	"""
-	the end of the functions for the crawler
-	the start of the functions for the vuln scanner
-	"""
-
-def getAllFormsFromFile(filename):
-	"""
-	parse all the forms from the forms file.
-	"""
-	f = open(FOLDER + filename, 'r')
-	lines = f.readlines()
-	f.close()
-	st = "".join(lines)
-	forms = map(lambda x: x[5:], st.split('endUrl\n'))
-	allForms = []  # [[url,action,method,[key,key,key]],[url,action,method,[key,key,key]]]
-	for form in forms:
-		formlines = form.split('\n')
-		if len(formlines) > 2:
-			url = formlines[0]#place of url
-			action, method = formlines[1].split('\t')#place of action and method
-			keys = []
-			for key in formlines[2:-1]:
-				keys.append(key)
-			allForms.append([url, action, method, keys])
-	return allForms
-
-
-def getAllLinksFromFile(filename):
-	"""
-	read all the links from the links file.
-	"""
-	links = []
-	f = open(FOLDER + filename, 'r')
-	lines = f.readlines()
-	f.close()
-	for line in lines:
-		links.append(line[:-1])
-	return links
+	if not need_to_filter(toAsk):
+		print "c: " + toAsk
+		ans = s.get(toAsk, headers=headers, timeout=3)
+		if notFound(ans):
+			return False
+		return ans.text.encode('utf-8')
+	return False

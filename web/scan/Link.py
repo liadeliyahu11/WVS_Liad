@@ -16,7 +16,7 @@ class Link:
 		
 	def set_params(self,params):
 		for parameter in params:
-			self.param.append([parameter,None])
+			self.param.append([parameter, None])
 
 	def getUrlWithoutParameters(self):
 		url = self.baseUrl
@@ -79,7 +79,7 @@ class Link:
 		ret_url = self.getUrlWithoutParameters()
 		ret_url += '?'
 		for par in self.param:
-			ret_url += par[0]+'='+parameter+'&' 
+			ret_url += par[0] + '=' + parameter + '&' 
 		return ret_url[:-1]
 
 	def send_padded_link(self, s, cs):

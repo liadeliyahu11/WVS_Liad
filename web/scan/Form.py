@@ -5,7 +5,7 @@ class Form():
 	def __init__(self, form_list):
 		self.form_list = form_list
 		self.url = form_list[0]
-		self.action = form_list[1]
+		self.action = form_list[1] 
 		self.is_get = (form_list[2].lower() == 'get')
 		self.keys = form_list[3]
 
@@ -13,15 +13,20 @@ class Form():
 		try:
 			while self.url[-1] == '.':
 				self.url = self.url[:-1]
-			if '#' in self.action:
+			if not self.action:
+				self.action = ''
+			elif '#' in self.action:
 					self.action = ''
 			if self.action != ('' or '/'):
+
 				self.url += '/' + self.action
 
 			if self.is_get:
 				link = Link(self.url)
 				link.set_params(self.keys)
 				addr, ans = link.send_padded_link(s, cs)
+				if 'sqli' in self.form_list[0]:
+					print addr
 				return (addr, ans)
 			else:
 				data = self.get_padded_data(cs)

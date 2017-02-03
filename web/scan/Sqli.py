@@ -22,7 +22,7 @@ class Sqli():
 		self.classic_cs = ["\'","\""]
 		self.blind_cs = [ ("\' and \'1\'=\'1","\' and \'1\'=\'2"), (" and 1=1"," and 1=2") ]
 
-	def errorExist(self,html):
+	def errorExist(self, html):
 		"""
 		gets html code of a page and checks if there are some sql errors by known strings.
 		"""
@@ -81,7 +81,6 @@ class Sqli():
 			if ans:
 				db = self.errorExist(ans.text)
 				if self.is_classic(ans, db):
-					print 'vuln form or link found!'
 					return ("classic-sql-injection", db)
 		return False
 
