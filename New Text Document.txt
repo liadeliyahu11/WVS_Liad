@@ -1,9 +1,5 @@
 handle xss
 handle command exec
 handle csrf(well known parameters)
-handle images and pdfs in wc
 handle more sql injection cheatsheets
-handle forms testing
-python django (react+json)
 cgi bin
-for xss payloads from kali just to check if they are exist in the returned html - but research needed ! 

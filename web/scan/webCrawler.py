@@ -18,7 +18,7 @@ def checkAddLink(base_url,links):
 
 
 def getLinkFromList():
-	if len(allLinks)>0:
+	if len(allLinks) > 0:
 		res = allLinks[0]
 		allLinks.remove(res)
 		return res
@@ -28,7 +28,8 @@ def pageScanner(ses,base_url):
 	try:		
 		link = getLinkFromList()
 		if link:
-			pageScan(ses,base_url,link)
+			pageScan(ses, base_url, link)
+	
 	except Exception as e:
 		print
 		pass
@@ -36,19 +37,23 @@ def pageScanner(ses,base_url):
 			
 def pageScan(ses, base_url, url=None):
 	global total_links
+	
 	if url == None:
 		url = base_url
+	
 	try:
 		if len(total_links) < MAX_LINKS:
 			html = linkExist(ses, url)
+			
 			if html and not already_visited(html):
 				total_links.append(url)
-				print url+" added!"
+				print url + " added!"
 				links = hrefs(html)
 				checkAddLink(base_url, links)
 				form = createFormsList(url, html)
 				all_forms.append(form)
 		return True
+	
 	except Exception as ex:
 		print ex
 		pass
@@ -64,7 +69,7 @@ def scanAllPages(url, filename, cookies):
 	
 	signin(ses, url)# this is for dvwa
 	if pageScan(ses, url):
-		while len(allLinks)>0:
+		while len(allLinks) > 0:
 			pageScanner(ses, url)
 		
 		forms = filter_forms(all_forms)
@@ -75,6 +80,5 @@ def scanAllPages(url, filename, cookies):
 		return False
 
 
-def signin(se,url):
-		ans = se.post(url + '/login.php',data={'username':"admin","password":"admin","Login":"Login"})
-		print ans.text
+def signin(se, url):
+		ans = se.post(url + '/login.php',data = {'username': "admin", "password":"admin", "Login":"Login"})

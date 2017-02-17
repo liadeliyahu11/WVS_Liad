@@ -77,7 +77,7 @@ def main():
     print "scan completed!"
     if se:
         print 'vlunerabilities scan started...'
-        vc = vulnChecker(se, links, forms)
+        vc = vulnChecker(se, links, forms, db)
         vuln_links = vc.checkAttacks()
         print "vlunerabilities scan completed..."
         add_new_scan(hash_str, url, links, forms, vuln_links)

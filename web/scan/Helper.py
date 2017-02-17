@@ -7,7 +7,6 @@ MAX_LINKS = 50
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
-FOLDER = "scan/logs/"
 status508 = 15
 
 cluesForError = [
@@ -118,7 +117,7 @@ def alreadyAdded(toFind):
 	get file name and string and check if the file contains the string.
 	"""
 	for form in tmpForms:
-		if toFind[1:] == form[1:]:
+		if toFind == form:
 			return True
 	tmpForms.append(toFind)
 
@@ -190,7 +189,6 @@ def linkValid(url, url2):
 		(url[HTTP:] in BASE_URL) or (url[HTTPS:] in BASE_URL)))
 	if (not SAME) and ((IS_LINK and ((INSIDE_HTTPS or INSIDE_HTTPS_WITHOUT_LAST) or (
 			INSIDE_HTTP or INSIDE_HTTP_WITHOUT_LAST))) or (IS_PAGE and not IS_LINK)) or IS_SUBDOMAIN:
-		#because the bot can logout ans then you have no access to another files
 		return True
 	return False
 

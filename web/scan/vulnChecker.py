@@ -4,8 +4,9 @@ from Sqli import *
 from Xss import * 
 class vulnChecker():
 	"""docstring for vulnChecker"""
-	def __init__(self, se, links, forms):
+	def __init__(self, se, links, forms, db):
 		self.se = se
+		self.db = db
 		self.allLinks, self.allForms = self.filter_link_and_forms(links, forms)
 
 	def filter_link_and_forms(self, links, forms):
@@ -24,7 +25,7 @@ class vulnChecker():
 
 	def checkAttacks(self):
 		lrfi = FileInclusion(self.se, self.allLinks, self.allForms)
-		xss = Xss(self.se, self.allLinks, self.allForms)
+		xss = Xss(self.se, self.allLinks, self.allForms, self.db.get_xss_cs())
 		sqli = Sqli(self.se, self.allLinks, self.allForms)
 
 		lfi, rfi = lrfi.getAllVulnLinks()

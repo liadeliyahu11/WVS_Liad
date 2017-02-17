@@ -19,8 +19,9 @@ class Sqli():
 		self.s = se
 		self.urls = urls
 		self.forms = forms
-		self.classic_cs = ["\'","\""]
-		self.blind_cs = [ ("\' and \'1\'=\'1","\' and \'1\'=\'2"), (" and 1=1"," and 1=2") ]
+		self.classic_cs = ["'",'"']
+		self.blind_cs = [ ("1' and '1'='1","1' and '1'='2"), ("1 and 1=1","1 and 1=2") ]
+		#id :1 is common id - blind with no value won't work
 
 	def errorExist(self, html):
 		"""
@@ -86,16 +87,16 @@ class Sqli():
 
 	def check_blind_cheat_sheet(self, url_or_form, isForm=False):
 		"""
-
+		//value needed in the parameter
 		"""
 		for cs in self.blind_cs:
 			if isForm:
 				form, ans1 = Form(url_or_form).send_padded_form(self.s, cs[0])
 				form, ans2 = Form(url_or_form).send_padded_form(self.s, cs[1])
+
 			else:
 				addr, ans1 = Link(url_or_form).send_padded_link(self.s, cs[0])
 				addr, ans2 = Link(url_or_form).send_padded_link(self.s, cs[1])
-
 			if self.is_blind(ans1, ans2):
 				return ("blind-sql-injection", "unknown-db")
 		return False
@@ -108,11 +109,11 @@ class Sqli():
 		try:
 			types = self.check_classic_cheat_sheet(form, isForm=True)
 			if types:
-					return types
+				return types
 
 			types = self.check_blind_cheat_sheet(form, isForm=True)
 			if types:
-					return types
+				return types
 		except:
 			pass
 		return False

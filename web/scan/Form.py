@@ -6,7 +6,7 @@ class Form():
 		self.form_list = form_list
 		self.url = form_list[0]
 		self.action = form_list[1] 
-		self.is_get = (form_list[2].lower() == 'get')
+		self.is_get = (form_list[2].lower() == 'get') if form_list[2] else True
 		self.keys = form_list[3]
 
 	def send_padded_form(self, s, cs):
@@ -25,8 +25,6 @@ class Form():
 				link = Link(self.url)
 				link.set_params(self.keys)
 				addr, ans = link.send_padded_link(s, cs)
-				if 'sqli' in self.form_list[0]:
-					print addr
 				return (addr, ans)
 			else:
 				data = self.get_padded_data(cs)

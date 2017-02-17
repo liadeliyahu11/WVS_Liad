@@ -28,6 +28,17 @@ class dbWrapper():
 	def add_new_scan(self, scan):
 		self.wvs.scans.insert_one(scan)
 
+	def get_sqli_fp(self):
+		return getAllCheatsheets()['sqli_fp']
 
+	def get_rfi_cs(self):
+		return getAllCheatsheets()['rfi_cs']		
+	
+	def get_lfi_cs(self):
+		return getAllCheatsheets()['lfi_cs']
+	
+	def get_ce_cs(self):
+		return getAllCheatsheets()['ce_cs']
 
-
+	def get_xss_cs(self):
+		return self.getAllCheatsheets()['xss_cs'][0]["cs"]
