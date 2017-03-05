@@ -73,37 +73,33 @@
     	$.getJSON("http://127.0.0.1:5000/scans/{{hash_str}}", 
     		function(data) 
     		{
-                clearInterval(intval);
                 $('#link').html(data.link);
-                $('#hash_str').html(data.hash_str);
                 //$('#links').html(data.links);
                 var links_str;
                 for(i = 0; i < data.links.length; i++)
                 {
                     links_str += data.links[i] + "<br>";
                 }
-                $('#links').html(links_str)
+                $('#links').html(links_str);
+                var forms_str;
+                for(i = 0; i < data.forms.length; i++)
+                {
+                    forms_str += data.forms[i] + "<br>";
+                }
+                $('#forms').html(forms_str);
                 var vulnLinks_str;
                 for(i = 0; i < data.vulnLinks.length; i++)
                 {
                     vulnLinks_str += data.vulnLinks[i]+ "<br>";
                 }
                 $('#vulnLinks').html(vulnLinks_str);
+                clearInterval(glo);
     		});
     }
-var intval = setInterval(showScanResults(), 5);
+var glo = setInterval(showScanResults, 3000);
 </script>
 </head>
 <body>
-<table class="form-style-8">
-	<tr>
-		<th><h2>hash string</h2></th>
-	</tr>
-	<tr>
-		<th id='hash_str'></th>
-	</tr>
-</table>
-
 <table class="form-style-8">
 	<tr>
 		<th><h2>link</h2></th>
@@ -124,10 +120,33 @@ var intval = setInterval(showScanResults(), 5);
 
 <table class="form-style-8">
 	<tr>
+		<th><h2>list of all forms</h2></th>
+	</tr>
+	<tr>
+		<th id='forms'></th>
+	</tr>
+</table>
+
+<table class="form-style-8">
+	<tr>
 		<th><h2>vulnerability links</h2></th>
 	</tr>
 	<tr>
 		<th id='vulnLinks'></th>
+	</tr>
+</table>
+
+<table class="form-style-8">
+	<tr>
+		<th><h2>suggestions</h2></th>
+	</tr>
+	<tr>
+		<th id='suggestions'>
+			Learn about <a href="https://www.owasp.org/index.php/XSS">XSS</a></br>
+			Learn about <a href="https://www.owasp.org/index.php/SQL_Injection">sql injection</a></br>
+			Learn about <a href="https://en.wikipedia.org/wiki/File_inclusion_vulnerability">file inclusions</a></br>
+			Learn about <a href="https://www.owasp.org/index.php/Command_Injection">command injections</a></br>
+		</th>
 	</tr>
 </table>
 </body>

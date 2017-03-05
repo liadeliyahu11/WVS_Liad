@@ -45,8 +45,8 @@ def check_details():
 	link = request.form['domain']
 	hash_str = hashlib.sha256(link).hexdigest().lower()
 	if link:
-
 		try:
+			db.remove_if_exist(hash_str)
 			subprocess.Popen("python scan\main.py -u " + link + ' -s ' + hash_str)
 			return redirect('/results/' + hash_str)
 		
