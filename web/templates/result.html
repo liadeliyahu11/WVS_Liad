@@ -70,7 +70,7 @@
 <script>
     function showScanResults()
     {
-    	$.getJSON("http://127.0.0.1:5000/scans/{{hash_str}}", 
+    	$.getJSON("/scans/{{hash_str}}", 
     		function(data) 
     		{
                 $('#link').html(data.link);
@@ -87,11 +87,16 @@
                     forms_str += data.forms[i] + "<br>";
                 }
                 $('#forms').html(forms_str);
-                var vulnLinks_str;
+                var vulnLinks_str = "<table>";
                 for(i = 0; i < data.vulnLinks.length; i++)
                 {
-                    vulnLinks_str += data.vulnLinks[i]+ "<br>";
+                    vulnLinks_str += "<tr>";
+                    var a = String(data.vulnLinks[i]).split(" ");
+                    vulnLinks_str += "<td><b>" + a[0] + "</b></td>";
+                    vulnLinks_str += "<td><b>" + a[1] + "</b></td>";
+                    vulnLinks_str += "</tr>";
                 }
+                vulnLinks_str += "</table>";
                 $('#vulnLinks').html(vulnLinks_str);
                 clearInterval(glo);
     		});
@@ -100,6 +105,7 @@ var glo = setInterval(showScanResults, 3000);
 </script>
 </head>
 <body>
+<center>
 <table class="form-style-8">
 	<tr>
 		<th><h2>link</h2></th>
@@ -149,5 +155,6 @@ var glo = setInterval(showScanResults, 3000);
 		</th>
 	</tr>
 </table>
+</center>
 </body>
 </html>

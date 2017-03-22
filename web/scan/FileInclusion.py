@@ -14,6 +14,11 @@ class FileInclusion():
 		self.rfi_forms = []
 		self.forms = forms
 
+	def check_RFI_in_ans(self, ans):
+		return self.rfi_text in ans.text
+
+	def check_LFI_in_ans(self, ans):
+		return not notFound(ans) and 'root:' in ans.text
 
 	def checkRFI(self, url_or_form, is_form=False):
 		"""
@@ -24,20 +29,14 @@ class FileInclusion():
 			if res:
 				urlAddr, ans = res
 				if self.check_RFI_in_ans(ans):
-					return urlAddr
+					return str(urlAddr).replace(" ","") + ' rfi'
 		else:
 			res = url_or_form.send_padded_form(self.s, self.the_addr)
 			if res:
 				form, ans = res
 				if self.check_RFI_in_ans(ans):
-					return form
+					return str(form)[2:-1].replace(" ","") + ' rfi'
 		return False
-
-	def check_LFI_in_ans(self, ans):
-		return not notFound(ans) and 'root:' in ans.text
-
-	def check_RFI_in_ans(self, ans):
-		return self.rfi_text in ans.text
 	
 	def checkLFI(self, url_or_form, is_form=False):
 		"""
@@ -49,14 +48,14 @@ class FileInclusion():
 				if res:
 					urlAddr, ans = res
 					if self.check_LFI_in_ans(ans):
-						return urlAddr
+						return str(urlAddr).replace(" ","") + ' lfi'
 		else:
 			for lfi in self.lfi_string:
 				res = url_or_form.send_padded_form(self.s, lfi)
 				if res:
 					form, ans = res
 					if self.check_LFI_in_ans(ans):#tuple (form string, ans)
-						return form
+						return str(form)[2:-1].replace(" ","") + ' lfi'
 		return False
 
 	def getAllVulnLinks(self):

@@ -18,7 +18,7 @@ class Xss():
 		for url in self.urls:
 			link = Link(url)
 			if self.checkXss(link):
-				self.vulnLinks.append(url + " - xss")
+				self.vulnLinks.append(url.replace(" ","") + " xss")
 		return self.vulnLinks
 	   
 	
@@ -37,7 +37,7 @@ class Xss():
 		for form in self.forms:
 			res = self.checkXss(form, is_form=True)
 			if res:
-				vulnForms.append((str(form) + str(res) + " - xss"))
+				vulnForms.append((str(form)[2:-1].replace(" ","") + str(res).replace(" ","") + " xss"))
 		return vulnForms
    
 	def checkXss(self, url_or_form, is_form=False):

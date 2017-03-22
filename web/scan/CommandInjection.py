@@ -40,7 +40,7 @@ class CommandInjection():
 		for url in self.urls:
 			link = Link(url)
 			if self.checkComInjec(link):
-				self.vulnLinks.append(url + " - Command Injection")
+				self.vulnLinks.append(url.replace(" ","") + " Command_Injection")
 		return self.vulnLinks
 
 		
@@ -50,5 +50,5 @@ class CommandInjection():
 			res = self.checkComInjec(Form(form), is_form = True)
 			print res
 			if res:
-				vulnForms.append((str(form) + str(res) + " - Command Injection"))
+				vulnForms.append((str(form)[2:-1].replace(" ","") + str(res).replace(" ","") + " Command_Injection"))
 		return vulnForms

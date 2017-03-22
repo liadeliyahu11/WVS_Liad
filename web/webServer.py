@@ -56,7 +56,7 @@ def check_details():
 			pass
 		return results
 
-@app.route('/results/<string:hash_str>', methods=['GET'])
+@app.route('/results/<string:hash_str>', methods = ['GET'])
 def get_results(hash_str):
 	"""
 	gets hash string and returns rendered page with the hash string associated results(html with realtime update).

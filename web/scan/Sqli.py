@@ -43,7 +43,7 @@ class Sqli():
 			if '=' in url:
 				res = self.linkIsInjectable(url)
 				if res:
-					vulnLinks.append((url, res))
+					vulnLinks.append((url.replace(" ",""), res))
 		return vulnLinks
 
 	def getAllVulnForms(self):
@@ -54,7 +54,7 @@ class Sqli():
 		for form in self.forms:
 			res = self.formIsInjectable(form)
 			if res:
-				vulnForms.append((form, res))
+				vulnForms.append((str(form)[2:-1].replace(" ",""), res))
 		return vulnForms
 
 	def is_classic(self, ans, db_type):
@@ -82,7 +82,7 @@ class Sqli():
 			if ans:
 				db = self.errorExist(ans.text)
 				if self.is_classic(ans, db):
-					return ("classic-sql-injection", db)
+					return (" classic-sql-injection", db)
 		return False
 
 	def check_blind_cheat_sheet(self, url_or_form, isForm=False):
@@ -98,7 +98,7 @@ class Sqli():
 				addr, ans1 = Link(url_or_form).send_padded_link(self.s, cs[0])
 				addr, ans2 = Link(url_or_form).send_padded_link(self.s, cs[1])
 			if self.is_blind(ans1, ans2):
-				return ("blind-sql-injection", "unknown-db")
+				return (" blind-sql-injection - unknown-db")
 		return False
 
 
