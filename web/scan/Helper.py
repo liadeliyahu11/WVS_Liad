@@ -68,6 +68,7 @@ def parseCookiesFromFile(filename):
 			l = line.split(':')
 		if len(l) > 1:
 			cookies.update({l[0]: l[1]})
+	print cookies
 	return cookies
 
 

@@ -30,7 +30,6 @@ def getParameters(argv):
     st += 'cookie file name for example:\ncookies.txt'
 
     cookies, url, status508, hash_str, filename = {}, None, 999, None, None
-
     try:
         opts, args = getopt.getopt(
             argv, "hbu:c:s:", [
@@ -46,6 +45,7 @@ def getParameters(argv):
             elif opt == '-u':
                 url = arg
             elif opt == '-c':
+                print "cookies !"
                 cookies = parseCookiesFromFile(arg)
             elif opt == '-b':
                 status508 = 1

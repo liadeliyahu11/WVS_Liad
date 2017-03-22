@@ -47,7 +47,7 @@ def check_details():
 	if link:
 		try:
 			db.remove_if_exist(hash_str)
-			subprocess.Popen("python scan\main.py -u " + link + ' -s ' + hash_str)
+			subprocess.Popen("python scan\main.py -c cookies.txt -u " + link + ' -s ' + hash_str)
 			return redirect('/results/' + hash_str)
 		
 		except Exception as ex:
@@ -77,4 +77,4 @@ def get_scan(hash_str):
 		return jsonify(scan)
 
 if __name__ == "__main__":
-	app.run(debug = True,)
+	app.run(host = '0.0.0.0', debug = True,)

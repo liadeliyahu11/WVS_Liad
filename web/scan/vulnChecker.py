@@ -2,6 +2,8 @@ from Helper import *
 from FileInclusion import * 
 from Sqli import * 
 from Xss import * 
+from CommandInjection import *
+
 class vulnChecker():
 	"""docstring for vulnChecker"""
 	def __init__(self, se, links, forms, db):
@@ -27,17 +29,27 @@ class vulnChecker():
 		lrfi = FileInclusion(self.se, self.allLinks, self.allForms)
 		xss = Xss(self.se, self.allLinks, self.allForms, self.db.get_xss_cs())
 		sqli = Sqli(self.se, self.allLinks, self.allForms)
+		ci = CommandInjection(self.se, self.allLinks, self.allForms)
 
 		lfi, rfi = lrfi.getAllVulnLinks()
 		vuln_sqli = sqli.getAllVulnLinks()
 		vuln_xss =  xss.getAllVulnLinks()
+		vuln_CommandInjection = ci.getAllVulnLinks()
 
 		vuln_sqli_f = sqli.getAllVulnForms()
 		vuln_xss_f = xss.getAllVulnForms()
 		lfi_f, rfi_f = lrfi.getAllVulnForms()
+		vuln_CommandInjection_f = ci.getAllVulnForms()
 		
 		print 'xss:'
 		for vuln in vuln_xss:
+			print vuln
+
+		print "command injection:"
+		for vuln in vuln_CommandInjection:
+			print vuln
+
+		for vuln in vuln_CommandInjection_f:
 			print vuln
 
 		print 'sql injection:'
@@ -64,6 +76,6 @@ class vulnChecker():
 		for vuln in rfi_f:
 			print vuln
 		
-		return list(lfi + rfi + vuln_sqli + vuln_xss + vuln_sqli_f + lfi_f + rfi_f + vuln_xss_f)
+		return list(lfi + rfi + vuln_sqli + vuln_xss + vuln_sqli_f + lfi_f + rfi_f + vuln_xss_f + vuln_CommandInjection_f + vuln_CommandInjection)
 
 		#admin' and (select 1 from dual where (select password from users where username = 'admin') like '___________')#
