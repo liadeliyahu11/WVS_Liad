@@ -12,10 +12,14 @@ class vulnChecker():
 		self.allLinks, self.allForms = self.filter_link_and_forms(links, forms)
 
 	def filter_link_and_forms(self, links, forms):
+		"""
+		gets links and forms and return just the wanted links and forms.
+		how? described in the need_to_filter function.
+		"""
 		new_links, new_forms = [],[]
 		for form in forms:
 			found = False
-			if not need_to_filter(form[0]) and not need_to_filter(form[1]):
+			if not need_to_filter(form[0]) and not need_to_filter(form[1]): #0 - url | 1 - action
 				new_forms.append(form)
 		
 		for link in links:
@@ -26,6 +30,10 @@ class vulnChecker():
 
 
 	def checkAttacks(self):
+		"""
+		check all the vulnerabilities in the links and forms.
+		types : XSS, SQLI, RFI, LFI, COMMAND INJ.
+		"""
 		lrfi = FileInclusion(self.se, self.allLinks, self.allForms)
 		xss = Xss(self.se, self.allLinks, self.allForms, self.db.get_xss_cs())
 		sqli = Sqli(self.se, self.allLinks, self.allForms)
@@ -49,9 +57,6 @@ class vulnChecker():
 		for vuln in vuln_CommandInjection:
 			print vuln
 
-		for vuln in vuln_CommandInjection_f:
-			print vuln
-
 		print 'sql injection:'
 		for vuln in vuln_sqli:
 			print vuln[0] + ":" + vuln[1][0] + ":" + vuln[1][1]
@@ -65,6 +70,9 @@ class vulnChecker():
 			print r
 
 		for vuln in vuln_sqli_f:
+			print vuln
+
+		for vuln in vuln_CommandInjection_f:
 			print vuln
 
 		for vuln in vuln_xss_f:

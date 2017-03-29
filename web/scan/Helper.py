@@ -17,17 +17,19 @@ cluesForError = [
 	"404",
 	"not found",
 	"Not Found",
-	"Not found",
+	"Not found ",
 	"was not found on this server",
 	"The requested URL",
 	"ErrorDocument to handle the request"]
 
+unwanted_pages = ['logout', 'setup', 'csrf', 'captcha']
 
 headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36',
 	"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
 	"Accept-Encoding": "gzip, deflate, sdch",
 	"Accept-Language": "en-US,en;q=0.8"}
+
 threads = []
 allLinks, all_forms, total_links = [], [], []
 pages_len, similar_pages, tmpForms = [], [], []
@@ -40,9 +42,9 @@ done = False
 
 def need_to_filter(txt):
 	# because they can destroy things
+	global unwanted_pages
 	if not txt:
 		return False
-	unwanted_pages = ['logout', 'setup', 'csrf', 'captcha']
 	for unwanted in unwanted_pages:
 		if unwanted in txt:
 			return True
@@ -147,7 +149,7 @@ def hrefs(html):
 	"""
 	lst = []
 	soup = BeautifulSoup(html, 'html.parser')
-	for a in soup.find_all('a', href=True):
+	for a in soup.find_all('a', href = True):
 		lst.append(a['href'])
 	for url in re.findall('url=(.*)\"', html):
 		lst.append(url)
@@ -156,7 +158,7 @@ def hrefs(html):
 
 def filter_forms(forms):
 	"""
-
+	filters forms that already added.
 	"""
 	total_forms = []
 	try:
@@ -209,9 +211,9 @@ def linkExist(s, toAsk):
 	checks if the link exist if it does returns the html else return False.
 	"""
 	if not need_to_filter(toAsk):
-		print "c: " + toAsk
 		ans = s.get(toAsk, headers=headers, timeout=3)
+		print "c: " + ans.url
 		if notFound(ans):
 			return False
-		return ans.text.encode('utf-8')
+		return ans.url, ans.text.encode('utf-8')
 	return False

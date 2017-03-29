@@ -1,7 +1,7 @@
 import itertools
 
 class Link:
-	def __init__(self,link):
+	def __init__(self, link):
 		self.link = link
 		pre = link.split("/")
 		self.baseUrl = pre[0]+'//'+pre[1]+pre[2]
@@ -55,6 +55,9 @@ class Link:
 			tmp2.append(st)
 		totalLinks = map(lambda x:link+x,tmp2)
 		return totalLinks
+
+	def get_link_without_page(self):
+		return '/'.join(self.link.split('/')[:-1])
 
 	def urlWithoutLastValue(url):
 		"""

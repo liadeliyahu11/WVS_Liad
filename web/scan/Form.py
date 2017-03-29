@@ -3,6 +3,7 @@ from Link import *
 class Form():
 	"""docstring for Form"""
 	def __init__(self, form_list):
+		# [url, action, method, [name1, name2]]
 		self.form_list = form_list
 		self.url = form_list[0]
 		self.action = form_list[1] 

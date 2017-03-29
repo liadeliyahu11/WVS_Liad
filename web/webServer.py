@@ -41,7 +41,6 @@ def check_details():
 	"""
 	scan a given domain (the domain is form parameter).
 	"""
-
 	link = request.form['domain']
 	hash_str = hashlib.sha256(link).hexdigest().lower()
 	if link:

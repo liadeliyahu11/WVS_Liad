@@ -1,1 +1,1 @@
-security:low
+security:high

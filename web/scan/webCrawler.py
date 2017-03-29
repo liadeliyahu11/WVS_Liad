@@ -12,7 +12,7 @@ mythreads = []
 
 def checkAddLink(base_url,links):
 	for page in links:
-		link = make_link(base_url,page.encode('utf8'))
+		link = make_link(base_url, page.encode('utf8'))
 		if link not in allLinks and linkValid(base_url, link) and not similar_page(link) and not is_useless_page(link):
 			allLinks.append(link)
 
@@ -39,19 +39,23 @@ def pageScan(ses, base_url, url=None):
 	global total_links
 	
 	if url == None:
+		ans = ses.get(base_url)
+		base_url = Link(ans.url).get_link_without_page()
 		url = base_url
 	
 	try:
 		if len(total_links) < MAX_LINKS:
-			html = linkExist(ses, url)
+			res = linkExist(ses, url)
 			
-			if html and not already_visited(html):
-				total_links.append(url)
-				print url + " added!"
-				links = hrefs(html)
-				checkAddLink(base_url, links)
-				form = createFormsList(url, html)
-				all_forms.append(form)
+			if res:
+				url, html = res 
+				if not already_visited(html):
+					total_links.append(url)
+					print url + " added!"
+					links = hrefs(html)
+					checkAddLink(base_url, links)
+					form = createFormsList(url, html)
+					all_forms.append(form)
 		return True
 	
 	except Exception as ex:
@@ -81,4 +85,4 @@ def scanAllPages(url, filename, cookies):
 
 
 def signin(se, url):
-		ans = se.post(url + '/login.php',data = {'username': "admin", "password":"admin", "Login":"Login"})
+		ans = se.post(url + '/login.php', data = {"username": "admin", "password":"admin", "Login":"Login"})
