@@ -9,7 +9,7 @@ class CommandInjection():
 		self.vulnLinks = []
 		self.forms = forms
 
-	def readFromFile(self,filename):
+	def readFromFile(self, filename):
 		f = open(filename)
 		lines = f.readlines()
 		lst = map(lambda x: x[:-1], lines)

@@ -51,7 +51,7 @@ def pageScan(ses, base_url, url=None):
 				url, html = res 
 				if not already_visited(html):
 					total_links.append(url)
-					print url + " added!"
+					print(Fore.GREEN + url + " added!")
 					links = hrefs(html)
 					checkAddLink(base_url, links)
 					form = createFormsList(url, html)
@@ -70,19 +70,33 @@ def scanAllPages(url, filename, cookies):
 	"""
 	global total_links
 	ses.cookies.update(cookies)
-	
-	signin(ses, url)# this is for dvwa
-	if pageScan(ses, url):
+	signin(ses, url)
+	if authenticate_owner(url) and pageScan(ses, url):
 		while len(allLinks) > 0:
 			pageScanner(ses, url)
-		
 		forms = filter_forms(all_forms)
 		print str(len(total_links)) + ' links found'
 		return (ses, total_links, forms)
 	else:
-		print "can't scan the page you gave.(couldn't find the page)."
+		print "can't scan the page you gave.(couldn't find the page or can't find the wvs.txt file)."
 		return False
 
 
 def signin(se, url):
-		ans = se.post(url + '/login.php', data = {"username": "admin", "password":"admin", "Login":"Login"})
+	data1 = {}
+	f = open('login.txt', 'r')
+	lines = map(lambda x: x[:-1] if x[-1]=='\n' else x, f.readlines())
+	f.close()
+	filename, method = lines[0].split('\t')
+	for line in lines[1:]:
+		key, val = line.split(':')
+		data1.update({key:val})
+	print method
+	if method.lower() == 'post':
+		ans = se.post(url + filename , data = data1)
+		print data1
+	else:
+		st = ""
+		for key in data.keys():
+			st += key + "=" + data[key] + '&'
+		ans = se.get(url + filename + '?' + st[:-1])

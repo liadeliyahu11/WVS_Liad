@@ -49,23 +49,23 @@ class vulnChecker():
 		lfi_f, rfi_f = lrfi.getAllVulnForms()
 		vuln_CommandInjection_f = ci.getAllVulnForms()
 		
-		print 'xss:'
+		print(Fore.BLUE + 'xss:')
 		for vuln in vuln_xss:
 			print vuln
 
-		print "command injection:"
+		print(Fore.BLUE + "command injection:")
 		for vuln in vuln_CommandInjection:
 			print vuln
 
-		print 'sql injection:'
+		print(Fore.BLUE + 'sql injection:')
 		for vuln in vuln_sqli:
 			print vuln[0] + ":" + vuln[1][0] + ":" + vuln[1][1]
 
-		print 'lfi:'
+		print(Fore.BLUE + 'lfi:')
 		for l in lfi:
 			print l 
 		
-		print 'rfi:'
+		print(Fore.BLUE + 'rfi:')
 		for r in rfi:
 			print r
 

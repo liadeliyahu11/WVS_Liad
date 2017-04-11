@@ -7,7 +7,6 @@ import subprocess
 app = Flask(__name__)
 db = dbWrapper()
 
-
 def message(msg):
 	"""
 	gets message and redirect to send_message function pass the message as argument.
@@ -35,6 +34,15 @@ def send_message():
 	return render_template('message.html', message=message)
 
 
+def upload_file(c, filename):
+	if c:
+		print c
+		f = open(filename, 'w')
+		f.write(c)
+		f.close()
+	
+
+
 
 @app.route('/scanDomain', methods=['POST'])
 def check_details():
@@ -42,6 +50,8 @@ def check_details():
 	scan a given domain (the domain is form parameter).
 	"""
 	link = request.form['domain']
+	upload_file(request.form['cookies'], 'cookies.txt')
+	upload_file(request.form['login'], 'login.txt')
 	hash_str = hashlib.sha256(link).hexdigest().lower()
 	if link:
 		try:

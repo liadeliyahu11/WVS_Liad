@@ -1,6 +1,28 @@
 <html>
 <head>
 <style type="text/css">
+
+.loader {
+  border: 16px solid #4D4D4D;
+  border-radius: 50%;
+  border-top: 16px solid #2CBBBB;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 5s linear infinite;
+  animation: spin 5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 .form-style-8{
     font-family: 'Open Sans Condensed', arial, sans;
     width: 1000px;
@@ -73,6 +95,7 @@
     	$.getJSON("/scans/{{hash_str}}", 
     		function(data) 
     		{
+                $( ".loader" ).remove();
                 $('#link').html(data.link);
                 //$('#links').html(data.links);
                 var links_str;
@@ -106,6 +129,8 @@ var glo = setInterval(showScanResults, 3000);
 </head>
 <body>
 <center>
+        <h1 style="color:#2CBBBB">Results</h1>
+<div id="stam" class="loader"><h2>Scanning please wait...</h2></div>
 <table class="form-style-8">
 	<tr>
 		<th><h2>link</h2></th>

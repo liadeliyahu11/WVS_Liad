@@ -5,14 +5,14 @@
 <style type="text/css">
 .form-style-8{
     font-family: 'Open Sans Condensed', arial, sans;
-    width: 500px;
+    width: 1000px;
     padding: 30px;
     background: #FFFFFF;
     margin: 50px auto;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
     -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
     -webkit-box-shadow:  0px 0px 15px rgba(0, 0, 0, 0.22);
-
+ 
 }
 .form-style-8 h2{
     background: #4D4D4D;
@@ -25,8 +25,9 @@
     margin: -30px -30px 30px -30px;
 }
 .form-style-8 input[type="text"],
+.form-style-8 input[type="password"],
 .form-style-8 textarea,
-.form-style-8 select 
+.form-style-8 select
 {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -46,7 +47,7 @@
     resize:none;
     overflow: hidden;
 }
-.form-style-8 input[type="button"], 
+.form-style-8 input[type="button"],
 .form-style-8 input[type="submit"]{
     -moz-box-shadow: inset 0px 1px 0px 0px #45D6D6;
     -webkit-box-shadow: inset 0px 1px 0px 0px #45D6D6;
@@ -62,7 +63,7 @@
     text-decoration: none;
     text-transform: uppercase;
 }
-.form-style-8 input[type="button"]:hover, 
+.form-style-8 input[type="button"]:hover,
 .form-style-8 input[type="submit"]:hover {
     background:linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
     background-color:#34CACA;
@@ -78,14 +79,15 @@ function adjust_textarea(h) {
   <title></title>
 </head>
 <body>
-    <center>
 <div class="form-style-8">
   <h2>Web Vulnerability Scanner - Scan Web By Domain</h2>
   <form method="post" action="/scanDomain" >
-    <input type="text" name="domain" placeholder="Enter the domain" />
+    <input type="text" name="domain" placeholder="enter the domain" />
+    <h4>*not necessary - enter login information or cookies:</h4>
+    <textarea name="cookies" placeholder="Enter cookies"></textarea>
+    <textarea name="login" placeholder="Enter login"></textarea>
     <input type="submit" value="Scan" />
   </form>
 </div>
-    </center>
 </body>
 </html>

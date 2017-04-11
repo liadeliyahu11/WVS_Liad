@@ -1,13 +1,18 @@
-from bs4 import BeautifulSoup
 import requests
+import colorama
 import re
+from bs4 import BeautifulSoup
 from Link import *
 from Form import *
+from colorama import Fore, Back, Style
+
 MAX_LINKS = 50
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
 status508 = 15
+
+PROOF = "5d53a71ff07c179ad4a96f4ff318e26298d8280a29ad8fa7b66f8f71c12cca72" # wvs liad and elad 
 
 cluesForError = [
 	"The resource you are looking",
@@ -38,7 +43,7 @@ pages_len, similar_pages, tmpForms = [], [], []
 current_scanning = 0
 count_not_answered = 0
 done = False
-
+colorama.init()
 
 def need_to_filter(txt):
 	# because they can destroy things
@@ -61,16 +66,13 @@ def parseCookiesFromFile(filename):
 	"""
 	cookies = {}
 	f = open(filename, 'r')
-	lines = f.readlines()
+	lines = map(lambda x: x[:-1] if x[-1]=='\n' else x, f.readlines())
 	f.close()
 	for line in lines:
-		if line[-1] == '\n':
-			l = line[:-1].split(':')
-		else:
-			l = line.split(':')
+		l = line.split(':')		
 		if len(l) > 1:
 			cookies.update({l[0]: l[1]})
-	print cookies
+	print(Fore.BLUE + str(cookies))
 	return cookies
 
 
@@ -211,9 +213,20 @@ def linkExist(s, toAsk):
 	checks if the link exist if it does returns the html else return False.
 	"""
 	if not need_to_filter(toAsk):
-		ans = s.get(toAsk, headers=headers, timeout=3)
-		print "c: " + ans.url
+		ans = s.get(toAsk, headers = headers, timeout = 3)
+		print(Fore.YELLOW + "c: " + ans.url)
 		if notFound(ans):
 			return False
 		return ans.url, ans.text.encode('utf-8')
 	return False
+
+
+def authenticate_owner(url):
+	ans = requests.get(url + '/wvs.txt')
+	print ans.text
+	if not notFound(ans) and PROOF in ans.text:
+		print(Fore.BLUE + "This is the real owner!")
+		return True
+	else:
+		print(Fore.RED + "This is not the real owner!")
+		return False
