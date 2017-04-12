@@ -10,6 +10,7 @@ class dbWrapper():
 	def getAllCheatsheets(self):
 		dic = {}
 		dic['sqli_fp'] = list(self.wvs.sqli_fp.find())
+		dic['sqli_cs'] = list(self.wvs.sqli_cs.find())
 		dic['lfi_cs'] = list(self.wvs.lfi_cs.find())
 		dic['rfi_cs'] = list(self.wvs.rfi_cs.find())
 		dic['ce_cs'] = list(self.wvs.ce_cs.find())
@@ -29,16 +30,19 @@ class dbWrapper():
 		self.wvs.scans.insert_one(scan)
 
 	def get_sqli_fp(self):
-		return getAllCheatsheets()['sqli_fp']
+		return self.getAllCheatsheets()['sqli_fp'][0]["errors"]
+
+	def get_sqli_cs(self):
+		return (self.getAllCheatsheets()['sqli_cs'][0]["cs_classic"],self.getAllCheatsheets()['sqli_cs'][1]["cs_blind"])
 
 	def get_rfi_cs(self):
-		return getAllCheatsheets()['rfi_cs']		
+		return self.getAllCheatsheets()['rfi_cs'][0]["cs"]	
 	
 	def get_lfi_cs(self):
-		return getAllCheatsheets()['lfi_cs']
+		return self.getAllCheatsheets()['lfi_cs'][0]["cs"]
 	
 	def get_ce_cs(self):
-		return getAllCheatsheets()['ce_cs']
+		return self.getAllCheatsheets()['ce_cs'][0]["cs"]
 
 	def get_xss_cs(self):
 		return self.getAllCheatsheets()['xss_cs'][0]["cs"]

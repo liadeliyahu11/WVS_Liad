@@ -4,23 +4,13 @@ class Sqli():
 	"""docstring for ClassName"""
 	#liad note: url should be like : http://abcs.com/somepage.php?id=5
 
-	def __init__(self, se, urls, forms):
-		self.dbms_errors = {# regular expressions for DBMS fingerprints
-		"MySQL": ("SQL syntax.*MySQL", "Warning.*mysql_.*", "valid MySQL result", "MySqlClient\."),
-		"PostgreSQL": ("PostgreSQL.*ERROR", "Warning.*\Wpg_.*", "valid PostgreSQL result", "Npgsql\."),
-		"Microsoft SQL Server": ("Driver.* SQL[\-\_\ ]*Server", "OLE DB.* SQL Server", "(\W|\A)SQL Server.*Driver", "Warning.*mssql_.*", "(\W|\A)SQL Server.*[0-9a-fA-F]{8}", "(?s)Exception.*\WSystem\.Data\.SqlClient\.", "(?s)Exception.*\WRoadhouse\.Cms\."),
-		"Microsoft Access": ("Microsoft Access Driver", "JET Database Engine", "Access Database Engine"),
-		"Oracle": ("\bORA-[0-9][0-9][0-9][0-9]", "Oracle error", "Oracle.*Driver", "Warning.*\Woci_.*", "Warning.*\Wora_.*"),
-		"IBM DB2": ("CLI Driver.*DB2", "DB2 SQL error", "\bdb2_\w+\("),
-		"SQLite": ("SQLite/JDBCDriver", "SQLite.Exception", "System.Data.SQLite.SQLiteException", "Warning.*sqlite_.*", "Warning.*SQLite3::", "\[SQLITE_ERROR\]"),
-		"Sybase": ("(?i)Warning.*sybase.*", "Sybase message", "Sybase.*Server message.*"),
-		"MariaDB": ("SQL syntax.*MariaDB",),
-		}
+	def __init__(self, se, urls, forms, errors, cs):
+		self.dbms_errors = errors
 		self.s = se
 		self.urls = urls
 		self.forms = forms
-		self.classic_cs = ["'",'"']
-		self.blind_cs = [ ("1' and '1'='1","1' and '1'='2"), ("1 and 1=1","1 and 1=2") ]
+		self.classic_cs = cs[0]
+		self.blind_cs = cs[1]
 		#id :1 is common id - blind with no value won't work
 
 	def errorExist(self, html):

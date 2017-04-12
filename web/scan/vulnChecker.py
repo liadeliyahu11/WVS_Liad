@@ -34,10 +34,10 @@ class vulnChecker():
 		check all the vulnerabilities in the links and forms.
 		types : XSS, SQLI, RFI, LFI, COMMAND INJ.
 		"""
-		lrfi = FileInclusion(self.se, self.allLinks, self.allForms)
+		lrfi = FileInclusion(self.se, self.allLinks, self.allForms, self.db.get_lfi_cs(), self.db.get_rfi_cs())
 		xss = Xss(self.se, self.allLinks, self.allForms, self.db.get_xss_cs())
-		sqli = Sqli(self.se, self.allLinks, self.allForms)
-		ci = CommandInjection(self.se, self.allLinks, self.allForms)
+		sqli = Sqli(self.se, self.allLinks, self.allForms, self.db.get_sqli_fp(), self.db.get_sqli_cs())
+		ci = CommandInjection(self.se, self.allLinks, self.allForms, self.db.get_ce_cs(),)
 
 		lfi, rfi = lrfi.getAllVulnLinks()
 		vuln_sqli = sqli.getAllVulnLinks()

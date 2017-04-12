@@ -2,9 +2,9 @@ from Helper import *
 
 class CommandInjection():
 	"""docstring for CommandInjection"""
-	def __init__(self,se,urls,forms):
+	def __init__(self, se, urls, forms, cs):
 		self.se = se
-		self.cheatsheets = [';cat /etc/passwd', 'cat /etc/passwd', '|| cat /etc/passwd','8.8.8.8 && cat /etc/passwd', '&;& cat /etc/passwd', '|cat /etc/passwd', 'cat put /etc/passwd'] #self.readFromFile("scan/commandInjectionCheatSheet.txt")
+		self.cheatsheets = cs
 		self.urls = urls
 		self.vulnLinks = []
 		self.forms = forms

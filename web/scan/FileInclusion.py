@@ -2,12 +2,12 @@ from Helper import *
 class FileInclusion():
 	"""doc string fot the class"""
 	#liad note: url should be like : http://abcs.com/somepage.php?page=
-	def __init__(self, se, urls, forms):
+	def __init__(self, se, urls, forms, csl, csr):
 		self.s= se
 		self.urls = urls
-		self.addr = ['http://wvstest.weebly.com', 'http:http:////wvstest.weebly.com']
+		self.addr = csr
 		self.rfi_text = 'this is special text to test the rfi vulnerability!!!'
-		self.lfi_string = ['/../../../../../../../../../../etc/passwd','/../../../../../../../../../../etc/passwd%00']
+		self.lfi_string = csl
 		self.lfi_links = []
 		self.rfi_links = []
 		self.lfi_forms = []

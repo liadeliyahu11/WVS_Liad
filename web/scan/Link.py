@@ -24,6 +24,8 @@ class Link:
 			url += '/'+i
 		return url+'/'+self.fileName
 
+	def get_link_without_page(self):
+		return '/'.join(self.link.split('/')[:-1])
 
 	def numOfParameters(self):
 		return len(self.param)
