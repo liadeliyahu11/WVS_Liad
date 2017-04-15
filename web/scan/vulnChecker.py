@@ -10,6 +10,8 @@ class vulnChecker():
 		self.se = se
 		self.db = db
 		self.allLinks, self.allForms = self.filter_link_and_forms(links, forms)
+		self.allLinks = map(lambda x: Link(x), self.allLinks)
+		self.allForms = map(lambda x: Form(x), self.allForms)
 
 	def filter_link_and_forms(self, links, forms):
 		"""
@@ -39,16 +41,11 @@ class vulnChecker():
 		sqli = Sqli(self.se, self.allLinks, self.allForms, self.db.get_sqli_fp(), self.db.get_sqli_cs())
 		ci = CommandInjection(self.se, self.allLinks, self.allForms, self.db.get_ce_cs(),)
 
-		lfi, rfi = lrfi.getAllVulnLinks()
-		vuln_sqli = sqli.getAllVulnLinks()
-		vuln_xss =  xss.getAllVulnLinks()
-		vuln_CommandInjection = ci.getAllVulnLinks()
+		vuln_lrfi = lrfi.getAllVulns()
+		vuln_sqli = sqli.getAllVulns()
+		vuln_xss =  xss.getAllVulns()
+		vuln_CommandInjection = ci.getAllVulns()
 
-		vuln_sqli_f = sqli.getAllVulnForms()
-		vuln_xss_f = xss.getAllVulnForms()
-		lfi_f, rfi_f = lrfi.getAllVulnForms()
-		vuln_CommandInjection_f = ci.getAllVulnForms()
-		
 		print(Fore.BLUE + 'xss:')
 		for vuln in vuln_xss:
 			print vuln
@@ -59,31 +56,12 @@ class vulnChecker():
 
 		print(Fore.BLUE + 'sql injection:')
 		for vuln in vuln_sqli:
-			print vuln[0] + ":" + vuln[1][0] + ":" + vuln[1][1]
+			print vuln
 
-		print(Fore.BLUE + 'lfi:')
-		for l in lfi:
+		print(Fore.BLUE + 'LFI and RFI:')
+		for l in vuln_lrfi:
 			print l 
-		
-		print(Fore.BLUE + 'rfi:')
-		for r in rfi:
-			print r
 
-		for vuln in vuln_sqli_f:
-			print vuln
-
-		for vuln in vuln_CommandInjection_f:
-			print vuln
-
-		for vuln in vuln_xss_f:
-			print vuln
-
-		for vuln in lfi_f:
-			print vuln
-
-		for vuln in rfi_f:
-			print vuln
-		
-		return list(lfi + rfi + vuln_sqli + vuln_xss + vuln_sqli_f + lfi_f + rfi_f + vuln_xss_f + vuln_CommandInjection_f + vuln_CommandInjection)
+		return list(vuln_lrfi + vuln_sqli + vuln_xss + vuln_CommandInjection)
 
 		#admin' and (select 1 from dual where (select password from users where username = 'admin') like '___________')#

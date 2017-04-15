@@ -3,50 +3,31 @@ from Helper import *
 class Xss():
 	"""docstring for Xss"""
 	#cs = cheatsheet
-	def __init__(self, se, urls, forms, cs):
-		self.urls = urls
+	def __init__(self, se, links, forms, cs):
+		self.links = links
 		self.se = se
 		self.cheatsheets = cs
-		self.vulnLinks = []
+		self.vulns = []
 		self.forms = forms
-   
-	def link_is_injectable(self, link, cs):
-		res = link.send_padded_link(self.se, cs)
-		return self.is_injectable(res, cs)
-   
-	def getAllVulnLinks(self):
-		for url in self.urls:
-			link = Link(url)
-			if self.checkXss(link):
-				self.vulnLinks.append(url.replace(" ","") + " xss")
-		return self.vulnLinks
-	   
 	
-	def formIsInjectable(self, form, cs):
-		res = Form(form).send_padded_form(self.se, cs)
-		return self.is_injectable(res, cs)
-	   
 	def is_injectable(self, res, cs):
 		if res:
 			addr, ans = res
 			return cs.encode('utf8') in ans.text.encode('utf8')
 		return False
    
-	def getAllVulnForms(self):
-		vulnForms = []
-		for form in self.forms:
-			res = self.checkXss(form, is_form=True)
-			if res:
-				vulnForms.append((str(form)[2:-1].replace(" ","") + str(res).replace(" ","") + " xss"))
-		return vulnForms
-   
-	def checkXss(self, url_or_form, is_form=False):
-		if not is_form:
-			for cs in self.cheatsheets:
-				if self.link_is_injectable(url_or_form, cs):
-					return True
-		else:
-			for cs in self.cheatsheets:
-				if self.formIsInjectable(url_or_form, cs):
-					return True
+	def check_injection(self, link_or_form, cs):
+		res = link_or_form.send_padded(self.se, cs)
+		return self.is_injectable(res, cs)
+
+	def checkXss(self, url_or_form):
+		for cs in self.cheatsheets:
+			if self.check_injection(url_or_form, cs):
+				return True
 		return False
+
+	def getAllVulns(self):
+		for link_or_form in (self.links + self.forms):
+			if self.checkXss(link_or_form):
+				self.vulns.append(link_or_form.pack(" XSS"))
+		return self.vulns

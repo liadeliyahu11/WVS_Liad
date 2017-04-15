@@ -2,7 +2,7 @@ import itertools
 
 class Link:
 	def __init__(self, link):
-		self.link = link
+		self.text = link
 		pre = link.split("/")
 		self.baseUrl = pre[0]+'//'+pre[1]+pre[2]
 		self.dirs = [x for x in pre[3:-1]]
@@ -25,17 +25,17 @@ class Link:
 		return url+'/'+self.fileName
 
 	def get_link_without_page(self):
-		return '/'.join(self.link.split('/')[:-1])
+		return '/'.join(self.text.split('/')[:-1])
 
 	def numOfParameters(self):
 		return len(self.param)
 
-	def addGetParameters(self,keys,values):
-		self.link.split('?')[0]
-		self.link += '?'
+	def addGetParameters(self, keys, values):
+		self.text.split('?')[0]
+		self.text += '?'
 		for i in xrange(len(keys)):
-			self.link += keys[i]+'='+values[i]+'&'
-		return self.link[:-1]
+			self.text += keys[i] + '=' + values[i] + '&'
+		return self.text[:-1]
 
 	def padGetParameters(self, parameter):
 		ret_url = self.getUrlWithoutParameters()
@@ -44,6 +44,16 @@ class Link:
 			ret_url += par[0] + '=' + parameter + '&' 
 		return ret_url[:-1]
 
-	def send_padded_link(self, s, cs):
+	def send_padded(self, s, cs):
 		to_request = self.padGetParameters(cs)
 		return (to_request, s.get(to_request))
+
+	def pack(self, attack_type):
+		return self.text.replace(" ","") + attack_type
+
+	def is_link(self):
+		return True
+
+	def is_form(self):
+		return False
+
