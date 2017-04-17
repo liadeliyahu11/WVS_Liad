@@ -217,7 +217,7 @@ def linkExist(s, toAsk):
 		print(Fore.YELLOW + "c: " + ans.url)
 		if notFound(ans):
 			return False
-		return ans.url, ans.text.encode('utf-8')
+		return ans.url, ans.text.encode('utf8')
 	return False
 
 

@@ -69,6 +69,7 @@ def getParameters(argv):
 
 
 def main():
+	#To handle hebrew: 
 	#reload(sys)
 	#sys.setdefaultencoding('utf8')
 	url, cookies, filename, hash_str = getParameters(sys.argv[1:])

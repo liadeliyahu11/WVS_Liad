@@ -46,7 +46,7 @@ class Sqli():
 			if ans:
 				db = self.errorExist(ans.text)
 				if self.is_classic(ans, db):
-					return (" classic-sql-injection" + ", " + db)
+					return (" classic-sql-injection, " + db)
 		return False
 
 	def check_blind_cheat_sheet(self, link_or_form):

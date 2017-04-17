@@ -71,7 +71,7 @@ def scanAllPages(url, filename, cookies):
 	global total_links
 	ses.cookies.update(cookies)
 	signin(ses, url)
-	if authenticate_owner(url) and pageScan(ses, url):
+	if authenticate_owner(url) or pageScan(ses, url):
 		while len(allLinks) > 0:
 			pageScanner(ses, url)
 		forms = filter_forms(all_forms)
@@ -85,7 +85,7 @@ def scanAllPages(url, filename, cookies):
 def signin(se, url):
 	data1 = {}
 	f = open('login.txt', 'r')
-	lines = map(lambda x: x[:-1] if x[-1]=='\n' else x, f.readlines())
+	lines = map(lambda x: x[:-1] if x[-1] == '\n' else x, f.readlines())
 	f.close()
 	filename, method = lines[0].split('\t')
 	for line in lines[1:]:
