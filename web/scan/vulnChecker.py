@@ -6,9 +6,10 @@ from CommandInjection import *
 
 class vulnChecker():
 	"""docstring for vulnChecker"""
-	def __init__(self, se, links, forms, db):
+	def __init__(self, se, links, forms, db, hash_str):
 		self.se = se
 		self.db = db
+		self.hash_str = hash_str
 		self.allLinks, self.allForms = self.filter_link_and_forms(links, forms)
 		self.allLinks = map(lambda x: Link(x), self.allLinks)
 		self.allForms = map(lambda x: Form(x), self.allForms)
@@ -42,10 +43,21 @@ class vulnChecker():
 		ci = CommandInjection(self.se, self.allLinks, self.allForms, self.db.get_ce_cs(),)
 
 		vuln_lrfi = lrfi.getAllVulns()
+		for vuln in vuln_lrfi:
+			db.add_vuln_to_db(self.hash_str, vuln)
+		
 		vuln_sqli = sqli.getAllVulns()
+		for vuln in vuln_sqli:
+			db.add_vuln_to_db(self.hash_str, vuln)
+		
 		vuln_xss =  xss.getAllVulns()
+		for vuln in vuln_xss:
+			db.add_vuln_to_db(self.hash_str, vuln)
+		
 		vuln_CommandInjection = ci.getAllVulns()
-
+		for vuln in vuln_CommandInjection:
+			db.add_vuln_to_db(self.hash_str, vuln)
+		
 		print(Fore.BLUE + 'xss:')
 		for vuln in vuln_xss:
 			print vuln
@@ -61,7 +73,6 @@ class vulnChecker():
 		print(Fore.BLUE + 'LFI and RFI:')
 		for l in vuln_lrfi:
 			print l 
-
 		return list(vuln_lrfi + vuln_sqli + vuln_xss + vuln_CommandInjection)
 
 		#admin' and (select 1 from dual where (select password from users where username = 'admin') like '___________')#

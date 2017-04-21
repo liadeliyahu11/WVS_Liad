@@ -5,12 +5,15 @@ from bs4 import BeautifulSoup
 from Link import *
 from Form import *
 from colorama import Fore, Back, Style
+from dbWrapper import *
 
 MAX_LINKS = 50
 MAX_THREADS = 100
 HTTP = 7
 HTTPS = 8
 status508 = 15
+
+db = dbWrapper()
 
 PROOF = "5d53a71ff07c179ad4a96f4ff318e26298d8280a29ad8fa7b66f8f71c12cca72" # wvs liad and elad 
 
@@ -36,7 +39,7 @@ headers = {
 	"Accept-Language": "en-US,en;q=0.8"}
 
 threads = []
-allLinks, all_forms, total_links = [], [], []
+allLinks, all_forms, total_links, total_forms = [], [], [], []
 pages_len, similar_pages, tmpForms = [], [], []
 
 
@@ -117,15 +120,6 @@ def already_visited(html):
 	return False
 
 
-def alreadyAdded(toFind):
-	"""
-	get file name and string and check if the file contains the string.
-	"""
-	for form in tmpForms:
-		if toFind == form:
-			return True
-	tmpForms.append(toFind)
-
 
 def createFormsList(url, html):
 	"""
@@ -145,6 +139,7 @@ def createFormsList(url, html):
 	return final_parameters
 
 
+
 def hrefs(html):
 	"""
 	gets html and returns list of all the href's values.
@@ -157,18 +152,36 @@ def hrefs(html):
 		lst.append(url)
 	return lst
 
+def alreadyAdded(toFind):
+	"""
+	get file name and string and check if the file contains the string.
+	"""
+	for form in tmpForms:
+		if toFind == form:
+			return True
+	tmpForms.append(toFind)
 
-def filter_forms(forms):
+def add_link(hash_str, url):
+	global total_links
+	global db
+	total_links.append(url)
+	db.add_link_to_db(hash_str, url)
+
+def add_form(hash_str, form):
+	global total_forms
+	global db
+	total_forms.append(form)
+	db.add_form_to_db(hash_str, form)
+
+def filter_forms(hash_str, all_forms):
 	"""
 	filters forms that already added.
 	"""
-	total_forms = []
+	global total_forms
 	try:
-		for form in forms:  # form :list of lists - list of forms
-			for one_form in form:
-				if not alreadyAdded(one_form):
-					total_forms.append(one_form)
-		return total_forms
+		for form in all_forms:  # form :list of lists - list of forms
+			if not alreadyAdded(form):
+				add_form(hash_str, form)
 	except Exception as ex:
 		print ex
 

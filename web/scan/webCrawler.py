@@ -10,7 +10,7 @@ cond = threading.Condition()
 done = False
 mythreads = []
 
-def checkAddLink(base_url,links):
+def checkAddLink(base_url, links):
 	for page in links:
 		link = make_link(base_url, page.encode('utf8'))
 		if link not in allLinks and linkValid(base_url, link) and not similar_page(link) and not is_useless_page(link):
@@ -24,38 +24,36 @@ def getLinkFromList():
 		return res
 	return False
 
-def pageScanner(ses,base_url):
+def pageScanner(ses, base_url, hash_str):
 	try:		
 		link = getLinkFromList()
+		print "trying : " + link
 		if link:
-			pageScan(ses, base_url, link)
-	
+			pageScan(ses, base_url, hash_str, link)
 	except Exception as e:
-		print
+		print e
 		pass
 
-			
-def pageScan(ses, base_url, url=None):
+
+def pageScan(ses, base_url, hash_str, url = None):
 	global total_links
 	
 	if url == None:
 		ans = ses.get(base_url)
 		base_url = Link(ans.url).get_link_without_page()
 		url = base_url
-	
 	try:
 		if len(total_links) < MAX_LINKS:
 			res = linkExist(ses, url)
-			
 			if res:
 				url, html = res 
 				if not already_visited(html):
-					total_links.append(url)
+					add_link(hash_str, url)
 					print(Fore.GREEN + url + " added!")
 					links = hrefs(html)
 					checkAddLink(base_url, links)
-					form = createFormsList(url, html)
-					all_forms.append(form)
+					forms = createFormsList(url, html)
+					filter_forms(hash_str, forms)
 		return True
 	
 	except Exception as ex:
@@ -64,19 +62,19 @@ def pageScan(ses, base_url, url=None):
 	return False
 
 
-def scanAllPages(url, filename, cookies):
+def scanAllPages(url, filename, cookies, hash_str):
 	"""
 	gets url address and trys to scan all it's pages. 
 	"""
 	global total_links
+	global total_forms
 	ses.cookies.update(cookies)
 	signin(ses, url)
-	if authenticate_owner(url) or pageScan(ses, url):
+	if authenticate_owner(url) and pageScan(ses, url, hash_str):
 		while len(allLinks) > 0:
-			pageScanner(ses, url)
-		forms = filter_forms(all_forms)
+			pageScanner(ses, url, hash_str)
 		print str(len(total_links)) + ' links found'
-		return (ses, total_links, forms)
+		return (ses, total_links, total_forms)
 	else:
 		print "can't scan the page you gave.(couldn't find the page or can't find the wvs.txt file)."
 		return False
@@ -93,7 +91,7 @@ def signin(se, url):
 		data1.update({key:val})
 	print method
 	if method.lower() == 'post':
-		ans = se.post(url + filename , data = data1)
+		ans = se.post(url + '/' + filename , data = data1)
 		print data1
 	else:
 		st = ""

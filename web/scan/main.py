@@ -1,22 +1,20 @@
 from webCrawler import *
 from vulnChecker import *
-from dbWrapper import *
 import Helper
 import sys
 import json
 import os
 import getopt
 
-db = dbWrapper()
-
-def add_new_scan(hash_str, link, links, forms, vulns):
+def add_new_scan(hash_str, link):
 	db.remove_if_exist(hash_str)
 	scan = {
 		'hash_str': hash_str,
 		"link": link,
-		"links": links,
-		"forms": forms,
-		"vulnLinks": vulns,
+		"links": [],
+		"forms": [],
+		"vulnLinks": [],
+		"done" : "",
 	}
 	db.add_new_scan(scan)
 
@@ -73,20 +71,20 @@ def main():
 	#reload(sys)
 	#sys.setdefaultencoding('utf8')
 	url, cookies, filename, hash_str = getParameters(sys.argv[1:])
+	add_new_scan(hash_str, url)
 	print "scan started..."
-	res = scanAllPages(url, filename, cookies)
+	res = scanAllPages(url, filename, cookies, hash_str)
 	if res: 
 		se, links, forms = res
 		print "scan completed!"
 		if se:
 			print 'vlunerabilities scan started...'
-			vc = vulnChecker(se, links, forms, db)
+			vc = vulnChecker(se, links, forms, db, hash_str)
 			vuln_links = vc.checkAttacks()
 			print "vlunerabilities scan completed..."
-			add_new_scan(hash_str, url, links, forms, vuln_links)
 	else:
-		#report about error
-		print 'some'
+		print 'Error occurred!'
+	db.done(hash_str)
 
 if __name__ == "__main__":
 	main()

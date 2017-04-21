@@ -17,6 +17,36 @@ class dbWrapper():
 		dic['xss_cs'] = list(self.wvs.xss_cs.find())
 		return dic
 
+	def add_link_to_db(self, hash_str, link):
+		curr_scan = self.get_scan_by_hash(hash_str)
+		self.remove_if_exist(hash_str)
+		cloner = curr_scan["links"]
+		cloner.append(link)
+		curr_scan.update({"links" : cloner})
+		self.wvs.scans.insert_one(curr_scan)
+
+	def add_vuln_to_db(self, hash_str, vuln):
+		curr_scan = self.get_scan_by_hash(hash_str)
+		self.remove_if_exist(hash_str)
+		cloner = curr_scan["vulnLinks"]
+		cloner.append(vuln)
+		curr_scan.update({"vulnLinks" : cloner})
+		self.wvs.scans.insert_one(curr_scan)
+
+	def add_form_to_db(self, hash_str, form):
+		curr_scan = self.get_scan_by_hash(hash_str)
+		self.remove_if_exist(hash_str)
+		cloner = curr_scan["forms"]
+		cloner.append(form)
+		curr_scan.update({"forms" : cloner})
+		self.wvs.scans.insert_one(curr_scan)
+
+	def done(self, hash_str):
+		curr_scan = self.get_scan_by_hash(hash_str)
+		self.remove_if_exist(hash_str)
+		curr_scan.update({"done" : "done"})
+		self.wvs.scans.insert_one(curr_scan)
+
 	def get_scan_by_hash(self, hash_str):
 		return self.wvs.scans.find_one({"hash_str" : hash_str})
 

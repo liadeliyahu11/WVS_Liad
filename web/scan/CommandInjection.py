@@ -8,10 +8,17 @@ class CommandInjection():
 		self.links = links
 		self.vulns = []
 		self.forms = forms
-
+	"""
+	check if 'root' exist in the answer
+	gets answer return true if 'root' exist
+	"""
 	def checkRootInAns(self, ans):
 		return not notFound(ans) and 'root:' in ans.text
 
+	"""
+	get link or form and send padded with cheat sheets
+
+	"""
 	def checkComInjec(self, url_or_form,):
 		for cs in self.cheatsheets:
 			res = url_or_form.send_padded(self.se, cs)

@@ -95,7 +95,6 @@
     	$.getJSON("/scans/{{hash_str}}", 
     		function(data) 
     		{
-                $( ".loader" ).remove();
                 $('#link').html(data.link);
                 //$('#links').html(data.links);
                 var links_str;
@@ -121,7 +120,12 @@
                 }
                 vulnLinks_str += "</table>";
                 $('#vulnLinks').html(vulnLinks_str);
-                clearInterval(glo);
+                if(data.done)
+                {
+                    $( ".loader" ).remove();
+                    clearInterval(glo);
+                    alert('Done!');
+                }
     		});
     }
 var glo = setInterval(showScanResults, 3000);
