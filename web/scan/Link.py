@@ -2,6 +2,7 @@ import itertools
 
 class Link:
 	def __init__(self, link):
+		self.known_pages = ['php', 'asp', 'aspx', 'py', 'js', 'css', 'html', 'htm', 'jsp']
 		self.text = link
 		pre = link.split("/")
 		self.baseUrl = pre[0]+'//'+pre[1]+pre[2]
@@ -25,7 +26,15 @@ class Link:
 		return url+'/'+self.fileName
 
 	def get_link_without_page(self):
-		return '/'.join(self.text.split('/')[:-1])
+		if self.page_in_link():
+			return '/'.join(self.text.split('/')[:-1])
+		return self.text
+
+	def page_in_link(self):
+		for page in self.known_pages:
+			if self.text[(len(page)+1)*(-1):-1] == '/' + page:
+				return True
+		return False
 
 	def numOfParameters(self):
 		return len(self.param)

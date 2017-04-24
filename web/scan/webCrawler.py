@@ -37,7 +37,7 @@ def pageScanner(ses, base_url, hash_str):
 
 def pageScan(ses, base_url, hash_str, url = None):
 	global total_links
-	
+
 	if url == None:
 		ans = ses.get(base_url)
 		base_url = Link(ans.url).get_link_without_page()
@@ -54,7 +54,7 @@ def pageScan(ses, base_url, hash_str, url = None):
 					checkAddLink(base_url, links)
 					forms = createFormsList(url, html)
 					filter_forms(hash_str, forms)
-		return True
+		return base_url
 	
 	except Exception as ex:
 		print ex
@@ -68,9 +68,11 @@ def scanAllPages(url, filename, cookies, hash_str):
 	"""
 	global total_links
 	global total_forms
+	print(Fore.GREEN + "The url is: " + url)
 	ses.cookies.update(cookies)
 	signin(ses, url)
-	if authenticate_owner(url) and pageScan(ses, url, hash_str):
+	url = pageScan(ses, url, hash_str)
+	if authenticate_owner(url) and url:
 		while len(allLinks) > 0:
 			pageScanner(ses, url, hash_str)
 		print str(len(total_links)) + ' links found'
