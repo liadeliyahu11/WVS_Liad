@@ -15,6 +15,7 @@ def add_new_scan(hash_str, link):
 		"forms": [],
 		"vulnLinks": [],
 		"done" : "",
+		"error":"",
 	}
 	db.add_new_scan(scan)
 
@@ -83,6 +84,7 @@ def main():
 			vuln_links = vc.checkAttacks()
 			print "vlunerabilities scan completed..."
 	else:
+		db.error("Error occurred!", hash_str)
 		print 'Error occurred!'
 	db.done(hash_str)
 

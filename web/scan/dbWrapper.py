@@ -47,6 +47,14 @@ class dbWrapper():
 		curr_scan.update({"done" : "done"})
 		self.wvs.scans.insert_one(curr_scan)
 
+	def error(self, error_msg, hash_str):
+		curr_scan = self.get_scan_by_hash(hash_str)
+		if curr_scan["error"] == "":
+			self.remove_if_exist(hash_str)
+			curr_scan.update({"error" : error_msg})
+			self.wvs.scans.insert_one(curr_scan)
+			self.done(hash_str)
+
 	def get_scan_by_hash(self, hash_str):
 		return self.wvs.scans.find_one({"hash_str" : hash_str})
 

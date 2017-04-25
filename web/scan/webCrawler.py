@@ -70,14 +70,19 @@ def scanAllPages(url, filename, cookies, hash_str):
 	global total_forms
 	print(Fore.GREEN + "The url is: " + url)
 	ses.cookies.update(cookies)
-	signin(ses, url)
-	url = pageScan(ses, url, hash_str)
-	if authenticate_owner(url) and url:
+	try:
+		signin(ses, url)
+		url = pageScan(ses, url, hash_str)
+	except:
+		db.error("Can't scan this address", hash_str)
+
+	if url or authenticate_owner(url):
 		while len(allLinks) > 0:
 			pageScanner(ses, url, hash_str)
 		print str(len(total_links)) + ' links found'
 		return (ses, total_links, total_forms)
 	else:
+		db.error("Can't scan the page you entered.(Couldn't find the page or this is not the real owner the scanner can't find : /wvs.txt).", hash_str)
 		print "can't scan the page you gave.(couldn't find the page or can't find the wvs.txt file)."
 		return False
 
