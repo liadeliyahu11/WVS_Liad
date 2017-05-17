@@ -56,7 +56,7 @@ def check_details():
 	if link:
 		try:
 			db.remove_if_exist(hash_str)
-			subprocess.Popen("python scan\main.py -c cookies.txt -u " + link + ' -s ' + hash_str)
+			subprocess.Popen("python scan\main.py -c cookies.txt -u " + link +" -s" + hash_str)
 			return redirect('/results/' + hash_str)
 		
 		except Exception as ex:

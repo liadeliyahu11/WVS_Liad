@@ -146,10 +146,11 @@ def hrefs(html):
 	"""
 	lst = []
 	soup = BeautifulSoup(html, 'html.parser')
-	for a in soup.find_all('a', href = True):
+	for a in soup.find_all(href = True):
 		lst.append(a['href'])
 	for url in re.findall('url=(.*)\"', html):
 		lst.append(url)
+	print len(lst)
 	return lst
 
 def alreadyAdded(toFind):
