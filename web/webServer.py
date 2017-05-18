@@ -21,6 +21,13 @@ def get_index():
 	"""
 	return current_app.send_static_file('index.html')
 
+@app.route('/wvs.txt')
+def get_wvs():
+	"""
+	returns the wvs proof page.
+	"""
+	return current_app.send_static_file('wvs.txt')
+
 
 @app.route('/message')
 def send_message():
