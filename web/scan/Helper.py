@@ -49,7 +49,9 @@ done = False
 colorama.init()
 
 def need_to_filter(txt):
-	# because they can destroy things
+	"""
+	gets txt(page name) and returns if the page is unwanted page.
+	"""
 	global unwanted_pages
 	if not txt:
 		return False
@@ -58,6 +60,9 @@ def need_to_filter(txt):
 			return True
 
 def is_useless_page(link):
+	"""
+	gets link and returns if the link if useless for the scan.
+	"""
 	IS_PDF = (len(link) > 4 and link[-4:] == ".pdf")
 	IS_JPG = (len(link) > 4 and link[-4:] == ".jpg")
 	return (IS_JPG or IS_PDF)
@@ -163,12 +168,18 @@ def alreadyAdded(toFind):
 	tmpForms.append(toFind)
 
 def add_link(hash_str, url):
+	"""
+	gets hash string and url and add link to the db.
+	"""
 	global total_links
 	global db
 	total_links.append(url)
 	db.add_link_to_db(hash_str, url)
 
 def add_form(hash_str, form):
+	"""
+	gets hash string and url and add form to the db.
+	"""
 	global total_forms
 	global db
 	total_forms.append(form)
@@ -236,6 +247,9 @@ def linkExist(s, toAsk):
 
 
 def authenticate_owner(url):
+	"""
+	gets url and returns if this is the real owner if this host/server.
+	"""
 	ans = requests.get(url + '/wvs.txt')
 	print ans.text
 	if not notFound(ans) and PROOF in ans.text:

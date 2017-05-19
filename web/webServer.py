@@ -42,6 +42,9 @@ def send_message():
 
 
 def upload_file(c, filename):
+	"""
+	gets content and file name and insert the content into this file.
+	"""
 	if c:
 		print c
 		f = open(filename, 'w')

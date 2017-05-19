@@ -11,6 +11,9 @@ done = False
 mythreads = []
 
 def checkAddLink(base_url, links):
+	"""
+	gets base link and list of links and append the valid links to the allLinks list. 
+	"""
 	for page in links:
 		link = make_link(base_url, page.encode('utf8'))
 		if link not in allLinks and linkValid(base_url, link) and not similar_page(link) and not is_useless_page(link):
@@ -18,6 +21,9 @@ def checkAddLink(base_url, links):
 
 
 def getLinkFromList():
+	"""
+	removes and returns the first index in the list of the links.
+	"""
 	if len(allLinks) > 0:
 		res = allLinks[0]
 		allLinks.remove(res)
@@ -25,6 +31,9 @@ def getLinkFromList():
 	return False
 
 def pageScanner(ses, base_url, hash_str):
+	"""
+	gets the session, base link, hash string and scan page from the list - wrap function.
+	"""
 	try:		
 		link = getLinkFromList()
 		print "trying : " + link
@@ -36,6 +45,9 @@ def pageScanner(ses, base_url, hash_str):
 
 
 def pageScan(ses, base_url, hash_str, url = None):
+	"""
+	gets session, base link, hash string and default url - scan the link and returns the base url.
+	"""
 	global total_links
 
 	if url == None:
@@ -88,6 +100,9 @@ def scanAllPages(url, filename, cookies, hash_str):
 
 
 def signin(se, url):
+	"""
+	gets sign in details from login.txt file and do the login.
+	"""
 	data1 = {}
 	f = open('login.txt', 'r')
 	lines = map(lambda x: x[:-1] if x[-1] == '\n' else x, f.readlines())

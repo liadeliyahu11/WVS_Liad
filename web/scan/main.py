@@ -7,6 +7,9 @@ import os
 import getopt
 
 def add_new_scan(hash_str, link):
+	"""
+	gets hash string and link and insert the base of the scan to the db.
+	"""
 	db.remove_if_exist(hash_str)
 	scan = {
 		'hash_str': hash_str,

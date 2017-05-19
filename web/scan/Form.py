@@ -11,6 +11,9 @@ class Form():
 		self.keys = form_list[3]
 
 	def send_padded(self, s, cs):
+		"""
+		gets session and cheatsheet and send the form padded in this cheatsheet.
+		"""
 		try:
 			while self.url[-1] == '.':
 				self.url = self.url[:-1]
@@ -46,13 +49,25 @@ class Form():
 		return data
 		
 	def numOfParameters(self):
+		"""
+		return count of keys.
+		"""
 		return len(self.keys)
 
 	def pack(self, attack_type):
+		"""
+		gets attack type and returns nice version of him.
+		"""
 		return str(self.text)[2:-1].replace(" ","") + attack_type
 
 	def is_link(self):
+		"""
+		this is not link.
+		"""
 		return False
 
 	def is_form(self):
+		"""
+		this is form
+		"""
 		return True

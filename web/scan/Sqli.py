@@ -39,7 +39,7 @@ class Sqli():
 
 	def check_classic_cheat_sheet(self, link_or_form):
 		"""
-		
+		gets link or form and returns if found classic sql injection.
 		"""
 		for cs in self.classic_cs: 
 			addr, ans = link_or_form.send_padded(self.s, cs)
@@ -51,7 +51,7 @@ class Sqli():
 
 	def check_blind_cheat_sheet(self, link_or_form):
 		"""
-		//value needed in the parameter
+		gets link or form and returns if found blind sql injection.
 		"""
 		for cs in self.blind_cs:
 			addr, ans1 = link_or_form.send_padded(self.s, cs[0])
@@ -63,7 +63,7 @@ class Sqli():
 
 	def is_injectable(self, link_or_form):
 		"""
-
+		gets link or form and returns the type of the vulnerability or False.
 		"""
 		try:
 			types = self.check_classic_cheat_sheet(link_or_form)

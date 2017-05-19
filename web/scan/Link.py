@@ -15,31 +15,49 @@ class Link:
 			self.param = map(lambda par: par.split('='),self.param_for_build)#get
 			# param is list of parameters lists [[key,value],[key,value]] 
 		
-	def set_params(self,params):
+	def set_params(self, params):
+		"""
+		gets parameters and set this parameters in the object.
+		"""
 		for parameter in params:
 			self.param.append([parameter, None])
 
 	def getUrlWithoutParameters(self):
+		"""
+		returns the url with the last parameter.
+		"""
 		url = self.baseUrl
 		for i in self.dirs:
 			url += '/'+i
 		return url+'/'+self.fileName
 
 	def get_link_without_page(self):
+		"""
+		returns the link without the page(just dirs).
+		"""
 		if self.page_in_link():
 			return '/'.join(self.text.split('/')[:-1])
 		return self.text
 
 	def page_in_link(self):
+		"""
+		returns if there is a page in the link.
+		"""
 		for page in self.known_pages:
 			if self.text[(len(page)+1)*(-1):-1] == '/' + page:
 				return True
 		return False
 
 	def numOfParameters(self):
+		"""
+		returns the number if the parameters.
+		"""
 		return len(self.param)
 
 	def addGetParameters(self, keys, values):
+		"""
+		gets keys and values and add them to get method and returns it.
+		"""
 		self.text.split('?')[0]
 		self.text += '?'
 		for i in xrange(len(keys)):
@@ -47,6 +65,9 @@ class Link:
 		return self.text[:-1]
 
 	def padGetParameters(self, parameter):
+		"""
+		gets parameters and pad the parameters in get method.
+		"""
 		ret_url = self.getUrlWithoutParameters()
 		ret_url += '?'
 		for par in self.param:
@@ -54,15 +75,27 @@ class Link:
 		return ret_url[:-1]
 
 	def send_padded(self, s, cs):
+		"""
+		gets session and cheatsheet and send the link padded with this cheatsheet and returns and ans.
+		"""
 		to_request = self.padGetParameters(cs)
 		return (to_request, s.get(to_request))
 
 	def pack(self, attack_type):
+		"""
+		gets attack type and returns nice version of him.
+		"""
 		return self.text.replace(" ","") + attack_type
 
 	def is_link(self):
+		"""
+		this is link.
+		"""
 		return True
 
 	def is_form(self):
+		"""
+		this is not form.
+		"""
 		return False
 
