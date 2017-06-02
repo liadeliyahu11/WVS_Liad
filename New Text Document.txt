@@ -1,5 +1,0 @@
-handle xss
-handle command exec
-handle csrf(well known parameters)
-handle more sql injection cheatsheets
-cgi bin

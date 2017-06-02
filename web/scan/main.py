@@ -54,11 +54,6 @@ def getParameters(argv):
 				print 'ok'
 			elif opt == '-s':
 				hash_str = arg
-
-		if (url[:HTTP] != "http://") and (url[:HTTPS] != "https://"):
-			print url
-			print(Fore.RED + 'the url is not by the protocol')
-			sys.exit(2)
 		else:
 			if url[:HTTPS] == "https://":
 				filename = url[HTTPS:].replace('/', '-')
@@ -82,10 +77,10 @@ def main():
 		se, links, forms = res
 		print "scan completed!"
 		if se:
-			print 'vlunerabilities scan started...'
+			print 'vulnerabilities scan started...'
 			vc = vulnChecker(se, links, forms, db, hash_str)
 			vuln_links = vc.checkAttacks()
-			print "vlunerabilities scan completed..."
+			print "vulnerabilities scan completed..."
 	else:
 		db.error("Error occurred!", hash_str)
 		print 'Error occurred!'
